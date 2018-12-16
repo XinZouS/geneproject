@@ -1,0 +1,235 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/main.css' %}">
+
+	{% if title %}
+		<title>Company Info - {{ title }}</title>
+	{% else %}
+		<title>Company Info</title>
+	{% endif %}
+
+    <style>
+        table {
+          font-family: arial, sans-serif;
+          border-collapse: collapse;
+          width: 100%;
+        }
+        td, th {
+          border: 1px solid #aabbdd;
+          text-align: center;
+          padding: 6px;
+          height: 50px;
+        }
+        tr:nth-child(even) {
+          background-color: #eeeeee;
+        }
+        div.scrollable {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 6px;
+            overflow: auto;
+        }
+        p.small80 {
+            font-size: 80%;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="site-header">
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+          <a class="navbar-brand mr-4" href="{% url 'blog-home' %}">Company Info</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <div class="navbar-nav mr-auto">
+              <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
+              <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>
+            </div>
+            <!-- Navbar Right Side -->
+            <div class="navbar-nav">
+
+
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <table>
+        <tr>
+        {% for col in colnames %}
+            <th>{{ col }}</th>
+        {% endfor %}
+        </tr>
+
+        {% for item in companys %}
+        <tr>
+            <td width="100px">{{ item.Name     }}</td>
+            <td>{{ item.CUSIP    }}</td>
+            <td>{{ item.SecId    }}</td>
+            <td>{{ item.FundId   }}</td>
+            <td>{{ item.MRFundID     }}</td>
+            <td>{{ item.PerfID   }}</td>
+            <td>{{ item.Ticker   }}</td>
+            <td>{{ item.OldestSh     }}</td>
+            <td>{{ item.Advisor  }}</td>
+            <td>{{ item.FirmName     }}</td>
+            <td>{{ item.BrndName     }}</td>
+            <td>{{ item.BrndNmID     }}</td>
+            <td>{{ item.InceptDt     }}</td>
+            <td>{{ item.GlBrdGrp     }}</td>
+            <td>{{ item.GlBrdCat     }}</td>
+            <td>{{ item.USCatGrp     }}</td>
+            <td>{{ item.MSCat    }}</td>
+            <td>{{ item.MSCatID  }}</td>
+            <td>{{ item.MSCatStr     }}</td>
+            <td>{{ item.MSInsCat     }}</td>
+            <td>{{ item.MSRatAll     }}</td>
+            <td>{{ item.MSRat3Y  }}</td>
+            <td>{{ item.MSRat5Y  }}</td>
+            <td>{{ item.MSRat10Y     }}</td>
+            <td>{{ item.EqStyleL     }}</td>
+            <td>{{ item.EqStyleS     }}</td>
+            <td>{{ item.FxStyleL     }}</td>
+            <td>{{ item.MSSubAdv     }}</td>
+            <td>{{ item.MSSubFee     }}</td>
+            <td>{{ item.TeamMgd  }}</td>
+            <td><div class="scrollable"><p class="small80">{{ item.MgrHist  }}</p></div></td>
+            <td><div class="scrollable">{{ item.MgrName  }}</div></td>
+            <td>{{ item.MgrTnrAv     }}</td>
+            <td>{{ item.MgrTnrLg     }}</td>
+            <td><div class="scrollable">{{ item.PPBnch   }}</div></td>
+            <td>{{ item.PPBnchID     }}</td>
+            <td>{{ item.PPBIncpt     }}</td>
+            <td>{{ item.SPBench  }}</td>
+            <td>{{ item.AUMShr   }}</td>
+            <td>{{ item.AUMShrDt     }}</td>
+            <td>{{ item.FSizeCur     }}</td>
+            <td>{{ item.FSizeDt  }}</td>
+            <td>{{ item.hldBondL     }}</td>
+            <td>{{ item.hldBondS     }}</td>
+            <td>{{ item.hldLong  }}</td>
+            <td>{{ item.hldOthrL     }}</td>
+            <td>{{ item.hldOthrS     }}</td>
+            <td>{{ item.hldStckL     }}</td>
+            <td>{{ item.hldStckS     }}</td>
+            <td>{{ item.hldT10   }}</td>
+            <td>{{ item.hldofInv     }}</td>
+            <td>{{ item.hldAT10  }}</td>
+            <td>{{ item.hldAT10D     }}</td>
+            <td>{{ item.Yld12M   }}</td>
+            <td>{{ item.Yld12MD  }}</td>
+            <td>{{ item.SECYld   }}</td>
+            <td>{{ item.SECYldD  }}</td>
+            <td>{{ item.DivdCur  }}</td>
+            <td>{{ item.DivdCurD     }}</td>
+            <td>{{ item.DivdNAVC     }}</td>
+            <td>{{ item.PortDate     }}</td>
+            <td>{{ item.VirtClss     }}</td>
+            <td>{{ item.FeeMgt   }}</td>
+            <td>{{ item.NExpSAR  }}</td>
+            <td>{{ item.NExpSARD     }}</td>
+            <td>{{ item.ChrgAR   }}</td>
+            <td>{{ item.ChrgARD  }}</td>
+            <td>{{ item.NExpPrs  }}</td>
+            <td>{{ item.NExpPrsD     }}</td>
+            <td>{{ item.ObjPros  }}</td>
+            <td>{{ item.Fee12b1  }}</td>
+            <td>{{ item.TurnRat  }}</td>
+            <td>{{ item.TurnRatD     }}</td>
+            <td>{{ item.CashN    }}</td>
+            <td>{{ item.AABondN  }}</td>
+            <td>{{ item.AACashN  }}</td>
+            <td>{{ item.AAEqN    }}</td>
+            <td>{{ item.AANUSBdN     }}</td>
+            <td>{{ item.AANUSEqN     }}</td>
+            <td>{{ item.AAOthrN  }}</td>
+            <td>{{ item.AAUSBdN  }}</td>
+            <td>{{ item.AAUSEqN  }}</td>
+            <td>{{ item.AAABN    }}</td>
+            <td>{{ item.AABondL  }}</td>
+            <td>{{ item.AACashL  }}</td>
+            <td>{{ item.AAEqL    }}</td>
+            <td>{{ item.AANUSBdL     }}</td>
+            <td>{{ item.AANUSEqL     }}</td>
+            <td>{{ item.AAOthrL  }}</td>
+            <td>{{ item.AAUSBdL  }}</td>
+            <td>{{ item.AAUSEqL  }}</td>
+            <td>{{ item.FoFIH    }}</td>
+            <td>{{ item.Leveragd     }}</td>
+            <td>{{ item.FeederFd     }}</td>
+            <td>{{ item.MasterFd     }}</td>
+            <td>{{ item.MasterN  }}</td>
+            <td>{{ item.MSTRFundID   }}</td>
+            <td>{{ item.Sharia   }}</td>
+            <td>{{ item.Ethical  }}</td>
+            <td>{{ item.ModelFd  }}</td>
+            <td>{{ item.Avail529     }}</td>
+            <td>{{ item.AvailRet     }}</td>
+            <td>{{ item.AvailIns     }}</td>
+            <td>{{ item.TaxMgd   }}</td>
+            <td>{{ item.Contrarn     }}</td>
+            <td><div class="scrollable"><p class="small80">{{ item.BrkAvail     }}</p></div></td>
+            <td>{{ item.EnhIndex     }}</td>
+            <td>{{ item.Indexed  }}</td>
+            <td>{{ item.FoF  }}</td>
+            <td>{{ item.SocCons  }}</td>
+            <td>{{ item.NonDiv   }}</td>
+            <td>{{ item.ClsdAll  }}</td>
+            <td>{{ item.ClsdALLD     }}</td>
+            <td>{{ item.ClsdNew  }}</td>
+            <td>{{ item.ClsdNewD     }}</td>
+            <td>{{ item.FeeAccnt     }}</td>
+            <td>{{ item.FeeAdmin     }}</td>
+            <td>{{ item.FeeAdv   }}</td>
+            <td>{{ item.FeeAudit     }}</td>
+            <td>{{ item.FeeCust  }}</td>
+            <td>{{ item.FeeDistr     }}</td>
+            <td>{{ item.FeeIns   }}</td>
+            <td>{{ item.FeeLegal     }}</td>
+            <td>{{ item.FeeOrg   }}</td>
+            <td>{{ item.FeeOthr  }}</td>
+            <td>{{ item.FeePerf  }}</td>
+            <td>{{ item.FeeProf  }}</td>
+            <td>{{ item.FeeReg   }}</td>
+            <td>{{ item.FeeShRpt     }}</td>
+            <td>{{ item.FeeTA    }}</td>
+            <td>{{ item.Domicile     }}</td>
+            <td>{{ item.BaseCurr     }}</td>
+            <td>{{ item.ObsoltD  }}</td>
+            <td>{{ item.ObsoltTy     }}</td>
+            <td>{{ item.DiscCurr     }}</td>
+            <td>{{ item.ShrType  }}</td>
+            <td>{{ item.AABdLR   }}</td>
+            <td>{{ item.AABdL    }}</td>
+            <td>{{ item.AACshLR  }}</td>
+            <td>{{ item.AACBLR   }}</td>
+            <td>{{ item.AAEqLR   }}</td>
+            <td>{{ item.AAxUSBLR     }}</td>
+            <td>{{ item.AAxUSELR     }}</td>
+            <td>{{ item.AAOtLR   }}</td>
+            <td>{{ item.AAPSLR   }}</td>
+            <td>{{ item.AAUSBLR  }}</td>
+            <td>{{ item.AAUSELR  }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+
+</body>
+</html>
