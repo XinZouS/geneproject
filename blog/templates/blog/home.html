@@ -2,26 +2,7 @@
 
 {% block content %}
 
-	<table>
-		<tr>
-			<th>Name</th>
-			<th>CUSIP</th>
-			<th>Name</th>
-			<th>CUSIP</th>
-			<th>Name</th>
-			<th>CUSIP</th>
-		</tr>
-		{% for item in companys %}
-		<tr>
-			<th>{{ item.Name }}</th>
-			<th>{{ item.CUSIP }}</th>
-			<th>{{ item.Name }}</th>
-			<th>{{ item.CUSIP }}</th>
-			<th>{{ item.Name }}</th>
-			<th>{{ item.CUSIP }}</th>
-		</tr>
-		{% endfor %}
-	</table>
+	<div><h3><a href="{% url 'blog-company' %}">Company Info table</a></h3></div>
 
 
 <!-- 	{% for post in posts %}
