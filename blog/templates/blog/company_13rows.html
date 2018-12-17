@@ -1,0 +1,33 @@
+{% extends "blog/base_table.html" %}
+
+{% block content %}
+
+
+    <table style="width:600px; margin:0 auto;">
+        <tr>
+        {% for col in colnames %}
+            <th>{{ col }}</th>
+        {% endfor %}
+        </tr>
+
+        {% for item in companys %}
+        <tr>
+            <td width="100px">{{ item.Name     }}</td>
+            <td>{{ item.CUSIP    }}</td>
+            <td>{{ item.SecId    }}</td>
+            <td>{{ item.FundId   }}</td>
+            <td>{{ item.MRFundID     }}</td>
+            <td>{{ item.PerfID   }}</td>
+            <td>{{ item.Ticker   }}</td>
+            <td>{{ item.OldestSh     }}</td>
+            <td>{{ item.Advisor  }}</td>
+            <td>{{ item.FirmName     }}</td>
+            <td>{{ item.BrndName     }}</td>
+            <td>{{ item.BrndNmID     }}</td>
+            <td>{{ item.InceptDt     }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+
+{% endblock content %}
