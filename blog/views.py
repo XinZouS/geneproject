@@ -32,16 +32,24 @@ def company_13rows(request):
 	return render(request, 'blog/company_13rows.html', content)
 
 
-def advisor_table(request, advisor_name='noadvisor'):
+def advisor_table(request):
 	cols = ["Name", "CUSIP", "SecId", "FundId"]
-	if advisor_name == 'noadvisor':
-		getInfo = Company.objects.filter(Advisor=advisor_name).order_by("Name")[:50]
+
+	advisorname = request.GET.get('advisorname')
+	if advisorname == u'':
+		print("advisors name is _ ----", advisorname)
+		cmpinfo = Company.objects.order_by("Name")[:50]
 	else:
-		getInfo = Company.objects.order_by("Name")[:50]
+		print("advisors name is advisor_name ----", advisorname)
+		cmpinfo = Company.objects.filter(Advisor=advisorname).order_by("Name")[:50]
+
+	# advisors = Company.objects.values_list('Advisor', flat=True).order_by("Advisor").distinct()
+	advisors = Company.objects.values('Advisor').exclude(Advisor__isnull=True).order_by("Advisor").distinct()
 
 	content = {
-		'companys': getInfo, # get first n rows 
-		'colnames': cols
+		'companys': cmpinfo, # get first n rows 
+		'colnames': cols,
+		'advisors': advisors,
 	}
 	return render(request, 'blog/advisor_table.html', content)
 

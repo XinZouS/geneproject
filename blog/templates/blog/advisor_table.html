@@ -2,8 +2,20 @@
 
 {% block content %}
 
+<section>
 
-    <table style="width:600px; margin:0 auto;">
+    <navleft>
+
+        <h3>Advisor Info</h3>
+
+        {% for adv in advisors %}
+            <a href="/advisor/{{ adv.Advisor }}/">{{ adv.Advisor }}</a>
+        {% endfor %}
+
+    </navleft>
+
+
+    <table style="width:600px; margin:0 auto; float: left;">
         <tr>
         {% for col in colnames %}
             <th>{{ col }}</th>
@@ -19,6 +31,10 @@
         </tr>
         {% endfor %}
     </table>
+    
+
+</section>
+
 
 
 {% endblock content %}

@@ -19,6 +19,21 @@
 	{% endif %}
 
     <style>
+        /* Create two columns/boxes that floats next to each other */
+        navleft {
+          float: left;
+          width: 26%;
+          height: 700px; /* only for demonstration, should be removed */
+          background: #ccddee;
+          padding: 20px;
+        }
+        /* Clear floats after the columns */
+        section:after {
+          content: "";
+          display: table;
+          clear: both;
+        }
+
         table {
           font-family: arial, sans-serif;
           border-collapse: collapse;
@@ -43,6 +58,8 @@
         p.small80 {
             font-size: 80%;
         }
+
+
     </style>
 </head>
 
