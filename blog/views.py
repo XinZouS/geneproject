@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.shortcuts import render
-from .models import Company
+from .models import Company, Advisors
 
 
 
@@ -32,24 +32,27 @@ def company_13rows(request):
 	return render(request, 'blog/company_13rows.html', content)
 
 
-def advisor_table(request):
+def advisor_table(request, advisorid=0):
 	cols = ["Name", "CUSIP", "SecId", "FundId"]
 
-	advisorname = request.GET.get('advisorname')
-	if advisorname == u'':
-		print("advisors name is _ ----", advisorname)
-		cmpinfo = Company.objects.order_by("Name")[:50]
+	if advisorid == 0:
+		cmpinfo = Company.objects.order_by("Name")
 	else:
-		print("advisors name is advisor_name ----", advisorname)
-		cmpinfo = Company.objects.filter(Advisor=advisorname).order_by("Name")[:50]
+		cmpinfo = Company.objects.filter(AdvisorID_id=advisorid).order_by("Name")
 
-	# advisors = Company.objects.values_list('Advisor', flat=True).order_by("Advisor").distinct()
-	advisors = Company.objects.values('Advisor').exclude(Advisor__isnull=True).order_by("Advisor").distinct()
+	# plan A: use Company to filter out all Advisors:
+	# advs = Company.objects.values('Advisor').exclude(Advisor__isnull=True).order_by("Advisor").distinct()
+	# plan B: use new table Advisor to provide info: 
+	advs = Advisors.objects.all()
+
+	advsObj = Advisors.objects.filter(id=advisorid)
+	selected = advsObj[0]
 
 	content = {
 		'companys': cmpinfo, # get first n rows 
 		'colnames': cols,
-		'advisors': advisors,
+		'advisors': advs,
+		'selected': selected,
 	}
 	return render(request, 'blog/advisor_table.html', content)
 

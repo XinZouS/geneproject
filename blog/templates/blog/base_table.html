@@ -22,10 +22,10 @@
         /* Create two columns/boxes that floats next to each other */
         navleft {
           float: left;
-          width: 26%;
-          height: 700px; /* only for demonstration, should be removed */
+          width: 30%;
+          height: 90%; /* only for demonstration, should be removed */
           background: #ccddee;
-          padding: 20px;
+          padding: 30px;
         }
         /* Clear floats after the columns */
         section:after {
@@ -59,6 +59,24 @@
             font-size: 80%;
         }
 
+        .vertical-menu {
+          height: 900px;
+          overflow: auto;
+          white-space: nowrap;
+        }
+        .vertical-menu a {
+          color: black;
+          display: block;
+          padding: 12px;
+          text-decoration: none;
+        }
+        .vertical-menu a:hover {
+          background-color: #cceeee;
+        }
+        .vertical-menu a.active {
+          background-color: #4CAF50;
+          color: white;
+        }
 
     </style>
 </head>

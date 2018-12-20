@@ -6,6 +6,10 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 
+class Advisors(models.Model):
+	Name = models.CharField(max_length=400,null=False)
+
+
 class Company(models.Model):
 	Name	= models.CharField(max_length=40)
 	CUSIP	= models.CharField(max_length=9,null=True)
@@ -16,6 +20,7 @@ class Company(models.Model):
 	Ticker	= models.CharField(max_length=12,null=True)
 	OldestSh	= models.CharField(max_length=5,null=True)
 	Advisor	= models.CharField(max_length=200,null=True)
+	AdvisorID = models.ForeignKey(Advisors, on_delete=models.SET_NULL, null=True)
 	FirmName	= models.CharField(max_length=100,null=True)
 	BrndName	= models.CharField(max_length=44,null=True)
 	BrndNmID	= models.CharField(max_length=10,null=True)

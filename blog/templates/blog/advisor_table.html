@@ -6,16 +6,19 @@
 
     <navleft>
 
-        <h3>Advisor Info</h3>
+        <h3>Advisor:</h3>
+        <h4 style="color: #1122ff">{{ selected.Name }}</h4>
 
-        {% for adv in advisors %}
-            <a href="/advisor/{{ adv.Advisor }}/">{{ adv.Advisor }}</a>
-        {% endfor %}
+        <div class="vertical-menu">
+            {% for adv in advisors %}
+                <a href="/advisor/{{ adv.id }}">{{ adv.Name }}</a>
+            {% endfor %}
+        </div>
 
     </navleft>
 
 
-    <table style="width:600px; margin:0 auto; float: left;">
+    <table style="width:800px; margin:0 auto; float: left;">
         <tr>
         {% for col in colnames %}
             <th>{{ col }}</th>
@@ -24,7 +27,7 @@
 
         {% for item in companys %}
         <tr>
-            <td width="100px">{{ item.Name     }}</td>
+            <td style="width:400px; text-align: left;">{{ item.Name     }}</td>
             <td>{{ item.CUSIP    }}</td>
             <td>{{ item.SecId    }}</td>
             <td>{{ item.FundId   }}</td>
