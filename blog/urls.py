@@ -10,5 +10,8 @@ urlpatterns = [
 	# url(r'^advisor/<int:advisorid>/$', views.advisor_table, name='advisor-table'),
 	# url(r'^advisor/', views.advisor_table, name='advisor-table'),
 	url(r'^about/$', views.about, name='blog-about'),
+
+
+	# url(r'^autocomplete/$', views.autocomplete, name='autocomplete'),
 ]
 

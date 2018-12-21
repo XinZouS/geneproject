@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.shortcuts import render
+from django.http import HttpResponse
 from .models import Company, Advisors
+from django.db.models import Q
 
 
 
@@ -44,14 +46,17 @@ def advisor_table(request, advisorid=0):
 	# advs = Company.objects.values('Advisor').exclude(Advisor__isnull=True).order_by("Advisor").distinct()
 	# plan B: use new table Advisor to provide info: 
 	advs = Advisors.objects.all()
+	
+	advsNames = list(map(lambda x: x.Name.encode("utf-8"), advs))
 
 	advsObj = Advisors.objects.filter(id=advisorid)
-	selected = advsObj[0]
+	selected = {'Name':'Select an Advisor'} if len(advsObj)==0 else advsObj[0]
 
 	content = {
 		'companys': cmpinfo, # get first n rows 
 		'colnames': cols,
 		'advisors': advs,
+		'advisorNames': advsNames,
 		'selected': selected,
 	}
 	return render(request, 'blog/advisor_table.html', content)
@@ -60,4 +65,8 @@ def advisor_table(request, advisorid=0):
 def about(request):
 	return render(request, 'blog/about.html')
 
-# Create your views here.
+
+
+
+
+
