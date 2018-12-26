@@ -58,27 +58,34 @@ input[type=submit] {
   background-color: DodgerBlue !important; 
   color: #ffffff; 
 }
+
+.centerhorizontal {
+  
+}
 </style>
 </head>     
 
 <body>
 
 
-<section>
+<section class="scrollable" style="width: 1330px;">
 
     <navleft>
 
-        <h3>Advisor:</h3>
-        <h4 style="color: #1122ff">{{ selected.Name }}</h4>
+        <h3>Advisors:</h3>
+        <h4 style="color: #11aa66">{{ selected.Name }}</h4>
 
 
+<div style="height: 1200px; width: 100%">
 
-<form autocomplete="off" action="/action_page.php">
-  <div class="autocomplete" style="width:300px;">
-    <input id="myInput" type="text" name="myAdvisor" placeholder="Advisor Name">
-  </div>
-  <input type="submit">
-</form>
+    <form autocomplete="off" action="/action_page.php">
+        <div class="autocomplete" style="width:100%;">
+            <input id="myInput" type="text" name="myAdvisor" placeholder="Advisor Name" style="width: 80%;">
+            <input type="submit">
+        </div>
+    </form>
+
+</div>
 
 <script>
 function autocomplete(inp, arr) {
@@ -87,18 +94,23 @@ function autocomplete(inp, arr) {
   var currentFocus;
   /*execute a function when someone writes in the text field:*/
   inp.addEventListener("input", function(e) {
-      var a, b, i, val = this.value;
+      var a, b, c, i, val = this.value;
       /*close any already open lists of autocompleted values*/
       closeAllLists();
       if (!val) { return false;}
       currentFocus = -1;
+
       /*create a DIV element that will contain the items (values):*/
       a = document.createElement("DIV");
       a.setAttribute("id", this.id + "autocomplete-list");
       a.setAttribute("class", "autocomplete-items");
-      /*append the DIV element as a child of the autocomplete container:*/
-      this.parentNode.appendChild(a);
-      /*for each item in the array...*/
+      this.parentNode.appendChild(a); /*append DIV as a child of autocomplete container:*/
+
+      // the scroll container for search result list
+      c = document.createElement("DIV");
+      c.setAttribute("class", "vertical-menu");
+      a.appendChild(c);
+
       for (i = 0; i < arr.length; i++) {
         /*check if the item starts with the same letters as the text field value:*/
         if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
@@ -109,7 +121,6 @@ function autocomplete(inp, arr) {
           b.innerHTML += arr[i].substr(val.length);
           /*insert a input field that will hold the current array item's value:*/
           b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-          /*execute a function when someone clicks on the item value (DIV element):*/
           b.addEventListener("click", function(e) {
               /*insert the value for the autocomplete text field:*/
               inp.value = this.getElementsByTagName("input")[0].value;
@@ -117,7 +128,7 @@ function autocomplete(inp, arr) {
               (or any other open lists of autocompleted values:*/
               closeAllLists();
           });
-          a.appendChild(b);
+          c.appendChild(b);
         }
       }
   });
@@ -126,17 +137,13 @@ function autocomplete(inp, arr) {
       var x = document.getElementById(this.id + "autocomplete-list");
       if (x) x = x.getElementsByTagName("div");
       if (e.keyCode == 40) {
-        /*If the arrow DOWN key is pressed,
-        increase the currentFocus variable:*/
+        /*If the arrow DOWN key is pressed, increase the currentFocus variable:*/
         currentFocus++;
-        /*and and make the current item more visible:*/
-        addActive(x);
+        addActive(x); /*and and make the current item more visible:*/
       } else if (e.keyCode == 38) { //up
-        /*If the arrow UP key is pressed,
-        decrease the currentFocus variable:*/
+        /*If the arrow UP key is pressed, decrease the currentFocus variable:*/
         currentFocus--;
-        /*and and make the current item more visible:*/
-        addActive(x);
+        addActive(x); /*and and make the current item more visible:*/
       } else if (e.keyCode == 13) {
         /*If the ENTER key is pressed, prevent the form from being submitted,*/
         e.preventDefault();
@@ -178,9 +185,6 @@ function autocomplete(inp, arr) {
   });
 }
 
-/*An array containing all the country names in the world:*/
-var countries = ["Afghanistan","Albania","Algeria","Andorra","Angola","Anguilla","Antigua & Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia","Bosnia & Herzegovina","Botswana","Brazil","British Virgin Islands","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Cayman Islands","Central Arfrican Republic","Chad","Chile","China","Colombia","Congo","Cook Islands","Costa Rica","Cote D Ivoire","Croatia","Cuba","Curacao","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Falkland Islands","Faroe Islands","Fiji","Finland","France","French Polynesia","French West Indies","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guam","Guatemala","Guernsey","Guinea","Guinea Bissau","Guyana","Haiti","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kiribati","Kosovo","Kuwait","Kyrgyzstan","Laos","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macau","Macedonia","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Mauritania","Mauritius","Mexico","Micronesia","Moldova","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauro","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","North Korea","Norway","Oman","Pakistan","Palau","Palestine","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Saint Pierre & Miquelon","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Korea","South Sudan","Spain","Sri Lanka","St Kitts & Nevis","St Lucia","St Vincent","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor L'Este","Togo","Tonga","Trinidad & Tobago","Tunisia","Turkey","Turkmenistan","Turks & Caicos","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States of America","Uruguay","Uzbekistan","Vanuatu","Vatican City","Venezuela","Vietnam","Virgin Islands (US)","Yemen","Zambia","Zimbabwe"];
-
 var allAdvs = {{ advisorNames|safe }};
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(document.getElementById("myInput"), allAdvs);
@@ -188,12 +192,12 @@ autocomplete(document.getElementById("myInput"), allAdvs);
 
 
 
-        <div class="vertical-menu">
+<!--         <div class="vertical-menu">
             {% for adv in advisors %}
                 <a href="/advisor/{{ adv.id }}">{{ adv.Name }}</a>
             {% endfor %}
         </div>
-
+ -->
     </navleft>
 
 
@@ -212,8 +216,7 @@ autocomplete(document.getElementById("myInput"), allAdvs);
             <td>{{ item.FundId   }}</td>
         </tr>
         {% endfor %}
-    </table>
-    
+    </table>        
 
 </section>
 
