@@ -5,6 +5,10 @@
 
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Add icon library for buttons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 <style>
 * {
   box-sizing: border-box;
@@ -32,6 +36,36 @@ input[type=submit] {
   color: #fff;
   cursor: pointer;
 }
+.btn {
+  border: none;
+  background-color: #eee;
+  height: 40px;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-block;
+}
+/* On mouse-over */
+.btn:hover {background: #fff;}
+.info {color: dodgerblue;}
+
+.liBtn {
+  height: 23px;
+  width: 23px;
+  border-radius: 50%;
+  background-color: DodgerBlue;
+  border: none;
+  color: white;
+  margin-left: 6px;
+  padding: 3px 3px;
+  font-size: 14px;
+  cursor: pointer;
+}
+/* Darker background on mouse-over */
+.liBtn:hover {
+  background-color: Red;
+}
+
 .autocomplete-items {
   position: absolute;
   border: 1px solid #d4d4d4;
@@ -59,8 +93,23 @@ input[type=submit] {
   color: #ffffff; 
 }
 
-.centerhorizontal {
-  
+.vertical-menu {
+  height: 500px;
+  overflow: auto;
+  white-space: nowrap;
+}
+.vertical-menu a {
+  color: black;
+  display: block;
+  padding: 12px;
+  text-decoration: none;
+}
+.vertical-menu a:hover {
+  background-color: #cceeee;
+}
+.vertical-menu a.active {
+  background-color: #4CAF50;
+  color: white;
 }
 </style>
 </head>     
@@ -72,20 +121,29 @@ input[type=submit] {
 
     <navleft>
 
-        <h3>Advisors:</h3>
-        <h4 style="color: #11aa66">{{ selected.Name }}</h4>
+        <h3>Search Advisors:</h3>
 
+        <div style="height: 1200px; width: 100%">
 
-<div style="height: 1200px; width: 100%">
+            <form autocomplete="off" action="/action_page.php">
+                <div class="autocomplete" style="width:100%;">
+                    <input id="myInput" type="text" name="myAdvisor" placeholder="Advisor Name" style="width: 78%;">
+                    <button type="button" onclick="clearSearchText()" class="btn info" style="width: 20%;">Clear</button>
+                </div>
+            </form>
 
-    <form autocomplete="off" action="/action_page.php">
-        <div class="autocomplete" style="width:100%;">
-            <input id="myInput" type="text" name="myAdvisor" placeholder="Advisor Name" style="width: 80%;">
-            <input type="submit">
+            <div id="blankMarginDiv" style="height:60px;"></div>
+            
+            <form>                
+                <div id="selectedAdvisorNamesDiv" style="height:300px; background-color:#fff; overflow:auto;">
+                    <ul id="selectedAdvisorUl" style="padding-top:20px;"> </ul>
+                </div>
+                <div id="submitUlBtnContainer" style="width:100%; height:50px; padding-top: 20px;">
+                    <input type="submit" style="float:right; width:40%">
+                </div>
+            </form>
+
         </div>
-    </form>
-
-</div>
 
 <script>
 function autocomplete(inp, arr) {
@@ -109,26 +167,29 @@ function autocomplete(inp, arr) {
       // the scroll container for search result list
       c = document.createElement("DIV");
       c.setAttribute("class", "vertical-menu");
+      c.setAttribute("id", "autocompleteMenuDiv");
       a.appendChild(c);
 
       for (i = 0; i < arr.length; i++) {
         /*check if the item starts with the same letters as the text field value:*/
         if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
           /*create a DIV element for each matching element:*/
-          b = document.createElement("DIV");
+          divB = document.createElement("DIV");
           /*make the matching letters bold:*/
-          b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-          b.innerHTML += arr[i].substr(val.length);
+          divB.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+          divB.innerHTML += arr[i].substr(val.length);
           /*insert a input field that will hold the current array item's value:*/
-          b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-          b.addEventListener("click", function(e) {
-              /*insert the value for the autocomplete text field:*/
-              inp.value = this.getElementsByTagName("input")[0].value;
-              /*close the list of autocompleted values,
-              (or any other open lists of autocompleted values:*/
-              closeAllLists();
+          divB.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+          divB.addEventListener("click", function(e) {
+            var targetLi = this.getElementsByTagName("input")[0]
+            var selectName = targetLi.value;
+            addSelectionHightLight(targetLi);
+            /*insert the value for the autocomplete text field:*/
+            // inp.value = selectName;
+            didSelectAdvisorName(selectName);
+            //closeAllLists();
           });
-          c.appendChild(b);
+          c.appendChild(divB);
         }
       }
   });
@@ -170,8 +231,6 @@ function autocomplete(inp, arr) {
     }
   }
   function closeAllLists(elmnt) {
-    /*close all autocomplete lists in the document,
-    except the one passed as an argument:*/
     var x = document.getElementsByClassName("autocomplete-items");
     for (var i = 0; i < x.length; i++) {
       if (elmnt != x[i] && elmnt != inp) {
@@ -181,13 +240,60 @@ function autocomplete(inp, arr) {
   }
   /*execute a function when someone clicks in the document:*/
   document.addEventListener("click", function (e) {
-      closeAllLists(e.target);
+    if (e.target.parentNode.id != "autocompleteMenuDiv") {
+        closeAllLists(e.target);
+    }
   });
 }
 
 var allAdvs = {{ advisorNames|safe }};
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(document.getElementById("myInput"), allAdvs);
+
+    function clearSearchText() {
+        myInput.value = "";
+    }
+
+    function didSelectAdvisorName(advName="notSet") {
+        var ul = document.getElementById("selectedAdvisorUl");
+        li = document.createElement("li");
+        li.appendChild(document.createTextNode(advName));
+
+        var advId = advName;
+        li.setAttribute("id", advId);
+
+        var idField = document.createElement("INPUT");
+        idField.setAttribute("value", advId);
+        idField.setAttribute("type", "hidden");
+
+        var btnIcon = document.createElement("i");
+        btnIcon.setAttribute("class", "fa fa-close");
+        var rmBtn = document.createElement("BUTTON");
+        rmBtn.setAttribute("class", "liBtn");
+        rmBtn.setAttribute("id", advId);
+        rmBtn.appendChild(btnIcon);
+        rmBtn.addEventListener('click', function(event) {
+            removeLiById(advId);
+        });
+
+        li.appendChild(idField);
+        li.appendChild(rmBtn);
+        ul.appendChild(li);
+    }
+
+    function addSelectionHightLight(targetLi) {
+        targetLi.setAttribute("background", "RoyalBlue");
+    }
+
+    function removeLiById(liId){
+        var lis = document.querySelectorAll('#selectedAdvisorUl li');
+        for(var i=0; li=lis[i]; i++) {
+            if(li.id == liId) {
+                li.parentNode.removeChild(li);
+                return;
+            }
+        }
+    }
 </script>
 
 
