@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.views.generic import TemplateView
 from .models import Company, Advisors
+from .forms import AdvisorForm
 from django.db.models import Q
 
 
@@ -34,23 +36,27 @@ def company_13rows(request):
 	return render(request, 'blog/company_13rows.html', content)
 
 
-def advisor_table(request, advisorid=0):
+def advisor_table(request):
 	cols = ["Name", "CUSIP", "SecId", "FundId"]
+	cmpinfo = []
+	selected = {}  # {'Name':'Select an Advisor'}
 
-	if advisorid == 0:
-		cmpinfo = Company.objects.order_by("Name")
-	else:
-		cmpinfo = Company.objects.filter(AdvisorID_id=advisorid).order_by("Name")
+	if request.method == "POST":
+		form = AdvisorForm(request.POST)
 
-	# plan A: use Company to filter out all Advisors:
-	# advs = Company.objects.values('Advisor').exclude(Advisor__isnull=True).order_by("Advisor").distinct()
-	# plan B: use new table Advisor to provide info: 
-	advs = Advisors.objects.all()
-	
+		if form.is_valid():
+			print request.POST.get('advId')
+			cmpinfo = Company.objects.filter(AdvisorID_id=advisorid).order_by("Name")
+		else:
+			print "------- get form is invalid..."
+			print form
+
+
+	advs = Advisors.objects.all()	
 	advsNames = list(map(lambda x: x.Name.encode("utf-8"), advs))
 
-	advsObj = Advisors.objects.filter(id=advisorid)
-	selected = {'Name':'Select an Advisor'} if len(advsObj)==0 else advsObj[0]
+	# advsObj = Advisors.objects.filter(id=advisorid)
+	# selected = {'Name':'Select an Advisor'} if len(advsObj)==0 else advsObj[0]
 
 	content = {
 		'companys': cmpinfo, # get first n rows 
