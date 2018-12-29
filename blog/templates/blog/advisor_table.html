@@ -261,16 +261,19 @@ autocomplete(document.getElementById("myInput"), allAdvs);
         li = document.createElement("li");
         li.appendChild(document.createTextNode(advName));
 
-        var advId = 233; // TODO: get the id by its name!!!!!!!!!!
+        var idOfName = {{ idOfNameDict|safe }};
+        var advId = idOfName[advName]; 
         li.setAttribute("id", advId);
 
         var idField = document.createElement("INPUT");
         idField.setAttribute("value", advId);
         idField.setAttribute("type", "hidden");
+        idField.setAttribute("id", "advId");
 
         var nameField = document.createElement("INPUT");
         nameField.setAttribute("value", advName);
         nameField.setAttribute("type", "hidden");
+        nameField.setAttribute("id", "advName");
 
         var btnIcon = document.createElement("i");
         btnIcon.setAttribute("class", "fa fa-close");

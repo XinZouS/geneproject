@@ -38,7 +38,7 @@ def company_13rows(request):
 
 def advisor_table(request):
 	cols = ["Name", "CUSIP", "SecId", "FundId"]
-	cmpinfo = []
+	companyInfo = []
 	selected = {}  # {'Name':'Select an Advisor'}
 
 	if request.method == "POST":
@@ -46,23 +46,30 @@ def advisor_table(request):
 
 		if form.is_valid():
 			print request.POST.get('advId')
-			cmpinfo = Company.objects.filter(AdvisorID_id=advisorid).order_by("Name")
+			companyInfo = Company.objects.filter(AdvisorID_id=advisorid).order_by("Name")
 		else:
 			print "------- get form is invalid..."
 			print form
 
+	else:
+		print "------ request is GET, not POST....,"
 
 	advs = Advisors.objects.all()	
 	advsNames = list(map(lambda x: x.Name.encode("utf-8"), advs))
+
+	idOfNameDict = {} # {'Name':'advId'}
+	for adv in advs:
+		idOfNameDict[adv.Name.encode("utf-8")] = adv.id
 
 	# advsObj = Advisors.objects.filter(id=advisorid)
 	# selected = {'Name':'Select an Advisor'} if len(advsObj)==0 else advsObj[0]
 
 	content = {
-		'companys': cmpinfo, # get first n rows 
+		'companys': companyInfo, # get first n rows 
 		'colnames': cols,
 		'advisors': advs,
 		'advisorNames': advsNames,
+		'idOfNameDict': idOfNameDict,
 		'selected': selected,
 	}
 	return render(request, 'blog/advisor_table.html', content)
