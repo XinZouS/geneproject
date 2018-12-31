@@ -42,14 +42,12 @@ def advisor_table(request):
 
 	if request.method == "POST":
 		selectedIds = request.POST.getlist('advId', 'noAdvId')
-		for advId in selectedIds:
-		   print('--- advId %s' % (advId))
-		# 	companysById = Company.objects.filter(AdvisorID_id=getId).order_by("Name")
-		# 	companyInfo.extend(companysById)
-
+		selectedIdSet = set(selectedIds)
+		for advId in selectedIdSet:
+			companysById = Company.objects.filter(AdvisorID_id=advId).order_by("Name")
+			companyInfo.extend(companysById)
 	else:
 		print "----------------- request is GET, not POST....,"
-
 
 	advs = Advisors.objects.all()	
 	advsNames = list(map(lambda x: x.Name.encode("utf-8"), advs))
