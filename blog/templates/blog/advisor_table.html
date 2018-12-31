@@ -133,9 +133,9 @@ input[type=submit] {
                 </div>
             </form>
 
-            <div id="blankMarginDiv" style="height:60px;"></div>
+            <div id="blankMarginDiv" style="height:30px;"></div>
             
-            <form method="POST" autocomplete="off" action="advisor-table">
+            <form method="POST" action="advisor-table">
                 {% csrf_token %}
                 <div id="selectedAdvisorNamesDiv" style="height:300px; background-color:#fff; overflow:auto;">
                     <ul id="selectedAdvisorUl" style="padding-top:20px;"> </ul>
@@ -268,11 +268,13 @@ autocomplete(document.getElementById("myInput"), allAdvs);
         var idField = document.createElement("INPUT");
         idField.setAttribute("value", advId);
         idField.setAttribute("type", "hidden");
+        idField.setAttribute("name", "advId");
         idField.setAttribute("id", "advId");
 
         var nameField = document.createElement("INPUT");
         nameField.setAttribute("value", advName);
         nameField.setAttribute("type", "hidden");
+        nameField.setAttribute("name", "advName");
         nameField.setAttribute("id", "advName");
 
         var btnIcon = document.createElement("i");
@@ -339,3 +341,14 @@ autocomplete(document.getElementById("myInput"), allAdvs);
 </body>
 
 {% endblock content %}
+
+
+
+
+
+
+
+
+
+
+

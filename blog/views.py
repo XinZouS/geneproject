@@ -4,7 +4,6 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import TemplateView
 from .models import Company, Advisors
-from .forms import AdvisorForm
 from django.db.models import Q
 
 
@@ -39,20 +38,18 @@ def company_13rows(request):
 def advisor_table(request):
 	cols = ["Name", "CUSIP", "SecId", "FundId"]
 	companyInfo = []
-	selected = {}  # {'Name':'Select an Advisor'}
+	selectedIds = []
 
 	if request.method == "POST":
-		form = AdvisorForm(request.POST)
-
-		if form.is_valid():
-			print request.POST.get('advId')
-			companyInfo = Company.objects.filter(AdvisorID_id=advisorid).order_by("Name")
-		else:
-			print "------- get form is invalid..."
-			print form
+		selectedIds = request.POST.getlist('advId', 'noAdvId')
+		for advId in selectedIds:
+		   print('--- advId %s' % (advId))
+		# 	companysById = Company.objects.filter(AdvisorID_id=getId).order_by("Name")
+		# 	companyInfo.extend(companysById)
 
 	else:
-		print "------ request is GET, not POST....,"
+		print "----------------- request is GET, not POST....,"
+
 
 	advs = Advisors.objects.all()	
 	advsNames = list(map(lambda x: x.Name.encode("utf-8"), advs))
@@ -62,7 +59,6 @@ def advisor_table(request):
 		idOfNameDict[adv.Name.encode("utf-8")] = adv.id
 
 	# advsObj = Advisors.objects.filter(id=advisorid)
-	# selected = {'Name':'Select an Advisor'} if len(advsObj)==0 else advsObj[0]
 
 	content = {
 		'companys': companyInfo, # get first n rows 
@@ -70,8 +66,9 @@ def advisor_table(request):
 		'advisors': advs,
 		'advisorNames': advsNames,
 		'idOfNameDict': idOfNameDict,
-		'selected': selected,
+		'selectedIds': selectedIds,
 	}
+
 	return render(request, 'blog/advisor_table.html', content)
 
 
