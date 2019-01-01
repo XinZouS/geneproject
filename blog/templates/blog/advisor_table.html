@@ -145,7 +145,7 @@ input[type=submit] {
                     <ul id="selectedAdvisorUl" style="padding-top:20px;"> </ul>
                 </div>
                 <div id="submitUlBtnContainer" style="width:100%; height:50px; padding-top: 20px;">
-                    <input type="submit" style="float:right; width:40%; border-radius: 5px;">
+                    <input id="submitButton" type="submit" style="float:right; width:40%; border-radius: 5px;">
                 </div>
             </form>
 
@@ -263,8 +263,17 @@ function autocomplete(inp, arr) {
 }
 
 var allAdvs = {{ advisorNames|safe }};
+var selectedNames = {{ selectedNames|safe }};
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(document.getElementById("myInput"), allAdvs);
+setupSelectedNames();
+
+
+function setupSelectedNames() {
+    for (i in selectedNames) {
+        addSelectAdvisorName(selectedNames[i]);
+    }
+}
 
 function clearSearchText() {
     myInput.value = "";
@@ -303,6 +312,7 @@ function addSelectAdvisorName(advName="notSet") {
     });
 
     li.appendChild(idField);
+    li.appendChild(nameField);
     li.appendChild(rmBtn);
     ul.appendChild(li);
 }

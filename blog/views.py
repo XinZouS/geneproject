@@ -39,13 +39,25 @@ def advisor_table(request):
 	cols = ["Name", "CUSIP", "SecId", "FundId"]
 	companyInfo = []
 	selectedIds = []
+	selectedNames = []
 
 	if request.method == "POST":
-		selectedIds = request.POST.getlist('advId', 'noAdvId')
+		selectedIds = request.POST.getlist('advId', '0')
+		selectedNames = request.POST.getlist('advName', '')
 		selectedIdSet = set(selectedIds)
+		selectedNameSet = set(selectedNames)
+
 		for advId in selectedIdSet:
 			companysById = Company.objects.filter(AdvisorID_id=advId).order_by("Name")
 			companyInfo.extend(companysById)
+			# SQL: 
+			# select name, cusip, secid, fundid, advisorid_id from blog_company 
+			# where advisorid_id IN (177, 282, 173) order by name
+
+		selectedNames = []
+		for name in selectedNameSet:
+			selectedNames.append(name.encode("utf-8"))
+			
 	else:
 		print "----------------- request is GET, not POST....,"
 
@@ -65,6 +77,7 @@ def advisor_table(request):
 		'advisorNames': advsNames,
 		'idOfNameDict': idOfNameDict,
 		'selectedIds': selectedIds,
+		'selectedNames': selectedNames,
 	}
 
 	return render(request, 'blog/advisor_table.html', content)
