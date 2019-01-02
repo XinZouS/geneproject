@@ -127,13 +127,13 @@ input[type=submit] {
 
         <h3>Search Advisors:</h3>
 
-        <div style="height: 1200px; width: 100%">
+        <div style="width: 100%">
 
             <form autocomplete="off" action="advisor-table">
                 {% csrf_token %}
                 <div class="autocomplete" style="width:100%;">
                     <input id="myInput" type="text" name="myAdvisor" placeholder="Advisor Name" style="width: 78%;">
-                    <button type="button" onclick="clearSearchText()" class="btn info" style="width: 20%;">Clear</button>
+                    <button type="button" onclick="clearSearchText()" class="btn info" style="width: 20%;">Reset</button>
                 </div>
             </form>
 
@@ -144,7 +144,9 @@ input[type=submit] {
                 <div id="selectedAdvisorNamesDiv" style="height:300px; background-color:#fff; overflow:auto;">
                     <ul id="selectedAdvisorUl" style="padding-top:20px;"> </ul>
                 </div>
-                <div id="submitUlBtnContainer" style="width:100%; height:50px; padding-top: 20px;">
+
+                <div id="submitUlBtnContainer" style="width:100%; height:50px; padding-top: 10px;">
+                    <button id="clearButton" type="button" onclick="clearSelectedList()" class="btn info" style="width:20%; float:center;">Clear</button>
                     <input id="submitButton" type="submit" style="float:right; width:40%; border-radius: 5px;">
                 </div>
             </form>
@@ -317,6 +319,11 @@ function addSelectAdvisorName(advName="notSet") {
     ul.appendChild(li);
 }
 
+function clearSelectedList(){
+    var ul = document.getElementById("selectedAdvisorUl");
+    ul.innerHTML = "";
+}
+
 function removeLiById(liId){
     var lis = document.querySelectorAll('#selectedAdvisorUl li');
     for(var i=0; li=lis[i]; i++) {
@@ -339,22 +346,28 @@ function removeLiById(liId){
     </navleft>
 
 
-    <table style="width:800px; margin:0 auto; float: left;">
-        <tr>
-        {% for col in colnames %}
-            <th>{{ col }}</th>
-        {% endfor %}
-        </tr>
-
-        {% for item in companys %}
-        <tr>
-            <td style="width:400px; text-align: left;">{{ item.Name     }}</td>
-            <td>{{ item.CUSIP    }}</td>
-            <td>{{ item.SecId    }}</td>
-            <td>{{ item.FundId   }}</td>
-        </tr>
-        {% endfor %}
-    </table>        
+    <div style="overflow-y:auto; height:93vh; width:800px;">
+        
+        <table style="margin:0 auto; float:left;">
+            <thead>
+                <tr>
+                {% for col in colnames %}
+                    <th>{{ col }}</th>
+                {% endfor %}
+                </tr>
+            </thead>
+            <tbody style="overflow-y:auto; height:90vh; width:800px;">
+                {% for item in companys %}
+                <tr>
+                    <td style="width:400px; text-align:left;">{{ item.Name     }}</td>
+                    <td>{{ item.CUSIP    }}</td>
+                    <td>{{ item.SecId    }}</td>
+                    <td>{{ item.FundId   }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>        
+    </div>
 
 </section>
 
