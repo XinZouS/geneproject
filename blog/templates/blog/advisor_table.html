@@ -229,15 +229,19 @@ function autocomplete(inp, arr) {
         for (i = 0; i < arr.length; i++) {
             /*check if the item starts with the same letters as the text field value:*/
             if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                var advName = arr[i];
                 /*create a DIV element for each matching element:*/
                 divB = document.createElement("DIV");
                 /*make the matching letters bold:*/
-                divB.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-                divB.innerHTML += arr[i].substr(val.length);
+                divB.innerHTML = "<strong>" + advName.substr(0, val.length) + "</strong>";
+                divB.innerHTML += advName.substr(val.length);
                 /*insert a input field that will hold the current array item's value:*/
-                divB.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                divB.innerHTML += "<input type='hidden' value='" + advName + "'>";
 
-                divB.setAttribute("id", arr[i]);
+                divB.setAttribute("id", advName);
+                if (selectedNames.includes(advName)) {
+                    divB.classList.add("autocomplete-active");
+                }
 
                 divB.addEventListener("click", function(e) {
                     var targetLi = this.getElementsByTagName("input")[0]
@@ -388,6 +392,7 @@ function removeSelectAdvisorName(advName="") {
 function clearSelectedList(){
     var ul = document.getElementById("selectedAdvisorUl");
     ul.innerHTML = "";
+    selectedNames = [];
 }
 
 function removeLiById(liId){
