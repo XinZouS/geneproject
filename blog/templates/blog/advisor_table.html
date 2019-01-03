@@ -36,6 +36,9 @@ input[type=submit] {
   color: #fff;
   cursor: pointer;
 }
+.blankMarginDiv {
+    height: 15px;
+}
 .btn {
   border: none;
   background-color: #eee;
@@ -169,40 +172,51 @@ th div{
 
     <navleft>
 
-        <h3>Search Advisors:</h3>
 
         <div style="width: 100%">
-
-            <form autocomplete="off" action="advisor-table">
+            <form method="POST" autocomplete="off" action="advisor-table">
                 {% csrf_token %}
+                <h4>Search Advisors:</h4>
                 <div class="autocomplete" style="width:100%;">
-                    <input id="myInput" type="text" name="myAdvisor" placeholder="Advisor Name" style="width: 78%;">
-                    <button type="button" onclick="clearSearchText()" class="btn info" style="width: 20%;">Add</button>
+                    <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name" style="width: 70%;">
+                    <button type="button" onclick="addSearchAdvisorText()" class="btn info" style="width: 28%;">Add</button>
                 </div>
-            </form>
-
-            <div id="blankMarginDiv" style="height:30px;"></div>
+                <div class="blankMarginDiv"></div>
             
-            <form method="POST" action="advisor-table">
-                {% csrf_token %}
-                <div id="selectedAdvisorNamesDiv" style="height:300px; background-color:#fff; overflow:auto;">
+                <div id="selectedAdvisorNamesDiv" style="height:200px; background-color:#fff; overflow:auto;">
                     <ul id="selectedAdvisorUl"></ul>
                 </div>
 
-                <div id="submitUlBtnContainer" style="width:100%; height:50px; padding-top: 20px;">
-                    <button id="clearButton" type="button" onclick="clearSelectedList()" class="btn info" style="width:20%; float:center;">Clear</button>
-                    <input id="submitButton" type="submit" style="float:right; width:40%; border-radius: 5px;">
+                <div id="clearUlBtnContainer" style="width:100%; height:50px; padding-top: 10px;">
+                    <button id="clearAdvisorButton" type="button" onclick="clearSelectedAdvisorList()" class="btn info" style="width:20%; float:right; color:#cc3300">Clear</button>
                 </div>
+
+
+                <h4 style="margin-top: 30px;">Search MSCats:</h4>
+                <div class="autocomplete" style="width:100%;">
+                    <input id="searchMSCatInput" type="text" name="myMSCat" placeholder="MSCat Name" style="width: 70%;">
+                    <button type="button" onclick="addSearchMSCatText()" class="btn info" style="width: 28%;">Add</button>
+                </div>
+                <div class="blankMarginDiv"></div>
+
+                <div id="selectedMSCatNamesDiv" style="height:200px; background-color:#fff; overflow:auto;">
+                    <ul id="selectedMSCatUl"></ul>
+                </div>
+
+                <div id="submitUlBtnContainer" style="width:100%; height:50px; padding-top: 10px;">
+                    <button id="clearButton" type="button" onclick="clearSelectedMSCatList()" class="btn info" style="width:20%; float:right; color:#cc3300">Clear</button>
+                </div>
+
+
+                <input id="submitButton" type="submit" style="float:right; width:50%; border-radius: 5px; margin-top: 30px;">
             </form>
 
-            <div style="padding-top: 30px;">
-                <h5 style="color:#33cc99">Get total results: {{ companys|length }}</h5>
-            </div>
         </div>
 
 
 <script>
-function autocomplete(inp, arr) {
+function autocomplete(SearchTypeEnum, inp, arr) {
+    console.log(SearchTypeEnum);
     /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/
     var currentFocus;
@@ -239,7 +253,7 @@ function autocomplete(inp, arr) {
                 divB.innerHTML += "<input type='hidden' value='" + advName + "'>";
 
                 divB.setAttribute("id", advName);
-                if (selectedNames.includes(advName)) {
+                if (selectedAdvisorNames.includes(advName)) {
                     divB.classList.add("autocomplete-active");
                 }
 
@@ -249,7 +263,7 @@ function autocomplete(inp, arr) {
                     var selectDiv = document.getElementById(selectName);
                     /*insert the value for the autocomplete text field:*/
                     // inp.value = selectName;
-                    if (selectedNames.includes(selectName)) {
+                    if (selectedAdvisorNames.includes(selectName)) {
                         selectDiv.classList.remove("autocomplete-active");
                         removeSelectAdvisorName(selectName);
                     } else {
@@ -320,22 +334,30 @@ function autocomplete(inp, arr) {
     });
 }
 
+var SearchTypeEnum = Object.freeze({"Advisor":1, "MSCat":2})
+
 var allAdvs = {{ advisorNames|safe }};
-var selectedNames = {{ selectedNames|safe }};
+var allMSCats = {{ mscatNames|safe }};
+var selectedAdvisorNames = {{ selectedAdvisorNames|safe }};
 var idOfName = {{ idOfNameDict|safe }};
-/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-autocomplete(document.getElementById("myInput"), allAdvs);
-setupSelectedNames();
+/*initiate the autocomplete function on the "searchAdvisorInput" element, and pass along the countries array as possible autocomplete values:*/
+autocomplete(SearchTypeEnum.Advisor, document.getElementById("searchAdvisorInput"), allAdvs);
+autocomplete(SearchTypeEnum.MSCat, document.getElementById("searchMSCatInput"), allMSCats);
+
+setupselectedAdvisorNames();
 
 
-function setupSelectedNames() {
-    for (i in selectedNames) {
-        addSelectAdvisorName(selectedNames[i]);
+function setupselectedAdvisorNames() {
+    for (i in selectedAdvisorNames) {
+        addSelectAdvisorName(selectedAdvisorNames[i]);
     }
 }
 
-function clearSearchText() {
-    myInput.value = "";
+function addSearchAdvisorText() {
+    searchAdvisorInput.value = "";
+}
+function addSearchMSCatText() {
+    searchMSCatInput.value = "";
 }
 
 function addSelectAdvisorName(advName="notSet") {
@@ -366,7 +388,7 @@ function addSelectAdvisorName(advName="notSet") {
     rmBtn.setAttribute("id", advId);
     rmBtn.appendChild(btnIcon);
     rmBtn.addEventListener('click', function(event) {
-        removeLiById(advId);
+        removeLiByAdvisorId(advId);
     });
 
     li.appendChild(idField);
@@ -374,29 +396,44 @@ function addSelectAdvisorName(advName="notSet") {
     li.appendChild(rmBtn);
     ul.appendChild(li);
 
-    selectedNames.push(advName);
+    selectedAdvisorNames.push(advName);
 }
 
 function removeSelectAdvisorName(advName="") {
     var advId = idOfName[advName];
-    removeLiById(advId);
+    removeLiByAdvisorId(advId);
 
-    for (var i = 0; i < selectedNames.length; i++) {
-        if (selectedNames[i] == advName) {
-            selectedNames.splice(i, 1);
+    for (var i = 0; i < selectedAdvisorNames.length; i++) {
+        if (selectedAdvisorNames[i] == advName) {
+            selectedAdvisorNames.splice(i, 1);
             return;
         }
     }
 }
 
-function clearSelectedList(){
+function clearSelectedAdvisorList() {
     var ul = document.getElementById("selectedAdvisorUl");
     ul.innerHTML = "";
-    selectedNames = [];
+    selectedAdvisorNames = [];
 }
 
-function removeLiById(liId){
+function clearSelectedMSCatList() {
+    var ul = document.getElementById("selectedMSCatUl");
+    ul.innerHTML = "";
+    selectedMSCatNames = [];
+}
+
+function removeLiByAdvisorId(liId){
     var lis = document.querySelectorAll('#selectedAdvisorUl li');
+    for(var i=0; li=lis[i]; i++) {
+        if(li.id == liId) {
+            li.parentNode.removeChild(li);
+            return;
+        }
+    }
+}
+function removeLiByMSCatId(liId){
+    var lis = document.querySelectorAll('#selectedMSCatUl li');
     for(var i=0; li=lis[i]; i++) {
         if(li.id == liId) {
             li.parentNode.removeChild(li);
