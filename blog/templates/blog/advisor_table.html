@@ -177,7 +177,7 @@ th div{
                 {% csrf_token %}
                 <div class="autocomplete" style="width:100%;">
                     <input id="myInput" type="text" name="myAdvisor" placeholder="Advisor Name" style="width: 78%;">
-                    <button type="button" onclick="clearSearchText()" class="btn info" style="width: 20%;">Reset</button>
+                    <button type="button" onclick="clearSearchText()" class="btn info" style="width: 20%;">Add</button>
                 </div>
             </form>
 
@@ -242,11 +242,16 @@ function autocomplete(inp, arr) {
                 divB.addEventListener("click", function(e) {
                     var targetLi = this.getElementsByTagName("input")[0]
                     var selectName = targetLi.value;
+                    var selectDiv = document.getElementById(selectName);
                     /*insert the value for the autocomplete text field:*/
                     // inp.value = selectName;
-                    var selectDiv = document.getElementById(selectName);
-                    selectDiv.classList.add("autocomplete-active");
-                    addSelectAdvisorName(selectName);
+                    if (selectedNames.includes(selectName)) {
+                        selectDiv.classList.remove("autocomplete-active");
+                        removeSelectAdvisorName(selectName);
+                    } else {
+                        selectDiv.classList.add("autocomplete-active");
+                        addSelectAdvisorName(selectName);
+                    }
                     //closeAllLists();
                 });
                 c.appendChild(divB);
@@ -313,6 +318,7 @@ function autocomplete(inp, arr) {
 
 var allAdvs = {{ advisorNames|safe }};
 var selectedNames = {{ selectedNames|safe }};
+var idOfName = {{ idOfNameDict|safe }};
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(document.getElementById("myInput"), allAdvs);
 setupSelectedNames();
@@ -333,7 +339,6 @@ function addSelectAdvisorName(advName="notSet") {
     li = document.createElement("li");
     li.appendChild(document.createTextNode(advName));
 
-    var idOfName = {{ idOfNameDict|safe }};
     var advId = idOfName[advName]; 
     li.setAttribute("id", advId);
 
@@ -364,6 +369,20 @@ function addSelectAdvisorName(advName="notSet") {
     li.appendChild(nameField);
     li.appendChild(rmBtn);
     ul.appendChild(li);
+
+    selectedNames.push(advName);
+}
+
+function removeSelectAdvisorName(advName="") {
+    var advId = idOfName[advName];
+    removeLiById(advId);
+
+    for (var i = 0; i < selectedNames.length; i++) {
+        if (selectedNames[i] == advName) {
+            selectedNames.splice(i, 1);
+            return;
+        }
+    }
 }
 
 function clearSelectedList(){
