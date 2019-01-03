@@ -45,13 +45,13 @@ input[type=submit] {
   cursor: pointer;
   display: inline-block;
 }
-/* On mouse-over */
 .btn:hover {background: #fff;}
 .info {color: dodgerblue;}
 
 .liBtn {
   height: 23px;
   width: 23px;
+  float: right;
   border-radius: 50%;
   background-color: DodgerBlue;
   border: none;
@@ -61,9 +61,25 @@ input[type=submit] {
   font-size: 14px;
   cursor: pointer;
 }
-/* Darker background on mouse-over */
 .liBtn:hover {
   background-color: Red;
+}
+
+ul {
+  padding: 0;
+}
+ul li {
+  position: relative;
+  padding: 6px 10px 6px 20px; /* t, r, b, l */
+  list-style-type: circle;
+  font-size: 18px;
+  transition: 0.2s;
+}
+ul li:nth-child(odd) {
+  background: #efefef;
+}
+ul li:hover {
+  background: #ddf;
 }
 
 .autocomplete-items {
@@ -86,6 +102,9 @@ input[type=submit] {
 /*when hovering an item:*/
 .autocomplete-items div:hover {
   background-color: #e9e9e9; 
+}
+.autocomplete-items div:click {
+  background-color: #22ff33; 
 }
 /*when navigating through the items using the arrow keys:*/
 .autocomplete-active {
@@ -111,221 +130,323 @@ input[type=submit] {
   background-color: #4CAF50;
   color: white;
 }
+
+tr th:first-child div {
+    padding: 15px 0px 0px 0px; 
+    width: 50px;
+    border: none;
+}
+td, th {
+  padding: 10px 20px;
+}
+th {
+  height: 0;
+  line-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  color: transparent;
+  border: none;
+  white-space: nowrap;
+}
+th div{
+  position: absolute;
+  height: 44px;
+  color: #101066;
+  padding: 14px 30px;
+  top: 0;
+  margin-left: -20px;
+  line-height: normal;
+  border-left: 1px solid #aabbdd;
+}
+
 </style>
 </head>     
 
 <body>
 
 
-<section class="scrollable" style="width: 1330px;">
+<section class="scrollable" style="width: 1310px;">
 
     <navleft>
 
         <h3>Search Advisors:</h3>
 
-        <div style="height: 1200px; width: 100%">
+        <div style="width: 100%">
 
-            <form autocomplete="off" action="/action_page.php">
+            <form autocomplete="off" action="advisor-table">
+                {% csrf_token %}
                 <div class="autocomplete" style="width:100%;">
                     <input id="myInput" type="text" name="myAdvisor" placeholder="Advisor Name" style="width: 78%;">
-                    <button type="button" onclick="clearSearchText()" class="btn info" style="width: 20%;">Clear</button>
+                    <button type="button" onclick="clearSearchText()" class="btn info" style="width: 20%;">Add</button>
                 </div>
             </form>
 
-            <div id="blankMarginDiv" style="height:60px;"></div>
+            <div id="blankMarginDiv" style="height:30px;"></div>
             
-            <form>                
+            <form method="POST" action="advisor-table">
+                {% csrf_token %}
                 <div id="selectedAdvisorNamesDiv" style="height:300px; background-color:#fff; overflow:auto;">
-                    <ul id="selectedAdvisorUl" style="padding-top:20px;"> </ul>
+                    <ul id="selectedAdvisorUl"></ul>
                 </div>
+
                 <div id="submitUlBtnContainer" style="width:100%; height:50px; padding-top: 20px;">
-                    <input type="submit" style="float:right; width:40%">
+                    <button id="clearButton" type="button" onclick="clearSelectedList()" class="btn info" style="width:20%; float:center;">Clear</button>
+                    <input id="submitButton" type="submit" style="float:right; width:40%; border-radius: 5px;">
                 </div>
             </form>
 
+            <div style="padding-top: 30px;">
+                <h5 style="color:#33cc99">Get total results: {{ companys|length }}</h5>
+            </div>
         </div>
+
 
 <script>
 function autocomplete(inp, arr) {
-  /*the autocomplete function takes two arguments,
-  the text field element and an array of possible autocompleted values:*/
-  var currentFocus;
-  /*execute a function when someone writes in the text field:*/
-  inp.addEventListener("input", function(e) {
-      var a, b, c, i, val = this.value;
-      /*close any already open lists of autocompleted values*/
-      closeAllLists();
-      if (!val) { return false;}
-      currentFocus = -1;
+    /*the autocomplete function takes two arguments,
+    the text field element and an array of possible autocompleted values:*/
+    var currentFocus;
+    /*execute a function when someone writes in the text field:*/
+    inp.addEventListener("input", function(e) {
+        var a, b, c, i, val = this.value;
+        /*close any already open lists of autocompleted values*/
+        closeAllLists();
+        if (!val) { return false;}
+        currentFocus = -1;
 
-      /*create a DIV element that will contain the items (values):*/
-      a = document.createElement("DIV");
-      a.setAttribute("id", this.id + "autocomplete-list");
-      a.setAttribute("class", "autocomplete-items");
-      this.parentNode.appendChild(a); /*append DIV as a child of autocomplete container:*/
+        /*create a DIV element that will contain the items (values):*/
+        a = document.createElement("DIV");
+        a.setAttribute("id", this.id + "autocomplete-list");
+        a.setAttribute("class", "autocomplete-items");
+        this.parentNode.appendChild(a); /*append DIV as a child of autocomplete container:*/
 
-      // the scroll container for search result list
-      c = document.createElement("DIV");
-      c.setAttribute("class", "vertical-menu");
-      c.setAttribute("id", "autocompleteMenuDiv");
-      a.appendChild(c);
+        // the scroll container for search result list
+        c = document.createElement("DIV");
+        c.setAttribute("class", "vertical-menu");
+        c.setAttribute("id", "autocompleteMenuDiv");
+        a.appendChild(c);
 
-      for (i = 0; i < arr.length; i++) {
-        /*check if the item starts with the same letters as the text field value:*/
-        if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-          /*create a DIV element for each matching element:*/
-          divB = document.createElement("DIV");
-          /*make the matching letters bold:*/
-          divB.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
-          divB.innerHTML += arr[i].substr(val.length);
-          /*insert a input field that will hold the current array item's value:*/
-          divB.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
-          divB.addEventListener("click", function(e) {
-            var targetLi = this.getElementsByTagName("input")[0]
-            var selectName = targetLi.value;
-            addSelectionHightLight(targetLi);
-            /*insert the value for the autocomplete text field:*/
-            // inp.value = selectName;
-            didSelectAdvisorName(selectName);
-            //closeAllLists();
-          });
-          c.appendChild(divB);
+        for (i = 0; i < arr.length; i++) {
+            /*check if the item starts with the same letters as the text field value:*/
+            if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                var advName = arr[i];
+                /*create a DIV element for each matching element:*/
+                divB = document.createElement("DIV");
+                /*make the matching letters bold:*/
+                divB.innerHTML = "<strong>" + advName.substr(0, val.length) + "</strong>";
+                divB.innerHTML += advName.substr(val.length);
+                /*insert a input field that will hold the current array item's value:*/
+                divB.innerHTML += "<input type='hidden' value='" + advName + "'>";
+
+                divB.setAttribute("id", advName);
+                if (selectedNames.includes(advName)) {
+                    divB.classList.add("autocomplete-active");
+                }
+
+                divB.addEventListener("click", function(e) {
+                    var targetLi = this.getElementsByTagName("input")[0]
+                    var selectName = targetLi.value;
+                    var selectDiv = document.getElementById(selectName);
+                    /*insert the value for the autocomplete text field:*/
+                    // inp.value = selectName;
+                    if (selectedNames.includes(selectName)) {
+                        selectDiv.classList.remove("autocomplete-active");
+                        removeSelectAdvisorName(selectName);
+                    } else {
+                        selectDiv.classList.add("autocomplete-active");
+                        addSelectAdvisorName(selectName);
+                    }
+                    //closeAllLists();
+                });
+                c.appendChild(divB);
+            }
         }
-      }
-  });
-  /*execute a function presses a key on the keyboard:*/
-  inp.addEventListener("keydown", function(e) {
-      var x = document.getElementById(this.id + "autocomplete-list");
-      if (x) x = x.getElementsByTagName("div");
-      if (e.keyCode == 40) {
-        /*If the arrow DOWN key is pressed, increase the currentFocus variable:*/
-        currentFocus++;
-        addActive(x); /*and and make the current item more visible:*/
-      } else if (e.keyCode == 38) { //up
-        /*If the arrow UP key is pressed, decrease the currentFocus variable:*/
-        currentFocus--;
-        addActive(x); /*and and make the current item more visible:*/
-      } else if (e.keyCode == 13) {
-        /*If the ENTER key is pressed, prevent the form from being submitted,*/
-        e.preventDefault();
-        if (currentFocus > -1) {
-          /*and simulate a click on the "active" item:*/
-          if (x) x[currentFocus].click();
+    });
+    /*execute a function presses a key on the keyboard:*/
+    inp.addEventListener("keydown", function(e) {
+        var x = document.getElementById(this.id + "autocomplete-list");
+        if (x) x = x.getElementsByTagName("div");
+        if (e.keyCode == 40) {
+            /*If the arrow DOWN key is pressed, increase the currentFocus variable:*/
+            currentFocus++;
+            addActive(x); /*and and make the current item more visible:*/
+        } else if (e.keyCode == 38) { //up
+            /*If the arrow UP key is pressed, decrease the currentFocus variable:*/
+            currentFocus--;
+            addActive(x); /*and and make the current item more visible:*/
+        } else if (e.keyCode == 13) {
+            /*If the ENTER key is pressed, prevent the form from being submitted,*/
+            e.preventDefault();
+            if (currentFocus > -1) {
+                /*and simulate a click on the "active" item:*/
+                if (x) x[currentFocus].click();
+            }
         }
-      }
-  });
-  function addActive(x) {
-    /*a function to classify an item as "active":*/
-    if (!x) return false;
-    /*start by removing the "active" class on all items:*/
-    removeActive(x);
-    if (currentFocus >= x.length) currentFocus = 0;
-    if (currentFocus < 0) currentFocus = (x.length - 1);
-    /*add class "autocomplete-active":*/
-    x[currentFocus].classList.add("autocomplete-active");
-  }
-  function removeActive(x) {
-    /*a function to remove the "active" class from all autocomplete items:*/
-    for (var i = 0; i < x.length; i++) {
-      x[i].classList.remove("autocomplete-active");
+    });
+    function addActive(x) {
+        /*a function to classify an item as "active":*/
+        if (!x) return false;
+        /*start by removing the "active" class on all items:*/
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = (x.length - 1);
+        /*add class "autocomplete-active":*/
+        x[currentFocus].classList.add("autocomplete-active");
     }
-  }
-  function closeAllLists(elmnt) {
-    var x = document.getElementsByClassName("autocomplete-items");
-    for (var i = 0; i < x.length; i++) {
-      if (elmnt != x[i] && elmnt != inp) {
-        x[i].parentNode.removeChild(x[i]);
-      }
+    function removeActive(x) {
+        /*a function to remove the "active" class from all autocomplete items:*/
+        for (var i = 0; i < x.length; i++) {
+          x[i].classList.remove("autocomplete-active");
+        }
     }
-  }
-  /*execute a function when someone clicks in the document:*/
-  document.addEventListener("click", function (e) {
-    if (e.target.parentNode.id != "autocompleteMenuDiv") {
-        closeAllLists(e.target);
-    }
-  });
-}
-
-var allAdvs = {{ advisorNames|safe }};
-/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-autocomplete(document.getElementById("myInput"), allAdvs);
-
-    function clearSearchText() {
-        myInput.value = "";
-    }
-
-    function didSelectAdvisorName(advName="notSet") {
-        var ul = document.getElementById("selectedAdvisorUl");
-        li = document.createElement("li");
-        li.appendChild(document.createTextNode(advName));
-
-        var advId = advName;
-        li.setAttribute("id", advId);
-
-        var idField = document.createElement("INPUT");
-        idField.setAttribute("value", advId);
-        idField.setAttribute("type", "hidden");
-
-        var btnIcon = document.createElement("i");
-        btnIcon.setAttribute("class", "fa fa-close");
-        var rmBtn = document.createElement("BUTTON");
-        rmBtn.setAttribute("class", "liBtn");
-        rmBtn.setAttribute("id", advId);
-        rmBtn.appendChild(btnIcon);
-        rmBtn.addEventListener('click', function(event) {
-            removeLiById(advId);
-        });
-
-        li.appendChild(idField);
-        li.appendChild(rmBtn);
-        ul.appendChild(li);
-    }
-
-    function addSelectionHightLight(targetLi) {
-        targetLi.setAttribute("background", "RoyalBlue");
-    }
-
-    function removeLiById(liId){
-        var lis = document.querySelectorAll('#selectedAdvisorUl li');
-        for(var i=0; li=lis[i]; i++) {
-            if(li.id == liId) {
-                li.parentNode.removeChild(li);
-                return;
+    function closeAllLists(elmnt) {
+        var x = document.getElementsByClassName("autocomplete-items");
+        for (var i = 0; i < x.length; i++) {
+            if (elmnt != x[i] && elmnt != inp) {
+                x[i].parentNode.removeChild(x[i]);
             }
         }
     }
+    function addSelectionHightLight(targetLiId) {
+        var targetLi = document.getElementById(targetLiId);
+        if (targetLi) targetLi = targetLi.getElementsByTagName("li");
+        targetLi.classList.add("autocomplete-active");
+    }
+    /*execute a function when someone clicks in the document:*/
+    document.addEventListener("click", function (e) {
+        if (e.target.parentNode.id != "autocompleteMenuDiv") {
+            closeAllLists(e.target);
+        }
+    });
+}
+
+var allAdvs = {{ advisorNames|safe }};
+var selectedNames = {{ selectedNames|safe }};
+var idOfName = {{ idOfNameDict|safe }};
+/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+autocomplete(document.getElementById("myInput"), allAdvs);
+setupSelectedNames();
+
+
+function setupSelectedNames() {
+    for (i in selectedNames) {
+        addSelectAdvisorName(selectedNames[i]);
+    }
+}
+
+function clearSearchText() {
+    myInput.value = "";
+}
+
+function addSelectAdvisorName(advName="notSet") {
+    var ul = document.getElementById("selectedAdvisorUl");
+    li = document.createElement("li");
+    li.appendChild(document.createTextNode(advName));
+
+    var advId = idOfName[advName]; 
+    li.setAttribute("id", advId);
+
+    var idField = document.createElement("INPUT");
+    idField.setAttribute("value", advId);
+    idField.setAttribute("type", "hidden");
+    idField.setAttribute("name", "advId");
+    idField.setAttribute("id", "advId");
+
+    var nameField = document.createElement("INPUT");
+    nameField.setAttribute("value", advName);
+    nameField.setAttribute("type", "hidden");
+    nameField.setAttribute("name", "advName");
+    nameField.setAttribute("id", "advName");
+
+    var btnIcon = document.createElement("i");
+    btnIcon.setAttribute("class", "fa fa-close");
+    var rmBtn = document.createElement("BUTTON");
+    rmBtn.setAttribute("class", "liBtn");
+    rmBtn.setAttribute("type", "button");
+    rmBtn.setAttribute("id", advId);
+    rmBtn.appendChild(btnIcon);
+    rmBtn.addEventListener('click', function(event) {
+        removeLiById(advId);
+    });
+
+    li.appendChild(idField);
+    li.appendChild(nameField);
+    li.appendChild(rmBtn);
+    ul.appendChild(li);
+
+    selectedNames.push(advName);
+}
+
+function removeSelectAdvisorName(advName="") {
+    var advId = idOfName[advName];
+    removeLiById(advId);
+
+    for (var i = 0; i < selectedNames.length; i++) {
+        if (selectedNames[i] == advName) {
+            selectedNames.splice(i, 1);
+            return;
+        }
+    }
+}
+
+function clearSelectedList(){
+    var ul = document.getElementById("selectedAdvisorUl");
+    ul.innerHTML = "";
+    selectedNames = [];
+}
+
+function removeLiById(liId){
+    var lis = document.querySelectorAll('#selectedAdvisorUl li');
+    for(var i=0; li=lis[i]; i++) {
+        if(li.id == liId) {
+            li.parentNode.removeChild(li);
+            return;
+        }
+    }
+}
 </script>
 
-
-
-<!--         <div class="vertical-menu">
-            {% for adv in advisors %}
-                <a href="/advisor/{{ adv.id }}">{{ adv.Name }}</a>
-            {% endfor %}
-        </div>
- -->
     </navleft>
 
 
-    <table style="width:800px; margin:0 auto; float: left;">
-        <tr>
-        {% for col in colnames %}
-            <th>{{ col }}</th>
-        {% endfor %}
-        </tr>
-
-        {% for item in companys %}
-        <tr>
-            <td style="width:400px; text-align: left;">{{ item.Name     }}</td>
-            <td>{{ item.CUSIP    }}</td>
-            <td>{{ item.SecId    }}</td>
-            <td>{{ item.FundId   }}</td>
-        </tr>
-        {% endfor %}
-    </table>        
+    <div style="position: relative; width: 800px; padding-top: 43px; background: #eaeaea; float:right;">
+        <div style="overflow-y:auto; width:800px; height:88vh; padding-right:10px;">        
+            <table style="margin:0 auto; float:left;">
+                <thead>
+                    <tr>
+                    {% for col in colnames %}
+                        <th><div>{{ col }}</div></th>
+                    {% endfor %}
+                    </tr>
+                </thead>
+                <tbody style="overflow-y:auto; height:90vh; width:800px;">
+                    {% for item in companys %}
+                    <tr>
+                        <td style="padding-left: 10px;">{{ forloop.counter }}</td>
+                        <td style="width:400px; text-align:left;">{{ item.Name     }}</td>
+                        <td>{{ item.CUSIP    }}</td>
+                        <td>{{ item.SecId    }}</td>
+                        <td>{{ item.FundId   }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>        
+        </div>
+    </div>
 
 </section>
 
 </body>
 
 {% endblock content %}
+
+
+
+
+
+
+
+
+
+
+

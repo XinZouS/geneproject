@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.views.generic import TemplateView
 from .models import Company, Advisors
 from django.db.models import Q
 
@@ -34,31 +35,51 @@ def company_13rows(request):
 	return render(request, 'blog/company_13rows.html', content)
 
 
-def advisor_table(request, advisorid=0):
-	cols = ["Name", "CUSIP", "SecId", "FundId"]
+def advisor_table(request):
+	cols = ["No.", "Name", "CUSIP", "SecId", "FundId"]
+	companyInfo = []
+	selectedIds = []
+	selectedNames = []
 
-	if advisorid == 0:
-		cmpinfo = Company.objects.order_by("Name")
+	if request.method == "POST":
+		selectedIds = request.POST.getlist('advId', '0')
+		selectedNames = request.POST.getlist('advName', '')
+		selectedIdSet = set(selectedIds)
+		selectedNameSet = set(selectedNames)
+
+		for advId in selectedIdSet:
+			companysById = Company.objects.filter(AdvisorID_id=advId).order_by("Name")
+			companyInfo.extend(companysById)
+			# SQL: 
+			# select name, cusip, secid, fundid, advisorid_id from blog_company 
+			# where advisorid_id IN (177, 282, 173) order by name
+
+		selectedNames = []
+		for name in selectedNameSet:
+			selectedNames.append(name.encode("utf-8"))
+
 	else:
-		cmpinfo = Company.objects.filter(AdvisorID_id=advisorid).order_by("Name")
+		print "----------------- request is GET, not POST....,"
 
-	# plan A: use Company to filter out all Advisors:
-	# advs = Company.objects.values('Advisor').exclude(Advisor__isnull=True).order_by("Advisor").distinct()
-	# plan B: use new table Advisor to provide info: 
-	advs = Advisors.objects.all()
-	
+	advs = Advisors.objects.all()	
 	advsNames = list(map(lambda x: x.Name.encode("utf-8"), advs))
 
-	advsObj = Advisors.objects.filter(id=advisorid)
-	selected = {'Name':'Select an Advisor'} if len(advsObj)==0 else advsObj[0]
+	idOfNameDict = {} # {'Name':'advId'}
+	for adv in advs:
+		idOfNameDict[adv.Name.encode("utf-8")] = adv.id
+
+	# advsObj = Advisors.objects.filter(id=advisorid)
 
 	content = {
-		'companys': cmpinfo, # get first n rows 
+		'companys': companyInfo, # get first n rows 
 		'colnames': cols,
 		'advisors': advs,
 		'advisorNames': advsNames,
-		'selected': selected,
+		'idOfNameDict': idOfNameDict,
+		'selectedIds': selectedIds,
+		'selectedNames': selectedNames,
 	}
+
 	return render(request, 'blog/advisor_table.html', content)
 
 
