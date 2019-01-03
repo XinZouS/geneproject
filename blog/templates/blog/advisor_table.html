@@ -131,8 +131,10 @@ ul li:hover {
   color: white;
 }
 
-thead tr th:first-child {  /* for table head "No." */
-    padding: 0px 0px 0px 6px; 
+tr th:first-child div {
+    padding: 15px 0px 0px 0px; 
+    width: 50px;
+    border: none;
 }
 td, th {
   padding: 10px 20px;
@@ -148,7 +150,7 @@ th {
 }
 th div{
   position: absolute;
-  height: 45px;
+  height: 44px;
   color: #101066;
   padding: 14px 30px;
   top: 0;
@@ -187,12 +189,15 @@ th div{
                     <ul id="selectedAdvisorUl"></ul>
                 </div>
 
-                <div id="submitUlBtnContainer" style="width:100%; height:50px; padding-top: 10px;">
+                <div id="submitUlBtnContainer" style="width:100%; height:50px; padding-top: 20px;">
                     <button id="clearButton" type="button" onclick="clearSelectedList()" class="btn info" style="width:20%; float:center;">Clear</button>
                     <input id="submitButton" type="submit" style="float:right; width:40%; border-radius: 5px;">
                 </div>
             </form>
 
+            <div style="padding-top: 30px;">
+                <h5 style="color:#33cc99">Get total results: {{ companys|length }}</h5>
+            </div>
         </div>
 
 
