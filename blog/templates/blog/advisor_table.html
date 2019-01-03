@@ -131,6 +131,9 @@ ul li:hover {
   color: white;
 }
 
+thead tr th:first-child {  /* for table head "No." */
+    padding: 0px 0px 0px 6px; 
+}
 td, th {
   padding: 10px 20px;
 }
@@ -145,7 +148,7 @@ th {
 }
 th div{
   position: absolute;
-  height: 50px;
+  height: 45px;
   color: #101066;
   padding: 14px 30px;
   top: 0;
@@ -378,7 +381,7 @@ function removeLiById(liId){
 
 
     <div style="position: relative; width: 800px; padding-top: 43px; background: #eaeaea; float:right;">
-        <div style="overflow-y:auto; width:800px; height:90vh; padding-right:10px;">        
+        <div style="overflow-y:auto; width:800px; height:88vh; padding-right:10px;">        
             <table style="margin:0 auto; float:left;">
                 <thead>
                     <tr>
@@ -390,6 +393,7 @@ function removeLiById(liId){
                 <tbody style="overflow-y:auto; height:90vh; width:800px;">
                     {% for item in companys %}
                     <tr>
+                        <td style="padding-left: 10px;">{{ forloop.counter }}</td>
                         <td style="width:400px; text-align:left;">{{ item.Name     }}</td>
                         <td>{{ item.CUSIP    }}</td>
                         <td>{{ item.SecId    }}</td>

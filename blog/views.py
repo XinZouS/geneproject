@@ -36,7 +36,7 @@ def company_13rows(request):
 
 
 def advisor_table(request):
-	cols = ["Name", "CUSIP", "SecId", "FundId"]
+	cols = ["No.", "Name", "CUSIP", "SecId", "FundId"]
 	companyInfo = []
 	selectedIds = []
 	selectedNames = []
@@ -57,7 +57,7 @@ def advisor_table(request):
 		selectedNames = []
 		for name in selectedNameSet:
 			selectedNames.append(name.encode("utf-8"))
-			
+
 	else:
 		print "----------------- request is GET, not POST....,"
 
