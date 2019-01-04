@@ -28,9 +28,9 @@
 -- order by MSSubAdv
 
 
--- select count(*) from blog_advisors -- 1597
--- select count(*) from blog_mscats -- 123
--- select count(*)  from blog_mssubadvs -- 1289
+-- select * from blog_advisors -- count: 1597
+-- select * from blog_mscats -- count: 123
+select * from blog_mssubadvs -- count: 1289
 
 
 

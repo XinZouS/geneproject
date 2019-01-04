@@ -16,6 +16,10 @@
 body {
   font: 16px Arial;  
 }
+.searchTitle {
+    margin-top: 10px;
+    font-weight: bold;
+}
 /*the container must be positioned relative:*/
 .autocomplete {
   position: relative;
@@ -36,6 +40,17 @@ input[type=submit] {
   color: #fff;
   cursor: pointer;
 }
+
+.selectedNamesDiv {
+    height:116px;
+    background-color:#fff;
+    overflow:auto;
+}
+.clearUlBtnContainer {
+    width:100%;
+    height:40px;
+    padding-top: 10px;
+}
 .blankMarginDiv {
     height: 10px;
 }
@@ -48,8 +63,13 @@ input[type=submit] {
   cursor: pointer;
   display: inline-block;
 }
-.btn:hover {background: #fff;}
 .info {color: dodgerblue;}
+
+.add {width: 28%;}
+.add:hover {
+    background: #b3ffb3;
+    font-weight: bold;
+}
 
 .liBtn {
   height: 23px;
@@ -67,6 +87,13 @@ input[type=submit] {
 .liBtn:hover {
   background-color: Red;
 }
+
+.clearUlButton {
+    width: 26%;
+    float: right;
+    color: #cc3300;
+}
+.clearUlButton:hover {background-color: #ffb3b3;}
 
 ul {
   padding: 0;
@@ -172,38 +199,51 @@ th div{
     <navleft>
 
 
-        <div style="width: 100%; height: 560px;">
+        <div style="width: 100%;">
             <form method="POST" autocomplete="off" action="advisor-table">
                 {% csrf_token %}
-                <h5>Search Advisors:</h5>
+                <h5 class="searchTitle">Advisors:</h5>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name" style="width: 70%;">
-                    <button type="button" onclick="addSearchAdvisorText()" class="btn info" style="width: 28%;">Add</button>
+                    <button type="button" onclick="addSearchAdvisorText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
             
-                <div id="selectedAdvisorNamesDiv" style="height:116px; background-color:#fff; overflow:auto;">
+                <div id="selectedAdvisorNamesDiv" class="selectedNamesDiv">
                     <ul id="selectedAdvisorUl"></ul>
                 </div>
-
-                <div id="clearUlBtnContainer" style="width:100%; height:40px; padding-top: 10px;">
-                    <button id="clearAdvisorButton" type="button" onclick="clearSelectedAdvisorList()" class="btn info" style="width:20%; float:right; color:#cc3300">Clear</button>
+                <div class="clearUlBtnContainer">
+                    <button class="btn info clearUlButton" type="button" onclick="clearSelectedAdvisorList()">Clear</button>
                 </div>
 
 
-                <h5 style="margin-top: 10px;">Search MSCats:</h5>
+                <h5 class="searchTitle">MSCats:</h5>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchMSCatInput" type="text" name="myMSCat" placeholder="MSCat Name" style="width: 70%;">
-                    <button type="button" onclick="addSearchMSCatText()" class="btn info" style="width: 28%;">Add</button>
+                    <button type="button" onclick="addSearchMSCatText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
-                <div id="selectedMSCatNamesDiv" style="height:116px; background-color:#fff; overflow:auto;">
+                <div id="selectedMSCatNamesDiv" class="selectedNamesDiv">
                     <ul id="selectedMSCatUl"></ul>
                 </div>
+                <div class="clearUlBtnContainer">
+                    <button class="btn info clearUlButton" type="button" onclick="clearSelectedMSCatList()">Clear</button>
+                </div>
 
-                <div id="clearUlBtnContainer" style="width:100%; height:50px; padding-top: 10px;">
-                    <button id="clearButton" type="button" onclick="clearSelectedMSCatList()" class="btn info" style="width:20%; float:right; color:#cc3300">Clear</button>
+
+                <h5 class="searchTitle">MSSubAdvs:</h5>
+                <div class="autocomplete" style="width:100%;">
+                    <input id="searchMSSubAdvInput" type="text" name="myMSSubAdv" placeholder="MSSubAdv Name" style="width: 70%;">
+                    <button type="button" onclick="addSearchMSSubAdvText()" class="btn info add">Add</button>
+                </div>
+                <div class="blankMarginDiv"></div>
+
+                <div id="selectedMSSubAdvNamesDiv" class="selectedNamesDiv">
+                    <ul id="selectedMSSubAdvUl"></ul>
+                </div>
+                <div class="clearUlBtnContainer">
+                    <button class="btn info clearUlButton" type="button" onclick="clearSelectedMSSubAdvList()">Clear</button>
                 </div>
 
 
@@ -348,22 +388,28 @@ function autocomplete(searchTypeEnum, inp, arr) {
     });
 }
 
-var SearchTypeEnum = Object.freeze({"Advisor":1, "MSCat":2});
+var SearchTypeEnum = Object.freeze({ "Advisor":1, "MSCat":2, "MSSubAdv":3 });
 
 var allAdvs = {{ advisorNames|safe }};
-var selectedAdvisorNames = {{ selectedAdvisorNames|safe }};
-var idOfAdvisorName = {{ idOfAdvisorNameDict|safe }};
-
 var allMSCats = {{ mscatNames|safe }};
+var allMSSubs = {{ mssubadvNames|safe }};
+
+var idOfAdvisorName = {{ idOfAdvisorNameDict|safe }};
 var idOfMSCatName = {{ idOfMSCatNameDict|safe }};
+var idOfMSSubAdvName = {{ idOfMSSubAdvNameDict|safe }};
+
+var selectedAdvisorNames = {{ selectedAdvisorNames|safe }};
 var selectedMSCatNames = {{ selectedMSCatNames|safe }}
+var selectedMSSubAdvNames = {{ selectedMSSubAdvNames|safe }};
 
 /*initiate the autocomplete function on the "searchAdvisorInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(SearchTypeEnum.Advisor, document.getElementById("searchAdvisorInput"), allAdvs);
 autocomplete(SearchTypeEnum.MSCat, document.getElementById("searchMSCatInput"), allMSCats);
+autocomplete(SearchTypeEnum.MSSubAdv, document.getElementById("searchMSSubAdvInput"), allMSSubs);
 
 setupselectedAdvisorNames();
 setupselectedMSCatNames();
+setupselectedMSSubAdvNames();
 
 
 function setupselectedAdvisorNames() {
@@ -374,6 +420,11 @@ function setupselectedAdvisorNames() {
 function setupselectedMSCatNames() {
     for (i in selectedMSCatNames) {
         addSelectMSCatName(selectedMSCatNames[i]);
+    }
+}
+function setupselectedMSSubAdvNames() {
+    for (i in selectedMSSubAdvNames) {
+        addSelectMSSubAdvName(selectedMSSubAdvNames[i]);
     }
 }
 
@@ -461,6 +512,46 @@ function addSelectMSCatName(catName="notSet") {
 
     selectedMSCatNames.push(catName);
 }
+
+function addSelectMSSubAdvName(subName="notSet") {
+    var ul = document.getElementById("selectedMSSubAdvUl");
+    li = document.createElement("li");
+    li.appendChild(document.createTextNode(subName));
+
+    var subId = idOfMSSubAdvName[subName]; 
+    li.setAttribute("id", subId);
+
+    var idField = document.createElement("INPUT");
+    idField.setAttribute("value", subId);
+    idField.setAttribute("type", "hidden");
+    idField.setAttribute("name", "subId");
+    idField.setAttribute("id", "subId");
+
+    var nameField = document.createElement("INPUT");
+    nameField.setAttribute("value", subName);
+    nameField.setAttribute("type", "hidden");
+    nameField.setAttribute("name", "subName");
+    nameField.setAttribute("id", "subName");
+
+    var btnIcon = document.createElement("i");
+    btnIcon.setAttribute("class", "fa fa-close");
+    var rmBtn = document.createElement("BUTTON");
+    rmBtn.setAttribute("class", "liBtn");
+    rmBtn.setAttribute("type", "button");
+    rmBtn.setAttribute("id", subId);
+    rmBtn.appendChild(btnIcon);
+    rmBtn.addEventListener('click', function(event) {
+        removeLiByMSSubAdvId(subId);
+    });
+
+    li.appendChild(idField);
+    li.appendChild(nameField);
+    li.appendChild(rmBtn);
+    ul.appendChild(li);
+
+    selectedMSSubAdvNames.push(subName);
+}
+
 
 function removeSelectAdvisorName(n="") {
     var advId = idOfAdvisorName[n];
