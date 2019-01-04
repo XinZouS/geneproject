@@ -172,7 +172,7 @@ th div{
     <navleft>
 
 
-        <div style="width: 100%">
+        <div style="width: 100%; height: 560px;">
             <form method="POST" autocomplete="off" action="advisor-table">
                 {% csrf_token %}
                 <h5>Search Advisors:</h5>
@@ -208,10 +208,12 @@ th div{
 
 
                 <input id="submitButton" type="submit" style="float:right; width:100%; border-radius: 5px; margin-top: 20px;">
+
             </form>
-
         </div>
-
+        <h6 style="height:20px; margin-top:10px; color:#008800">
+            Total results: {{ companys|length }}
+        </h6>
 
 <script>
 function autocomplete(searchTypeEnum, inp, arr) {
