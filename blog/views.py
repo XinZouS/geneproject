@@ -52,11 +52,10 @@ def advisor_table(request):
 
 		selectedMSCatIds = request.POST.getlist('catId')
 		selectedMSCatNames = request.POST.getlist('catName', '')
-		selectedMSCatIdSet = set(selectedMSCatIds)
+		selectedMSCatIdSet = set(list(map(lambda x: int(x.encode("utf-8")), selectedMSCatIds)))
 		selectedMsCatNameSet = set(selectedMSCatNames)
 
 		start_time = time.time()
-		print("---in post: %s seconds ---" % (time.time() - start_time))
 		if len(selectedAdvisorIds) != 0 and len(selectedMSCatIds) != 0:
 			cmpObjByAdv = []
 			for advId in selectedAdvisorIdSet:
@@ -66,24 +65,16 @@ def advisor_table(request):
 				elif len(obj) > 1:
 					for c in obj:
 						cmpObjByAdv.append(c)
-			print("---query Adv id: %s seconds ---" % (time.time() - start_time))
+			print("--- query Adv id: %s seconds ---" % (time.time() - start_time))
+			print("--- get Adv.count = %s" % len(cmpObjByAdv))
 			start_time = time.time()
-			idArrByCat = []
-			for catId in selectedMSCatIdSet:
-				obj = Company.objects.filter(MSCatDbId_id=catId)
-				idArrByCat.extend(list(map(lambda x: x.id, obj)))
 
-			print("---query Cat id: %s seconds ---" % (time.time() - start_time))
-			start_time = time.time()
 			cmpObjByAdvCat = []
-			idSetByCat = set(idArrByCat)
-
 			for cmpObj in cmpObjByAdv:
-				if cmpObj.id in idSetByCat:
+				if cmpObj.MSCatDbId_id in selectedMSCatIdSet:
 					cmpObjByAdvCat.append(cmpObj)
+			print("---query Cat id: %s seconds ---" % (time.time() - start_time))
 			companyInfo.extend(cmpObjByAdvCat)
-			print("---get all info: %s seconds ---" % (time.time() - start_time))
-			start_time = time.time()
 
 		else:
 			if len(selectedAdvisorIds) != 0:

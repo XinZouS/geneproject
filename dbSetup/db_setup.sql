@@ -20,10 +20,16 @@
 -- group by mscat
 -- order by mscat
 
+-- == all MSSubAdv == --
+select MSSubAdv from blog_company 
+where MSSubAdv is not null 
+group by MSSubAdv 
+order by MSSubAdv
 
 -- select * from blog_mscats
 -- select * from blog_advisors
 
+-- == test combo search Adv&Cat == --
 -- select Advisorid_id, Advisor, mscatdbid_id, mSCat from blog_company
 -- where advisorid_id = 12 and mscatdbid_id in (9, 64)
 -- order by Advisor 
