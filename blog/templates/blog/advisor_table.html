@@ -37,7 +37,7 @@ input[type=submit] {
   cursor: pointer;
 }
 .blankMarginDiv {
-    height: 15px;
+    height: 10px;
 }
 .btn {
   border: none;
@@ -176,39 +176,39 @@ th div{
         <div style="width: 100%">
             <form method="POST" autocomplete="off" action="advisor-table">
                 {% csrf_token %}
-                <h4>Search Advisors:</h4>
+                <h5>Search Advisors:</h5>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name" style="width: 70%;">
                     <button type="button" onclick="addSearchAdvisorText()" class="btn info" style="width: 28%;">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
             
-                <div id="selectedAdvisorNamesDiv" style="height:200px; background-color:#fff; overflow:auto;">
+                <div id="selectedAdvisorNamesDiv" style="height:100px; background-color:#fff; overflow:auto;">
                     <ul id="selectedAdvisorUl"></ul>
                 </div>
 
-                <div id="clearUlBtnContainer" style="width:100%; height:50px; padding-top: 10px;">
+                <div id="clearUlBtnContainer" style="width:100%; height:40px; padding-top: 10px;">
                     <button id="clearAdvisorButton" type="button" onclick="clearSelectedAdvisorList()" class="btn info" style="width:20%; float:right; color:#cc3300">Clear</button>
                 </div>
 
 
-                <h4 style="margin-top: 30px;">Search MSCats:</h4>
+                <h5 style="margin-top: 10px;">Search MSCats:</h5>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchMSCatInput" type="text" name="myMSCat" placeholder="MSCat Name" style="width: 70%;">
                     <button type="button" onclick="addSearchMSCatText()" class="btn info" style="width: 28%;">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
-                <div id="selectedMSCatNamesDiv" style="height:200px; background-color:#fff; overflow:auto;">
+                <div id="selectedMSCatNamesDiv" style="height:100px; background-color:#fff; overflow:auto;">
                     <ul id="selectedMSCatUl"></ul>
                 </div>
 
-                <div id="submitUlBtnContainer" style="width:100%; height:50px; padding-top: 10px;">
+                <div id="clearUlBtnContainer" style="width:100%; height:50px; padding-top: 10px;">
                     <button id="clearButton" type="button" onclick="clearSelectedMSCatList()" class="btn info" style="width:20%; float:right; color:#cc3300">Clear</button>
                 </div>
 
 
-                <input id="submitButton" type="submit" style="float:right; width:50%; border-radius: 5px; margin-top: 30px;">
+                <input id="submitButton" type="submit" style="float:right; width:100%; border-radius: 5px; margin-top: 20px;">
             </form>
 
         </div>
@@ -275,7 +275,7 @@ function autocomplete(searchTypeEnum, inp, arr) {
                         }
                     } else 
                     if (searchTypeEnum == SearchTypeEnum.MSCat) {
-                        if (selectedAdvisorNames.includes(selectName)) {
+                        if (selectedMSCatNames.includes(selectName)) {
                             selectDiv.classList.remove("autocomplete-active");
                             removeSelectMSCatName(selectName);
                         } else {
@@ -450,7 +450,7 @@ function addSelectMSCatName(catName="notSet") {
     rmBtn.setAttribute("id", catId);
     rmBtn.appendChild(btnIcon);
     rmBtn.addEventListener('click', function(event) {
-        removeLiByAdvisorId(catId);
+        removeLiByMSCatId(catId);
     });
 
     li.appendChild(idField);

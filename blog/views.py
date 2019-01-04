@@ -6,6 +6,7 @@ from django.views.generic import TemplateView
 from .models import Company, Advisors, MSCats
 from django.db.models import Q
 
+import time
 
 
 def home(request):
@@ -54,6 +55,8 @@ def advisor_table(request):
 		selectedMSCatIdSet = set(selectedMSCatIds)
 		selectedMsCatNameSet = set(selectedMSCatNames)
 
+		start_time = time.time()
+		print("---in post: %s seconds ---" % (time.time() - start_time))
 		if len(selectedAdvisorIds) != 0 and len(selectedMSCatIds) != 0:
 			cmpObjByAdv = []
 			for advId in selectedAdvisorIdSet:
@@ -63,11 +66,15 @@ def advisor_table(request):
 				elif len(obj) > 1:
 					for c in obj:
 						cmpObjByAdv.append(c)
+			print("---query Adv id: %s seconds ---" % (time.time() - start_time))
+			start_time = time.time()
 			idArrByCat = []
 			for catId in selectedMSCatIdSet:
 				obj = Company.objects.filter(MSCatDbId_id=catId)
 				idArrByCat.extend(list(map(lambda x: x.id, obj)))
 
+			print("---query Cat id: %s seconds ---" % (time.time() - start_time))
+			start_time = time.time()
 			cmpObjByAdvCat = []
 			idSetByCat = set(idArrByCat)
 
@@ -75,6 +82,8 @@ def advisor_table(request):
 				if cmpObj.id in idSetByCat:
 					cmpObjByAdvCat.append(cmpObj)
 			companyInfo.extend(cmpObjByAdvCat)
+			print("---get all info: %s seconds ---" % (time.time() - start_time))
+			start_time = time.time()
 
 		else:
 			if len(selectedAdvisorIds) != 0:
@@ -91,6 +100,8 @@ def advisor_table(request):
 						companyInfo.append(obj[0])
 					elif len(obj) > 1:
 						companyInfo.extend(obj)
+			print("--- only cat id: %s seconds ---" % (time.time() - start_time))
+			start_time = time.time()
 
 		selectedAdvisorNames = []
 		for advName in selectedAdvisorNameset:
