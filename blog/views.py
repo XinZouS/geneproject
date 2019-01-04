@@ -44,16 +44,15 @@ def advisor_table(request):
 	selectedMSCatNames = []
 
 	if request.method == "POST":
-		selectedAdvisorIds = request.POST.getlist('advId', '0')
+		selectedAdvisorIds = request.POST.getlist('advId')
 		selectedAdvisorNames = request.POST.getlist('advName', '')
 		selectedAdvisorIdSet = set(selectedAdvisorIds)
 		selectedAdvisorNameset = set(selectedAdvisorNames)
 
-		selectedMSCatIds = request.POST.getlist('catId', '0')
+		selectedMSCatIds = request.POST.getlist('catId')
 		selectedMSCatNames = request.POST.getlist('catName', '')
 		selectedMSCatIdSet = set(selectedMSCatIds)
 		selectedMsCatNameSet = set(selectedMSCatNames)
-
 
 		if len(selectedAdvisorIds) != 0 and len(selectedMSCatIds) != 0:
 			cmpObjByAdv = []
@@ -71,6 +70,7 @@ def advisor_table(request):
 
 			cmpObjByAdvCat = []
 			idSetByCat = set(idArrByCat)
+
 			for cmpObj in cmpObjByAdv:
 				if cmpObj.id in idSetByCat:
 					cmpObjByAdvCat.append(cmpObj)
@@ -80,11 +80,17 @@ def advisor_table(request):
 			if len(selectedAdvisorIds) != 0:
 				for advId in selectedAdvisorIdSet:
 					obj = Company.objects.filter(AdvisorID_id=advId).order_by("Name")
-					companyInfo.append(obj)
+					if len(obj) == 1:
+						companyInfo.append(obj[0])
+					elif len(obj) > 1:
+						companyInfo.extend(obj)
 			else:
 				for catId in selectedMSCatIdSet:
 					obj = Company.objects.filter(MSCatDbId_id=catId).order_by("Name")
-					companyInfo.append(obj)
+					if len(obj) == 1:
+						companyInfo.append(obj[0])
+					elif len(obj) > 1:
+						companyInfo.extend(obj)
 
 		selectedAdvisorNames = []
 		for advName in selectedAdvisorNameset:
