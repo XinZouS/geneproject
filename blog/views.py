@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import TemplateView
-from .models import Company, Advisors
+from .models import Company, Advisors, MSCats
 from django.db.models import Q
 
 
@@ -38,50 +38,95 @@ def company_13rows(request):
 def advisor_table(request):
 	cols = ["No.", "Name", "CUSIP", "SecId", "FundId"]
 	companyInfo = []
-	selectedIds = []
+	selectedAdvisorIds = []
 	selectedAdvisorNames = []
+	selectedMSCatIds = []
+	selectedMSCatNames = []
 
 	if request.method == "POST":
-		selectedIds = request.POST.getlist('advId', '0')
+		selectedAdvisorIds = request.POST.getlist('advId', '0')
 		selectedAdvisorNames = request.POST.getlist('advName', '')
-		selectedIdSet = set(selectedIds)
+		selectedAdvisorIdSet = set(selectedAdvisorIds)
 		selectedAdvisorNameset = set(selectedAdvisorNames)
 
-		for advId in selectedIdSet:
-			companysById = Company.objects.filter(AdvisorID_id=advId).order_by("Name")
-			companyInfo.extend(companysById)
-			# SQL: 
-			# select name, cusip, secid, fundid, advisorid_id from blog_company 
-			# where advisorid_id IN (177, 282, 173) order by name
+		selectedMSCatIds = request.POST.getlist('catId', '0')
+		selectedMSCatNames = request.POST.getlist('catName', '')
+		selectedMSCatIdSet = set(selectedMSCatIds)
+		selectedMsCatNameSet = set(selectedMSCatNames)
+
+
+		if len(selectedAdvisorIds) != 0 and len(selectedMSCatIds) != 0:
+			cmpObjByAdv = []
+			for advId in selectedAdvisorIdSet:
+				obj = Company.objects.filter(AdvisorID_id=advId).order_by("Name")
+				if len(obj) == 1:
+					cmpObjByAdv.append(obj[0])
+				elif len(obj) > 1:
+					for c in obj:
+						cmpObjByAdv.append(c)
+			idArrByCat = []
+			for catId in selectedMSCatIdSet:
+				obj = Company.objects.filter(MSCatDbId_id=catId)
+				idArrByCat.extend(list(map(lambda x: x.id, obj)))
+
+			cmpObjByAdvCat = []
+			idSetByCat = set(idArrByCat)
+			for cmpObj in cmpObjByAdv:
+				if cmpObj.id in idSetByCat:
+					cmpObjByAdvCat.append(cmpObj)
+			companyInfo.extend(cmpObjByAdvCat)
+
+		else:
+			if len(selectedAdvisorIds) != 0:
+				for advId in selectedAdvisorIdSet:
+					obj = Company.objects.filter(AdvisorID_id=advId).order_by("Name")
+					companyInfo.append(obj)
+			else:
+				for catId in selectedMSCatIdSet:
+					obj = Company.objects.filter(MSCatDbId_id=catId).order_by("Name")
+					companyInfo.append(obj)
 
 		selectedAdvisorNames = []
-		for name in selectedAdvisorNameset:
-			selectedAdvisorNames.append(name.encode("utf-8"))
+		for advName in selectedAdvisorNameset:
+			selectedAdvisorNames.append(advName.encode("utf-8"))
+
+		selectedMSCatNames = []
+		for catName in selectedMsCatNameSet:
+			selectedMSCatNames.append(catName.encode("utf-8"))
 
 	else:
-		print "----------------- request is GET, not POST....,"
+		print "--- [GET] request is GET, init page....,"
 
+	# for Auto-complete search lists
 	advs = Advisors.objects.all()	
 	advsNames = list(map(lambda x: x.Name.encode("utf-8"), advs))
 
-	cats = ["aa", "bb", "cc"]
-	mscatNames = list(map(lambda x: x.encode("utf-8"), cats))
+	cats = MSCats.objects.all()
+	mscatNames = list(map(lambda x: x.Name.encode("utf-8"), cats))
 
-	idOfNameDict = {} # {'Name':'advId'}
+	idOfAdvisorNameDict = {} # {'Name':'advId'}
 	for adv in advs:
-		idOfNameDict[adv.Name.encode("utf-8")] = adv.id
+		idOfAdvisorNameDict[adv.Name.encode("utf-8")] = adv.id
+
+	idOfMSCatNameDict = {}
+	for cat in cats:
+		idOfMSCatNameDict[cat.Name.encode("utf-8")] = cat.id
 
 	# advsObj = Advisors.objects.filter(id=advisorid)
 
 	content = {
 		'companys': companyInfo, # get first n rows 
 		'colnames': cols,
-		'advisors': advs,
+
 		'advisorNames': advsNames,
-		'mscatNames': mscatNames,
-		'idOfNameDict': idOfNameDict,
-		'selectedIds': selectedIds,
+		'idOfAdvisorNameDict':  idOfAdvisorNameDict,
+		'selectedAdvisorIds':   selectedAdvisorIds,
 		'selectedAdvisorNames': selectedAdvisorNames,
+
+		'mscatNames': mscatNames,
+		'idOfMSCatNameDict' : idOfMSCatNameDict,
+		'selectedMSCatIds':   selectedMSCatIds,
+		'selectedMSCatNames': selectedMSCatNames,
 	}
 
 	return render(request, 'blog/advisor_table.html', content)

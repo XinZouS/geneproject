@@ -215,8 +215,7 @@ th div{
 
 
 <script>
-function autocomplete(SearchTypeEnum, inp, arr) {
-    console.log(SearchTypeEnum);
+function autocomplete(searchTypeEnum, inp, arr) {
     /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/
     var currentFocus;
@@ -243,17 +242,20 @@ function autocomplete(SearchTypeEnum, inp, arr) {
         for (i = 0; i < arr.length; i++) {
             /*check if the item starts with the same letters as the text field value:*/
             if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-                var advName = arr[i];
+                var targetName = arr[i];
                 /*create a DIV element for each matching element:*/
                 divB = document.createElement("DIV");
                 /*make the matching letters bold:*/
-                divB.innerHTML = "<strong>" + advName.substr(0, val.length) + "</strong>";
-                divB.innerHTML += advName.substr(val.length);
+                divB.innerHTML = "<strong>" + targetName.substr(0, val.length) + "</strong>";
+                divB.innerHTML += targetName.substr(val.length);
                 /*insert a input field that will hold the current array item's value:*/
-                divB.innerHTML += "<input type='hidden' value='" + advName + "'>";
+                divB.innerHTML += "<input type='hidden' value='" + targetName + "'>";
 
-                divB.setAttribute("id", advName);
-                if (selectedAdvisorNames.includes(advName)) {
+                divB.setAttribute("id", targetName);
+                if (searchTypeEnum == SearchTypeEnum.Advisor && selectedAdvisorNames.includes(targetName)) {
+                    divB.classList.add("autocomplete-active");
+                } else
+                if (searchTypeEnum == SearchTypeEnum.MSCat && selectedMSCatNames.includes(targetName)) {
                     divB.classList.add("autocomplete-active");
                 }
 
@@ -263,12 +265,23 @@ function autocomplete(SearchTypeEnum, inp, arr) {
                     var selectDiv = document.getElementById(selectName);
                     /*insert the value for the autocomplete text field:*/
                     // inp.value = selectName;
-                    if (selectedAdvisorNames.includes(selectName)) {
-                        selectDiv.classList.remove("autocomplete-active");
-                        removeSelectAdvisorName(selectName);
-                    } else {
-                        selectDiv.classList.add("autocomplete-active");
-                        addSelectAdvisorName(selectName);
+                    if (searchTypeEnum == SearchTypeEnum.Advisor) {
+                        if (selectedAdvisorNames.includes(selectName)) {
+                            selectDiv.classList.remove("autocomplete-active");
+                            removeSelectAdvisorName(selectName);
+                        } else {
+                            selectDiv.classList.add("autocomplete-active");
+                            addSelectAdvisorName(selectName);
+                        }
+                    } else 
+                    if (searchTypeEnum == SearchTypeEnum.MSCat) {
+                        if (selectedAdvisorNames.includes(selectName)) {
+                            selectDiv.classList.remove("autocomplete-active");
+                            removeSelectMSCatName(selectName);
+                        } else {
+                            selectDiv.classList.add("autocomplete-active");
+                            addSelectMSCatName(selectName);
+                        }
                     }
                     //closeAllLists();
                 });
@@ -334,22 +347,32 @@ function autocomplete(SearchTypeEnum, inp, arr) {
     });
 }
 
-var SearchTypeEnum = Object.freeze({"Advisor":1, "MSCat":2})
+var SearchTypeEnum = Object.freeze({"Advisor":1, "MSCat":2});
 
 var allAdvs = {{ advisorNames|safe }};
-var allMSCats = {{ mscatNames|safe }};
 var selectedAdvisorNames = {{ selectedAdvisorNames|safe }};
-var idOfName = {{ idOfNameDict|safe }};
+var idOfAdvisorName = {{ idOfAdvisorNameDict|safe }};
+
+var allMSCats = {{ mscatNames|safe }};
+var idOfMSCatName = {{ idOfMSCatNameDict|safe }};
+var selectedMSCatNames = {{ selectedMSCatNames|safe }}
+
 /*initiate the autocomplete function on the "searchAdvisorInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(SearchTypeEnum.Advisor, document.getElementById("searchAdvisorInput"), allAdvs);
 autocomplete(SearchTypeEnum.MSCat, document.getElementById("searchMSCatInput"), allMSCats);
 
 setupselectedAdvisorNames();
+setupselectedMSCatNames();
 
 
 function setupselectedAdvisorNames() {
     for (i in selectedAdvisorNames) {
         addSelectAdvisorName(selectedAdvisorNames[i]);
+    }
+}
+function setupselectedMSCatNames() {
+    for (i in selectedMSCatNames) {
+        addSelectMSCatName(selectedMSCatNames[i]);
     }
 }
 
@@ -365,7 +388,7 @@ function addSelectAdvisorName(advName="notSet") {
     li = document.createElement("li");
     li.appendChild(document.createTextNode(advName));
 
-    var advId = idOfName[advName]; 
+    var advId = idOfAdvisorName[advName]; 
     li.setAttribute("id", advId);
 
     var idField = document.createElement("INPUT");
@@ -399,13 +422,61 @@ function addSelectAdvisorName(advName="notSet") {
     selectedAdvisorNames.push(advName);
 }
 
-function removeSelectAdvisorName(advName="") {
-    var advId = idOfName[advName];
-    removeLiByAdvisorId(advId);
+function addSelectMSCatName(catName="notSet") {
+    var ul = document.getElementById("selectedMSCatUl");
+    li = document.createElement("li");
+    li.appendChild(document.createTextNode(catName));
 
+    var catId = idOfMSCatName[catName]; 
+    li.setAttribute("id", catId);
+
+    var idField = document.createElement("INPUT");
+    idField.setAttribute("value", catId);
+    idField.setAttribute("type", "hidden");
+    idField.setAttribute("name", "catId");
+    idField.setAttribute("id", "catId");
+
+    var nameField = document.createElement("INPUT");
+    nameField.setAttribute("value", catName);
+    nameField.setAttribute("type", "hidden");
+    nameField.setAttribute("name", "catName");
+    nameField.setAttribute("id", "catName");
+
+    var btnIcon = document.createElement("i");
+    btnIcon.setAttribute("class", "fa fa-close");
+    var rmBtn = document.createElement("BUTTON");
+    rmBtn.setAttribute("class", "liBtn");
+    rmBtn.setAttribute("type", "button");
+    rmBtn.setAttribute("id", catId);
+    rmBtn.appendChild(btnIcon);
+    rmBtn.addEventListener('click', function(event) {
+        removeLiByAdvisorId(catId);
+    });
+
+    li.appendChild(idField);
+    li.appendChild(nameField);
+    li.appendChild(rmBtn);
+    ul.appendChild(li);
+
+    selectedMSCatNames.push(catName);
+}
+
+function removeSelectAdvisorName(n="") {
+    var advId = idOfAdvisorName[n];
+    removeLiByAdvisorId(advId);
     for (var i = 0; i < selectedAdvisorNames.length; i++) {
-        if (selectedAdvisorNames[i] == advName) {
+        if (selectedAdvisorNames[i] == n) {
             selectedAdvisorNames.splice(i, 1);
+            return;
+        }
+    }
+}
+function removeSelectMSCatName(n="") {
+    var catId = idOfMSCatName[n];
+    removeLiByMSCatId(catId);
+    for (var i = 0; i < selectedMSCatNames.length; i++) {
+        if (selectedMSCatNames[i] == n) {
+            selectedMSCatNames.splice(i, 1);
             return;
         }
     }
@@ -416,7 +487,6 @@ function clearSelectedAdvisorList() {
     ul.innerHTML = "";
     selectedAdvisorNames = [];
 }
-
 function clearSelectedMSCatList() {
     var ul = document.getElementById("selectedMSCatUl");
     ul.innerHTML = "";
