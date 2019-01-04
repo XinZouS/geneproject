@@ -135,18 +135,17 @@ ul li:hover {
 }
 
 tr th:first-child div {
-    padding: 15px 0px 0px 0px; 
+    padding: 15px 0px 0px 20px; 
     width: 50px;
     border: none;
 }
 td, th {
-  padding: 10px 20px;
+  padding: 10px 10px;
 }
 th {
   height: 0;
   line-height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0px 50px 0px 10px;
   color: transparent;
   border: none;
   white-space: nowrap;
@@ -157,7 +156,7 @@ th div{
   color: #101066;
   padding: 14px 30px;
   top: 0;
-  margin-left: -20px;
+  margin-left: -10px;
   line-height: normal;
   border-left: 1px solid #aabbdd;
 }
@@ -183,7 +182,7 @@ th div{
                 </div>
                 <div class="blankMarginDiv"></div>
             
-                <div id="selectedAdvisorNamesDiv" style="height:100px; background-color:#fff; overflow:auto;">
+                <div id="selectedAdvisorNamesDiv" style="height:116px; background-color:#fff; overflow:auto;">
                     <ul id="selectedAdvisorUl"></ul>
                 </div>
 
@@ -199,7 +198,7 @@ th div{
                 </div>
                 <div class="blankMarginDiv"></div>
 
-                <div id="selectedMSCatNamesDiv" style="height:100px; background-color:#fff; overflow:auto;">
+                <div id="selectedMSCatNamesDiv" style="height:116px; background-color:#fff; overflow:auto;">
                     <ul id="selectedMSCatUl"></ul>
                 </div>
 
@@ -529,7 +528,7 @@ function removeLiByMSCatId(liId){
                 <tbody style="overflow-y:auto; height:90vh; width:800px;">
                     {% for item in companys %}
                     <tr>
-                        <td style="padding-left: 10px;">{{ forloop.counter }}</td>
+                        <td style="padding-left: 10px; width:20px;">{{ forloop.counter }}</td>
                         <td style="width:400px; text-align:left;">{{ item.Name     }}</td>
                         <td>{{ item.CUSIP    }}</td>
                         <td>{{ item.SecId    }}</td>

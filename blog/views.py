@@ -94,6 +94,7 @@ def advisor_table(request):
 					elif len(obj) > 1:
 						companyInfo.extend(obj)
 			else:
+				start_time = time.time()
 				for catId in selectedMSCatIdSet:
 					obj = Company.objects.filter(MSCatDbId_id=catId).order_by("Name")
 					if len(obj) == 1:
