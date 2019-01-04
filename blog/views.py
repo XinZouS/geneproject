@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import TemplateView
-from .models import Company, Advisors, MSCats
+from .models import Company, Advisors, MSCats, MSSubAdvs
 from django.db.models import Q
 
 import time
@@ -39,10 +39,13 @@ def company_13rows(request):
 def advisor_table(request):
 	cols = ["No.", "Name", "CUSIP", "SecId", "FundId"]
 	companyInfo = []
+
 	selectedAdvisorIds = []
 	selectedAdvisorNames = []
 	selectedMSCatIds = []
 	selectedMSCatNames = []
+	selectedMSSubAdvIds = []
+	selectedMSSubAdvNames = []
 
 	if request.method == "POST":
 		selectedAdvisorIds = request.POST.getlist('advId')
@@ -53,7 +56,12 @@ def advisor_table(request):
 		selectedMSCatIds = request.POST.getlist('catId')
 		selectedMSCatNames = request.POST.getlist('catName', '')
 		selectedMSCatIdSet = set(list(map(lambda x: int(x.encode("utf-8")), selectedMSCatIds)))
-		selectedMsCatNameSet = set(selectedMSCatNames)
+		selectedMSCatNameSet = set(selectedMSCatNames)
+
+		selectedMSSubAdvIds = request.POST.getlist('subId')
+		selectedMSSubAdvNames = request.POST.getlist('subName', '')
+		selectedMSSubAdvIdSet = set(list(map(lambda x: int(x.encode("utf-8")), selectedMSSubAdvIds)))
+		selectedMSSubAdvNameSet = set(selectedMSSubAdvNames)
 
 		start_time = time.time()
 		if len(selectedAdvisorIds) != 0 and len(selectedMSCatIds) != 0:
@@ -100,7 +108,7 @@ def advisor_table(request):
 			selectedAdvisorNames.append(advName.encode("utf-8"))
 
 		selectedMSCatNames = []
-		for catName in selectedMsCatNameSet:
+		for catName in selectedMSCatNameSet:
 			selectedMSCatNames.append(catName.encode("utf-8"))
 
 	else:

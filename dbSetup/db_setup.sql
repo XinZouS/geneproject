@@ -20,14 +20,19 @@
 -- group by mscat
 -- order by mscat
 
--- == all MSSubAdv == --
-select MSSubAdv from blog_company 
-where MSSubAdv is not null 
-group by MSSubAdv 
-order by MSSubAdv
+-- == insert the MSCat table == -- 
+-- INSERT INTO blog_mssubadvs (Name)
+-- select MSSubAdv from blog_company 
+-- where MSSubAdv is not null 
+-- group by MSSubAdv 
+-- order by MSSubAdv
+
 
 -- select * from blog_mscats
 -- select * from blog_advisors
+-- select * from blog_mssubadvs
+
+
 
 -- == test combo search Adv&Cat == --
 -- select Advisorid_id, Advisor, mscatdbid_id, mSCat from blog_company

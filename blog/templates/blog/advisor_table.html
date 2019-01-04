@@ -112,7 +112,7 @@ ul li:hover {
 /*when navigating through the items using the arrow keys:*/
 .autocomplete-active {
   background-color: DodgerBlue !important; 
-  color: #ffffff; 
+  color: #fff; 
 }
 
 .vertical-menu {
@@ -496,15 +496,17 @@ function clearSelectedMSCatList() {
 
 function removeLiByAdvisorId(liId){
     var lis = document.querySelectorAll('#selectedAdvisorUl li');
-    for(var i=0; li=lis[i]; i++) {
-        if(li.id == liId) {
-            li.parentNode.removeChild(li);
-            return;
-        }
-    }
+    removeLiById(liId, lis)
 }
 function removeLiByMSCatId(liId){
     var lis = document.querySelectorAll('#selectedMSCatUl li');
+    removeLiById(liId, lis)
+}
+function removeLiByMSSubAdvId(liId){
+    var lis = document.querySelectorAll('#selectedMSSubAdvUl li');
+    removeLiById(liId, lis)
+}
+function removeLiById(liId, lis) {
     for(var i=0; li=lis[i]; i++) {
         if(li.id == liId) {
             li.parentNode.removeChild(li);
