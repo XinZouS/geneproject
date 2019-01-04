@@ -6,9 +6,11 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 
 
-class Advisors(models.Model):
+class Advisors(models.Model):  # model name must NOT the same as column name!
 	Name = models.CharField(max_length=400,null=False)
 
+class MSCats(models.Model):  # model name must NOT the same as column name!
+	Name = models.CharField(max_length=50,null=False)
 
 class Company(models.Model):
 	Name	= models.CharField(max_length=40)
@@ -29,6 +31,7 @@ class Company(models.Model):
 	GlBrdCat	= models.CharField(max_length=39,null=True)
 	USCatGrp	= models.CharField(max_length=20,null=True)
 	MSCat	= models.CharField(max_length=50,null=True)
+	MSCatDbId = models.ForeignKey(MSCats, on_delete=models.SET_NULL, null=True)
 	MSCatID	= models.CharField(max_length=10,null=True)
 	MSCatStr	=models.DateField(null=True)			
 	MSInsCat	= models.CharField(max_length=43,null=True)

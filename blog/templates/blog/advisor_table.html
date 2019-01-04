@@ -36,6 +36,9 @@ input[type=submit] {
   color: #fff;
   cursor: pointer;
 }
+.blankMarginDiv {
+    height: 10px;
+}
 .btn {
   border: none;
   background-color: #eee;
@@ -132,18 +135,17 @@ ul li:hover {
 }
 
 tr th:first-child div {
-    padding: 15px 0px 0px 0px; 
+    padding: 15px 0px 0px 20px; 
     width: 50px;
     border: none;
 }
 td, th {
-  padding: 10px 20px;
+  padding: 10px 10px;
 }
 th {
   height: 0;
   line-height: 0;
-  padding-top: 0;
-  padding-bottom: 0;
+  padding: 0px 50px 0px 10px;
   color: transparent;
   border: none;
   white-space: nowrap;
@@ -154,7 +156,7 @@ th div{
   color: #101066;
   padding: 14px 30px;
   top: 0;
-  margin-left: -20px;
+  margin-left: -10px;
   line-height: normal;
   border-left: 1px solid #aabbdd;
 }
@@ -169,40 +171,50 @@ th div{
 
     <navleft>
 
-        <h3>Search Advisors:</h3>
 
         <div style="width: 100%">
-
-            <form autocomplete="off" action="advisor-table">
+            <form method="POST" autocomplete="off" action="advisor-table">
                 {% csrf_token %}
+                <h5>Search Advisors:</h5>
                 <div class="autocomplete" style="width:100%;">
-                    <input id="myInput" type="text" name="myAdvisor" placeholder="Advisor Name" style="width: 78%;">
-                    <button type="button" onclick="clearSearchText()" class="btn info" style="width: 20%;">Add</button>
+                    <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name" style="width: 70%;">
+                    <button type="button" onclick="addSearchAdvisorText()" class="btn info" style="width: 28%;">Add</button>
                 </div>
-            </form>
-
-            <div id="blankMarginDiv" style="height:30px;"></div>
+                <div class="blankMarginDiv"></div>
             
-            <form method="POST" action="advisor-table">
-                {% csrf_token %}
-                <div id="selectedAdvisorNamesDiv" style="height:300px; background-color:#fff; overflow:auto;">
+                <div id="selectedAdvisorNamesDiv" style="height:116px; background-color:#fff; overflow:auto;">
                     <ul id="selectedAdvisorUl"></ul>
                 </div>
 
-                <div id="submitUlBtnContainer" style="width:100%; height:50px; padding-top: 20px;">
-                    <button id="clearButton" type="button" onclick="clearSelectedList()" class="btn info" style="width:20%; float:center;">Clear</button>
-                    <input id="submitButton" type="submit" style="float:right; width:40%; border-radius: 5px;">
+                <div id="clearUlBtnContainer" style="width:100%; height:40px; padding-top: 10px;">
+                    <button id="clearAdvisorButton" type="button" onclick="clearSelectedAdvisorList()" class="btn info" style="width:20%; float:right; color:#cc3300">Clear</button>
                 </div>
+
+
+                <h5 style="margin-top: 10px;">Search MSCats:</h5>
+                <div class="autocomplete" style="width:100%;">
+                    <input id="searchMSCatInput" type="text" name="myMSCat" placeholder="MSCat Name" style="width: 70%;">
+                    <button type="button" onclick="addSearchMSCatText()" class="btn info" style="width: 28%;">Add</button>
+                </div>
+                <div class="blankMarginDiv"></div>
+
+                <div id="selectedMSCatNamesDiv" style="height:116px; background-color:#fff; overflow:auto;">
+                    <ul id="selectedMSCatUl"></ul>
+                </div>
+
+                <div id="clearUlBtnContainer" style="width:100%; height:50px; padding-top: 10px;">
+                    <button id="clearButton" type="button" onclick="clearSelectedMSCatList()" class="btn info" style="width:20%; float:right; color:#cc3300">Clear</button>
+                </div>
+
+
+                <input id="submitButton" type="submit" style="float:right; width:100%; border-radius: 5px; margin-top: 20px;">
             </form>
 
-            <div style="padding-top: 30px;">
-                <h5 style="color:#33cc99">Get total results: {{ companys|length }}</h5>
-            </div>
         </div>
 
 
 <script>
-function autocomplete(inp, arr) {
+function autocomplete(searchTypeEnum, inp, arr) {
     /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/
     var currentFocus;
@@ -229,17 +241,20 @@ function autocomplete(inp, arr) {
         for (i = 0; i < arr.length; i++) {
             /*check if the item starts with the same letters as the text field value:*/
             if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-                var advName = arr[i];
+                var targetName = arr[i];
                 /*create a DIV element for each matching element:*/
                 divB = document.createElement("DIV");
                 /*make the matching letters bold:*/
-                divB.innerHTML = "<strong>" + advName.substr(0, val.length) + "</strong>";
-                divB.innerHTML += advName.substr(val.length);
+                divB.innerHTML = "<strong>" + targetName.substr(0, val.length) + "</strong>";
+                divB.innerHTML += targetName.substr(val.length);
                 /*insert a input field that will hold the current array item's value:*/
-                divB.innerHTML += "<input type='hidden' value='" + advName + "'>";
+                divB.innerHTML += "<input type='hidden' value='" + targetName + "'>";
 
-                divB.setAttribute("id", advName);
-                if (selectedNames.includes(advName)) {
+                divB.setAttribute("id", targetName);
+                if (searchTypeEnum == SearchTypeEnum.Advisor && selectedAdvisorNames.includes(targetName)) {
+                    divB.classList.add("autocomplete-active");
+                } else
+                if (searchTypeEnum == SearchTypeEnum.MSCat && selectedMSCatNames.includes(targetName)) {
                     divB.classList.add("autocomplete-active");
                 }
 
@@ -249,12 +264,23 @@ function autocomplete(inp, arr) {
                     var selectDiv = document.getElementById(selectName);
                     /*insert the value for the autocomplete text field:*/
                     // inp.value = selectName;
-                    if (selectedNames.includes(selectName)) {
-                        selectDiv.classList.remove("autocomplete-active");
-                        removeSelectAdvisorName(selectName);
-                    } else {
-                        selectDiv.classList.add("autocomplete-active");
-                        addSelectAdvisorName(selectName);
+                    if (searchTypeEnum == SearchTypeEnum.Advisor) {
+                        if (selectedAdvisorNames.includes(selectName)) {
+                            selectDiv.classList.remove("autocomplete-active");
+                            removeSelectAdvisorName(selectName);
+                        } else {
+                            selectDiv.classList.add("autocomplete-active");
+                            addSelectAdvisorName(selectName);
+                        }
+                    } else 
+                    if (searchTypeEnum == SearchTypeEnum.MSCat) {
+                        if (selectedMSCatNames.includes(selectName)) {
+                            selectDiv.classList.remove("autocomplete-active");
+                            removeSelectMSCatName(selectName);
+                        } else {
+                            selectDiv.classList.add("autocomplete-active");
+                            addSelectMSCatName(selectName);
+                        }
                     }
                     //closeAllLists();
                 });
@@ -320,22 +346,40 @@ function autocomplete(inp, arr) {
     });
 }
 
+var SearchTypeEnum = Object.freeze({"Advisor":1, "MSCat":2});
+
 var allAdvs = {{ advisorNames|safe }};
-var selectedNames = {{ selectedNames|safe }};
-var idOfName = {{ idOfNameDict|safe }};
-/*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-autocomplete(document.getElementById("myInput"), allAdvs);
-setupSelectedNames();
+var selectedAdvisorNames = {{ selectedAdvisorNames|safe }};
+var idOfAdvisorName = {{ idOfAdvisorNameDict|safe }};
+
+var allMSCats = {{ mscatNames|safe }};
+var idOfMSCatName = {{ idOfMSCatNameDict|safe }};
+var selectedMSCatNames = {{ selectedMSCatNames|safe }}
+
+/*initiate the autocomplete function on the "searchAdvisorInput" element, and pass along the countries array as possible autocomplete values:*/
+autocomplete(SearchTypeEnum.Advisor, document.getElementById("searchAdvisorInput"), allAdvs);
+autocomplete(SearchTypeEnum.MSCat, document.getElementById("searchMSCatInput"), allMSCats);
+
+setupselectedAdvisorNames();
+setupselectedMSCatNames();
 
 
-function setupSelectedNames() {
-    for (i in selectedNames) {
-        addSelectAdvisorName(selectedNames[i]);
+function setupselectedAdvisorNames() {
+    for (i in selectedAdvisorNames) {
+        addSelectAdvisorName(selectedAdvisorNames[i]);
+    }
+}
+function setupselectedMSCatNames() {
+    for (i in selectedMSCatNames) {
+        addSelectMSCatName(selectedMSCatNames[i]);
     }
 }
 
-function clearSearchText() {
-    myInput.value = "";
+function addSearchAdvisorText() {
+    searchAdvisorInput.value = "";
+}
+function addSearchMSCatText() {
+    searchMSCatInput.value = "";
 }
 
 function addSelectAdvisorName(advName="notSet") {
@@ -343,7 +387,7 @@ function addSelectAdvisorName(advName="notSet") {
     li = document.createElement("li");
     li.appendChild(document.createTextNode(advName));
 
-    var advId = idOfName[advName]; 
+    var advId = idOfAdvisorName[advName]; 
     li.setAttribute("id", advId);
 
     var idField = document.createElement("INPUT");
@@ -366,7 +410,7 @@ function addSelectAdvisorName(advName="notSet") {
     rmBtn.setAttribute("id", advId);
     rmBtn.appendChild(btnIcon);
     rmBtn.addEventListener('click', function(event) {
-        removeLiById(advId);
+        removeLiByAdvisorId(advId);
     });
 
     li.appendChild(idField);
@@ -374,29 +418,91 @@ function addSelectAdvisorName(advName="notSet") {
     li.appendChild(rmBtn);
     ul.appendChild(li);
 
-    selectedNames.push(advName);
+    selectedAdvisorNames.push(advName);
 }
 
-function removeSelectAdvisorName(advName="") {
-    var advId = idOfName[advName];
-    removeLiById(advId);
+function addSelectMSCatName(catName="notSet") {
+    var ul = document.getElementById("selectedMSCatUl");
+    li = document.createElement("li");
+    li.appendChild(document.createTextNode(catName));
 
-    for (var i = 0; i < selectedNames.length; i++) {
-        if (selectedNames[i] == advName) {
-            selectedNames.splice(i, 1);
+    var catId = idOfMSCatName[catName]; 
+    li.setAttribute("id", catId);
+
+    var idField = document.createElement("INPUT");
+    idField.setAttribute("value", catId);
+    idField.setAttribute("type", "hidden");
+    idField.setAttribute("name", "catId");
+    idField.setAttribute("id", "catId");
+
+    var nameField = document.createElement("INPUT");
+    nameField.setAttribute("value", catName);
+    nameField.setAttribute("type", "hidden");
+    nameField.setAttribute("name", "catName");
+    nameField.setAttribute("id", "catName");
+
+    var btnIcon = document.createElement("i");
+    btnIcon.setAttribute("class", "fa fa-close");
+    var rmBtn = document.createElement("BUTTON");
+    rmBtn.setAttribute("class", "liBtn");
+    rmBtn.setAttribute("type", "button");
+    rmBtn.setAttribute("id", catId);
+    rmBtn.appendChild(btnIcon);
+    rmBtn.addEventListener('click', function(event) {
+        removeLiByMSCatId(catId);
+    });
+
+    li.appendChild(idField);
+    li.appendChild(nameField);
+    li.appendChild(rmBtn);
+    ul.appendChild(li);
+
+    selectedMSCatNames.push(catName);
+}
+
+function removeSelectAdvisorName(n="") {
+    var advId = idOfAdvisorName[n];
+    removeLiByAdvisorId(advId);
+    for (var i = 0; i < selectedAdvisorNames.length; i++) {
+        if (selectedAdvisorNames[i] == n) {
+            selectedAdvisorNames.splice(i, 1);
+            return;
+        }
+    }
+}
+function removeSelectMSCatName(n="") {
+    var catId = idOfMSCatName[n];
+    removeLiByMSCatId(catId);
+    for (var i = 0; i < selectedMSCatNames.length; i++) {
+        if (selectedMSCatNames[i] == n) {
+            selectedMSCatNames.splice(i, 1);
             return;
         }
     }
 }
 
-function clearSelectedList(){
+function clearSelectedAdvisorList() {
     var ul = document.getElementById("selectedAdvisorUl");
     ul.innerHTML = "";
-    selectedNames = [];
+    selectedAdvisorNames = [];
+}
+function clearSelectedMSCatList() {
+    var ul = document.getElementById("selectedMSCatUl");
+    ul.innerHTML = "";
+    selectedMSCatNames = [];
 }
 
-function removeLiById(liId){
+function removeLiByAdvisorId(liId){
     var lis = document.querySelectorAll('#selectedAdvisorUl li');
+    for(var i=0; li=lis[i]; i++) {
+        if(li.id == liId) {
+            li.parentNode.removeChild(li);
+            return;
+        }
+    }
+}
+function removeLiByMSCatId(liId){
+    var lis = document.querySelectorAll('#selectedMSCatUl li');
     for(var i=0; li=lis[i]; i++) {
         if(li.id == liId) {
             li.parentNode.removeChild(li);
@@ -422,7 +528,7 @@ function removeLiById(liId){
                 <tbody style="overflow-y:auto; height:90vh; width:800px;">
                     {% for item in companys %}
                     <tr>
-                        <td style="padding-left: 10px;">{{ forloop.counter }}</td>
+                        <td style="padding-left: 10px; width:20px;">{{ forloop.counter }}</td>
                         <td style="width:400px; text-align:left;">{{ item.Name     }}</td>
                         <td>{{ item.CUSIP    }}</td>
                         <td>{{ item.SecId    }}</td>
