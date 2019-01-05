@@ -311,8 +311,6 @@ function autocomplete(searchTypeEnum, inp, arr) {
                     var selectDiv = document.getElementById(selectName);
                     /*insert the value for the autocomplete text field:*/
                     // inp.value = selectName;
-                    console.log("--- [INFO] selectName = " + selectName);
-                    console.log("--- [INFO] searchTypeEnum = " + searchTypeEnum);
                     switch (searchTypeEnum) {
                         case SearchTypeEnum.Advisor:
                             if (selectedAdvisorNames.includes(selectName)) {
@@ -512,7 +510,7 @@ function addSelectName(name="notSet", searchTypeEnum) {
     rmBtn.setAttribute("id", id);
     rmBtn.appendChild(btnIcon);
     rmBtn.addEventListener('click', function(event) {
-        removeLiById(id, searchTypeEnum);
+        removeLiByName(name, searchTypeEnum);
     });
 
     li.appendChild(idField);
@@ -522,54 +520,56 @@ function addSelectName(name="notSet", searchTypeEnum) {
 }
 
 function removeSelectAdvisorName(n="") {
-    var advId = idOfAdvisorName[n];
-    removeLiById(advId, SearchTypeEnum.Advisor);
-    for (var i = 0; i < selectedAdvisorNames.length; i++) {
-        if (selectedAdvisorNames[i] == n) {
-            selectedAdvisorNames.splice(i, 1);
-            return;
-        }
-    }
+    // var advId = idOfAdvisorName[n];
+    removeLiByName(n, SearchTypeEnum.Advisor);
 }
 function removeSelectMSCatName(n="") {
-    var catId = idOfMSCatName[n];
-    removeLiById(catId, SearchTypeEnum.MSCat);
-    for (var i = 0; i < selectedMSCatNames.length; i++) {
-        if (selectedMSCatNames[i] == n) {
-            selectedMSCatNames.splice(i, 1);
-            return;
-        }
-    }
+    // var catId = idOfMSCatName[n];
+    removeLiByName(n, SearchTypeEnum.MSCat);
 }
 function removeSelectMSSubAdvName(n="") {
-    var subId = idOfMSSubAdvName[n];
-    removeLiById(subId, SearchTypeEnum.MSSubAdv);
-    for (var i = 0; i < selectedMSSubAdvNames.length; i++) {
-        if (selectedMSSubAdvNames[i] == n) {
-            selectedMSSubAdvNames.splice(i, 1);
-            return;
-        }
-    }
+    // var subId = idOfMSSubAdvName[n];
+    removeLiByName(n, SearchTypeEnum.MSSubAdv);
 }
 
 
-function removeLiById(liId, searchTypeEnum) {
+function removeLiByName(name, searchTypeEnum) {
     var lsId = '';
+    var itemId = 0;
     switch (searchTypeEnum) {
         case SearchTypeEnum.Advisor:
             lsId = '#selectedAdvisorUl li';
+            itemId = idOfAdvisorName[name];
+            for (var i = 0; i < selectedAdvisorNames.length; i++) {
+                if (selectedAdvisorNames[i] == name) {
+                    selectedAdvisorNames.splice(i, 1); // NOT break if finded, bcz may has duplicates
+                }
+            }
             break;
         case SearchTypeEnum.MSCat:
             lsId = '#selectedMSCatUl li';
+            itemId = idOfMSCatName[name];
+            for (var i = 0; i < selectedMSCatNames.length; i++) {
+                if (selectedMSCatNames[i] == name) {
+                    selectedMSCatNames.splice(i, 1); // NOT break if finded, bcz may has duplicates
+                }
+            }
             break;
         case SearchTypeEnum.MSSubAdv:
             lsId = '#selectedMSSubAdvUl li';
+            itemId = idOfMSSubAdvName[name];
+            for (var i = 0; i < selectedMSSubAdvNames.length; i++) {
+                if (selectedMSSubAdvNames[i] == name) {
+                    selectedMSSubAdvNames.splice(i, 1); // NOT break if finded, bcz may has duplicates
+                }
+            }
             break;
         default:
             console.log("--- [ERROR] removeLiById unexpected searchType: " + searchTypeEnum)
             return;
     }
     var lis = document.querySelectorAll(lsId);
+    var liId = searchTypeEnum + itemId;
     for(var i=0; li=lis[i]; i++) {
         if(li.id == liId) {
             li.parentNode.removeChild(li);
