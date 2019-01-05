@@ -42,14 +42,9 @@ input[type=submit] {
 }
 
 .selectedNamesDiv {
-    height:116px;
+    height:100px;
     background-color:#fff;
     overflow:auto;
-}
-.clearUlBtnContainer {
-    width:100%;
-    height:40px;
-    padding-top: 10px;
 }
 .blankMarginDiv {
     height: 10px;
@@ -67,7 +62,7 @@ input[type=submit] {
 
 .add {width: 28%;}
 .add:hover {
-    background: #b3ffb3;
+    background: #fff;
     font-weight: bold;
 }
 
@@ -88,8 +83,14 @@ input[type=submit] {
   background-color: Red;
 }
 
+.clearUlBtnContainer {
+    width:100%;
+    height:50px;
+    padding-top: 10px;
+}
 .clearUlButton {
     width: 26%;
+    height: 100%;
     float: right;
     color: #cc3300;
 }
@@ -97,6 +98,7 @@ input[type=submit] {
 
 ul {
   padding: 0;
+  overflow-y: scroll;
 }
 ul li {
   position: relative;
@@ -205,7 +207,7 @@ th div{
                 <h5 class="searchTitle">Advisors:</h5>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name" style="width: 70%;">
-                    <button type="button" onclick="addSearchAdvisorText()" class="btn info add">Add</button>
+                    <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
             
@@ -220,7 +222,7 @@ th div{
                 <h5 class="searchTitle">MSCats:</h5>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchMSCatInput" type="text" name="myMSCat" placeholder="MSCat Name" style="width: 70%;">
-                    <button type="button" onclick="addSearchMSCatText()" class="btn info add">Add</button>
+                    <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
@@ -235,7 +237,7 @@ th div{
                 <h5 class="searchTitle">MSSubAdvs:</h5>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchMSSubAdvInput" type="text" name="myMSSubAdv" placeholder="MSSubAdv Name" style="width: 70%;">
-                    <button type="button" onclick="addSearchMSSubAdvText()" class="btn info add">Add</button>
+                    <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
@@ -298,6 +300,9 @@ function autocomplete(searchTypeEnum, inp, arr) {
                 } else
                 if (searchTypeEnum == SearchTypeEnum.MSCat && selectedMSCatNames.includes(targetName)) {
                     divB.classList.add("autocomplete-active");
+                } else
+                if (searchTypeEnum == SearchTypeEnum.MSSubAdv && selectedMSSubAdvNames.includes(targetName)) {
+                    divB.classList.add("autocomplete-active");
                 }
 
                 divB.addEventListener("click", function(e) {
@@ -306,23 +311,38 @@ function autocomplete(searchTypeEnum, inp, arr) {
                     var selectDiv = document.getElementById(selectName);
                     /*insert the value for the autocomplete text field:*/
                     // inp.value = selectName;
-                    if (searchTypeEnum == SearchTypeEnum.Advisor) {
-                        if (selectedAdvisorNames.includes(selectName)) {
-                            selectDiv.classList.remove("autocomplete-active");
-                            removeSelectAdvisorName(selectName);
-                        } else {
-                            selectDiv.classList.add("autocomplete-active");
-                            addSelectAdvisorName(selectName);
-                        }
-                    } else 
-                    if (searchTypeEnum == SearchTypeEnum.MSCat) {
-                        if (selectedMSCatNames.includes(selectName)) {
-                            selectDiv.classList.remove("autocomplete-active");
-                            removeSelectMSCatName(selectName);
-                        } else {
-                            selectDiv.classList.add("autocomplete-active");
-                            addSelectMSCatName(selectName);
-                        }
+                    console.log("--- [INFO] selectName = " + selectName);
+                    console.log("--- [INFO] searchTypeEnum = " + searchTypeEnum);
+                    switch (searchTypeEnum) {
+                        case SearchTypeEnum.Advisor:
+                            if (selectedAdvisorNames.includes(selectName)) {
+                                selectDiv.classList.remove("autocomplete-active");
+                                removeSelectAdvisorName(selectName);
+                            } else {
+                                selectDiv.classList.add("autocomplete-active");
+                                addSelectName(selectName, searchTypeEnum);
+                            }
+                            break;
+                        case SearchTypeEnum.MSCat:
+                            if (selectedMSCatNames.includes(selectName)) {
+                                selectDiv.classList.remove("autocomplete-active");
+                                removeSelectMSCatName(selectName);
+                            } else {
+                                selectDiv.classList.add("autocomplete-active");
+                                addSelectName(selectName, searchTypeEnum);
+                            }
+                            break;
+                        case SearchTypeEnum.MSSubAdv:
+                            if (selectedMSSubAdvNames.includes(selectName)) {
+                                selectDiv.classList.remove("autocomplete-active");
+                                removeSelectMSSubAdvName(selectName);
+                            } else {
+                                selectDiv.classList.add("autocomplete-active");
+                                addSelectName(selectName, searchTypeEnum);
+                            }
+                            break;
+                        default:
+                            console.log("--- [ERROR] line 340: get unexpected searchTypeEnum: " + searchTypeEnum);
                     }
                     //closeAllLists();
                 });
@@ -388,7 +408,7 @@ function autocomplete(searchTypeEnum, inp, arr) {
     });
 }
 
-var SearchTypeEnum = Object.freeze({ "Advisor":1, "MSCat":2, "MSSubAdv":3 });
+var SearchTypeEnum = Object.freeze({ "Advisor":"adv", "MSCat":"cat", "MSSubAdv":"sub" });
 
 var allAdvs = {{ advisorNames|safe }};
 var allMSCats = {{ mscatNames|safe }};
@@ -414,148 +434,96 @@ setupselectedMSSubAdvNames();
 
 function setupselectedAdvisorNames() {
     for (i in selectedAdvisorNames) {
-        addSelectAdvisorName(selectedAdvisorNames[i]);
+        addSelectName(selectedAdvisorNames[i], SearchTypeEnum.Advisor);
     }
 }
 function setupselectedMSCatNames() {
     for (i in selectedMSCatNames) {
-        addSelectMSCatName(selectedMSCatNames[i]);
+        addSelectName(selectedMSCatNames[i], SearchTypeEnum.MSCat);
     }
 }
 function setupselectedMSSubAdvNames() {
     for (i in selectedMSSubAdvNames) {
-        addSelectMSSubAdvName(selectedMSSubAdvNames[i]);
+        addSelectName(selectedMSSubAdvNames[i], SearchTypeEnum.MSSubAdv);
     }
 }
 
-function addSearchAdvisorText() {
+function clearSearchText() {
     searchAdvisorInput.value = "";
-}
-function addSearchMSCatText() {
     searchMSCatInput.value = "";
+    searchMSSubAdvInput.value = "";
 }
 
-function addSelectAdvisorName(advName="notSet") {
-    var ul = document.getElementById("selectedAdvisorUl");
-    li = document.createElement("li");
-    li.appendChild(document.createTextNode(advName));
+function addSelectName(name="notSet", searchTypeEnum) {
+    var ulId = "";
+    var id = 0;
+    var idFieldName = "";
+    var nameFieldStr = "";
 
-    var advId = idOfAdvisorName[advName]; 
-    li.setAttribute("id", advId);
+    switch(searchTypeEnum) {
+        case SearchTypeEnum.Advisor:
+            ulId = "selectedAdvisorUl";
+            idFieldName = "advId";      // ????????????????
+            nameFieldStr = "advName"; // ?????????????????
+            id = idOfAdvisorName[name];
+            selectedAdvisorNames.push(name);
+            break;
+        case SearchTypeEnum.MSCat:
+            ulId = "selectedMSCatUl";
+            idFieldName = "catId";
+            nameFieldStr = "catName";
+            id = idOfMSCatName[name];
+            selectedMSCatNames.push(name);
+            break;
+        case SearchTypeEnum.MSSubAdv:
+            ulId = "selectedMSSubAdvUl";
+            idFieldName = "subId";
+            nameFieldStr = "subName";
+            id = idOfMSSubAdvName[name];
+            selectedMSSubAdvNames.push(name);
+            break;
+        default: // use Advisor
+            console.log("--- [ERROR] get unexpected SearchTypeEnum in func addSelectName: line 463");
+            return;
+    }
+    var ul = document.getElementById(ulId);
+    li = document.createElement("li");
+    li.appendChild(document.createTextNode(name));
+
+    li.setAttribute("id", searchTypeEnum + id);
 
     var idField = document.createElement("INPUT");
-    idField.setAttribute("value", advId);
+    idField.setAttribute("value", id);
     idField.setAttribute("type", "hidden");
-    idField.setAttribute("name", "advId");
-    idField.setAttribute("id", "advId");
+    idField.setAttribute("name", idFieldName);
+    idField.setAttribute("id", idFieldName);
 
     var nameField = document.createElement("INPUT");
-    nameField.setAttribute("value", advName);
+    nameField.setAttribute("value", name);
     nameField.setAttribute("type", "hidden");
-    nameField.setAttribute("name", "advName");
-    nameField.setAttribute("id", "advName");
+    nameField.setAttribute("name", nameFieldStr);
+    nameField.setAttribute("id", nameFieldStr);
 
     var btnIcon = document.createElement("i");
     btnIcon.setAttribute("class", "fa fa-close");
     var rmBtn = document.createElement("BUTTON");
     rmBtn.setAttribute("class", "liBtn");
     rmBtn.setAttribute("type", "button");
-    rmBtn.setAttribute("id", advId);
+    rmBtn.setAttribute("id", id);
     rmBtn.appendChild(btnIcon);
     rmBtn.addEventListener('click', function(event) {
-        removeLiByAdvisorId(advId);
+        removeLiById(id, searchTypeEnum);
     });
 
     li.appendChild(idField);
     li.appendChild(nameField);
     li.appendChild(rmBtn);
     ul.appendChild(li);
-
-    selectedAdvisorNames.push(advName);
 }
-
-function addSelectMSCatName(catName="notSet") {
-    var ul = document.getElementById("selectedMSCatUl");
-    li = document.createElement("li");
-    li.appendChild(document.createTextNode(catName));
-
-    var catId = idOfMSCatName[catName]; 
-    li.setAttribute("id", catId);
-
-    var idField = document.createElement("INPUT");
-    idField.setAttribute("value", catId);
-    idField.setAttribute("type", "hidden");
-    idField.setAttribute("name", "catId");
-    idField.setAttribute("id", "catId");
-
-    var nameField = document.createElement("INPUT");
-    nameField.setAttribute("value", catName);
-    nameField.setAttribute("type", "hidden");
-    nameField.setAttribute("name", "catName");
-    nameField.setAttribute("id", "catName");
-
-    var btnIcon = document.createElement("i");
-    btnIcon.setAttribute("class", "fa fa-close");
-    var rmBtn = document.createElement("BUTTON");
-    rmBtn.setAttribute("class", "liBtn");
-    rmBtn.setAttribute("type", "button");
-    rmBtn.setAttribute("id", catId);
-    rmBtn.appendChild(btnIcon);
-    rmBtn.addEventListener('click', function(event) {
-        removeLiByMSCatId(catId);
-    });
-
-    li.appendChild(idField);
-    li.appendChild(nameField);
-    li.appendChild(rmBtn);
-    ul.appendChild(li);
-
-    selectedMSCatNames.push(catName);
-}
-
-function addSelectMSSubAdvName(subName="notSet") {
-    var ul = document.getElementById("selectedMSSubAdvUl");
-    li = document.createElement("li");
-    li.appendChild(document.createTextNode(subName));
-
-    var subId = idOfMSSubAdvName[subName]; 
-    li.setAttribute("id", subId);
-
-    var idField = document.createElement("INPUT");
-    idField.setAttribute("value", subId);
-    idField.setAttribute("type", "hidden");
-    idField.setAttribute("name", "subId");
-    idField.setAttribute("id", "subId");
-
-    var nameField = document.createElement("INPUT");
-    nameField.setAttribute("value", subName);
-    nameField.setAttribute("type", "hidden");
-    nameField.setAttribute("name", "subName");
-    nameField.setAttribute("id", "subName");
-
-    var btnIcon = document.createElement("i");
-    btnIcon.setAttribute("class", "fa fa-close");
-    var rmBtn = document.createElement("BUTTON");
-    rmBtn.setAttribute("class", "liBtn");
-    rmBtn.setAttribute("type", "button");
-    rmBtn.setAttribute("id", subId);
-    rmBtn.appendChild(btnIcon);
-    rmBtn.addEventListener('click', function(event) {
-        removeLiByMSSubAdvId(subId);
-    });
-
-    li.appendChild(idField);
-    li.appendChild(nameField);
-    li.appendChild(rmBtn);
-    ul.appendChild(li);
-
-    selectedMSSubAdvNames.push(subName);
-}
-
 
 function removeSelectAdvisorName(n="") {
     var advId = idOfAdvisorName[n];
-    removeLiByAdvisorId(advId);
+    removeLiById(advId, SearchTypeEnum.Advisor);
     for (var i = 0; i < selectedAdvisorNames.length; i++) {
         if (selectedAdvisorNames[i] == n) {
             selectedAdvisorNames.splice(i, 1);
@@ -565,10 +533,46 @@ function removeSelectAdvisorName(n="") {
 }
 function removeSelectMSCatName(n="") {
     var catId = idOfMSCatName[n];
-    removeLiByMSCatId(catId);
+    removeLiById(catId, SearchTypeEnum.MSCat);
     for (var i = 0; i < selectedMSCatNames.length; i++) {
         if (selectedMSCatNames[i] == n) {
             selectedMSCatNames.splice(i, 1);
+            return;
+        }
+    }
+}
+function removeSelectMSSubAdvName(n="") {
+    var subId = idOfMSSubAdvName[n];
+    removeLiById(subId, SearchTypeEnum.MSSubAdv);
+    for (var i = 0; i < selectedMSSubAdvNames.length; i++) {
+        if (selectedMSSubAdvNames[i] == n) {
+            selectedMSSubAdvNames.splice(i, 1);
+            return;
+        }
+    }
+}
+
+
+function removeLiById(liId, searchTypeEnum) {
+    var lsId = '';
+    switch (searchTypeEnum) {
+        case SearchTypeEnum.Advisor:
+            lsId = '#selectedAdvisorUl li';
+            break;
+        case SearchTypeEnum.MSCat:
+            lsId = '#selectedMSCatUl li';
+            break;
+        case SearchTypeEnum.MSSubAdv:
+            lsId = '#selectedMSSubAdvUl li';
+            break;
+        default:
+            console.log("--- [ERROR] removeLiById unexpected searchType: " + searchTypeEnum)
+            return;
+    }
+    var lis = document.querySelectorAll(lsId);
+    for(var i=0; li=lis[i]; i++) {
+        if(li.id == liId) {
+            li.parentNode.removeChild(li);
             return;
         }
     }
@@ -584,27 +588,12 @@ function clearSelectedMSCatList() {
     ul.innerHTML = "";
     selectedMSCatNames = [];
 }
+function clearSelectedMSSubAdvList() {
+    var ul = document.getElementById("selectedMSSubAdvUl");
+    ul.innerHTML = "";
+    selectedMSSubAdvNames = [];
+}
 
-function removeLiByAdvisorId(liId){
-    var lis = document.querySelectorAll('#selectedAdvisorUl li');
-    removeLiById(liId, lis)
-}
-function removeLiByMSCatId(liId){
-    var lis = document.querySelectorAll('#selectedMSCatUl li');
-    removeLiById(liId, lis)
-}
-function removeLiByMSSubAdvId(liId){
-    var lis = document.querySelectorAll('#selectedMSSubAdvUl li');
-    removeLiById(liId, lis)
-}
-function removeLiById(liId, lis) {
-    for(var i=0; li=lis[i]; i++) {
-        if(li.id == liId) {
-            li.parentNode.removeChild(li);
-            return;
-        }
-    }
-}
 </script>
 
     </navleft>
