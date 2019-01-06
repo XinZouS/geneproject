@@ -37,7 +37,7 @@ def company_13rows(request):
 
 
 def advisor_table(request):
-	cols = ["No.", "Name", "CUSIP", "SecId", "FundId"]
+	cols = ["No.", "Name", "CUSIP", "SecId", "FundId", "Advisor", "MSCat", "MSSubAdv"]
 	companyInfo = []
 
 	selectedAdvisorIds = []

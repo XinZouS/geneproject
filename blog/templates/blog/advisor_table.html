@@ -6,7 +6,8 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Add icon library for buttons -->
+<!-- Add icon library for buttons, 
+    ref: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_icon_buttons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <style>
@@ -33,7 +34,7 @@ input {
 }
 input[type=text] {
   background-color: #f1f1f1;
-  width: 70%;
+  width: 60%;
   height: 36px;
 }
 input[type=submit] {
@@ -61,10 +62,14 @@ input[type=submit] {
 }
 .info {color: dodgerblue;}
 
-.add {width: 28%;}
-.add:hover {
+.showUl {width: 10%;}
+.showUl:hover {
     background: #fff;
     font-weight: bold;
+}
+.add    {width: 27%;}
+.add:hover {
+    background: #fff;
 }
 
 .liBtn {
@@ -199,7 +204,7 @@ th div{
 <body>
 
 
-<section class="scrollable" style="width: 1310px;">
+<section class="scrollable" style="width: 2010px;">
 
     <navleft>
 
@@ -210,6 +215,7 @@ th div{
                 <h6 class="searchTitle">Advisors:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name">
+                    <button type="button" onclick="clearSearchText()" class="btn info showUl"><i class="fa fa-list-ul"></i></button>
                     <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
@@ -225,6 +231,7 @@ th div{
                 <h6 class="searchTitle">MSCats:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchMSCatInput" type="text" name="myMSCat" placeholder="MSCat Name">
+                    <button type="button" onclick="clearSearchText()" class="btn info showUl"><i class="fa fa-list-ul"></i></button>
                     <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
@@ -240,6 +247,7 @@ th div{
                 <h6 class="searchTitle">MSSubAdvs:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchMSSubAdvInput" type="text" name="myMSSubAdv" placeholder="MSSubAdv Name">
+                    <button type="button" onclick="clearSearchText()" class="btn info showUl"><i class="fa fa-list-ul"></i></button>
                     <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
@@ -311,9 +319,8 @@ function autocomplete(searchTypeEnum, inp, arr) {
                 divB.addEventListener("click", function(e) {
                     var targetLi = this.getElementsByTagName("input")[0]
                     var selectName = targetLi.value;
-                    var selectDiv = document.getElementById(selectName);
-                    /*insert the value for the autocomplete text field:*/
-                    // inp.value = selectName;
+                    var selectDiv = document.getElementById(selectName);                    
+                    // inp.value = selectName; /*insert the value for the autocomplete text field:*/
                     switch (searchTypeEnum) {
                         case SearchTypeEnum.Advisor:
                             if (selectedAdvisorNames.includes(selectName)) {
@@ -342,7 +349,6 @@ function autocomplete(searchTypeEnum, inp, arr) {
                         default:
                             console.log("--- [ERROR] line 340: get unexpected searchTypeEnum: " + searchTypeEnum);
                     }
-                    //closeAllLists();
                 });
                 c.appendChild(divB);
             }
@@ -602,8 +608,8 @@ function clearSelectedMSSubAdvList() {
     </navleft>
 
 
-    <div style="position: relative; width: 800px; padding-top: 43px; background: #eaeaea; float:right;">
-        <div style="overflow-y:auto; width:800px; height:88vh; padding-right:10px;">        
+    <div style="position: relative; width: 1500px; padding-top: 43px; background: #eaeaea; float:right;">
+        <div style="overflow-y:auto; width:1500px; height:88vh; padding-right:10px;">        
             <table style="margin:0 auto; float:left;">
                 <thead>
                     <tr>
@@ -612,14 +618,17 @@ function clearSelectedMSSubAdvList() {
                     {% endfor %}
                     </tr>
                 </thead>
-                <tbody style="overflow-y:auto; height:90vh; width:800px;">
+                <tbody style="overflow-y:auto; height:90vh; width:1500px;">
                     {% for item in companys %}
                     <tr>
                         <td style="padding-left: 10px; width:20px;">{{ forloop.counter }}</td>
-                        <td style="width:400px; text-align:left;">{{ item.Name     }}</td>
+                        <td style="width:300px; text-align:left;">{{ item.Name     }}</td>
                         <td>{{ item.CUSIP    }}</td>
                         <td>{{ item.SecId    }}</td>
                         <td>{{ item.FundId   }}</td>
+                        <td>{{ item.Advisor  }}</td>
+                        <td style="width:160px; text-align:left;">{{ item.MSCat    }}</td>
+                        <td>{{ item.MSSubAdv }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
