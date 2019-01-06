@@ -96,7 +96,7 @@ input[type=submit] {
     padding-top: 10px;
 }
 .clearUlButton {
-    width: 26%;
+    width: 27%;
     height: 100%;
     float: right;
     color: #cc3300;
@@ -215,7 +215,7 @@ th div{
                 <h6 class="searchTitle">Advisors:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name">
-                    <button type="button" onclick="clearSearchText()" class="btn info showUl"><i class="fa fa-list-ul"></i></button>
+                    <button type="button" onclick="showFullAdvisorList()" class="btn info showUl"><i class="fa fa-list-ul"></i></button>
                     <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
@@ -231,7 +231,7 @@ th div{
                 <h6 class="searchTitle">MSCats:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchMSCatInput" type="text" name="myMSCat" placeholder="MSCat Name">
-                    <button type="button" onclick="clearSearchText()" class="btn info showUl"><i class="fa fa-list-ul"></i></button>
+                    <button type="button" onclick="showFullMSCatList()" class="btn info showUl"><i class="fa fa-list-ul"></i></button>
                     <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
@@ -247,7 +247,7 @@ th div{
                 <h6 class="searchTitle">MSSubAdvs:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchMSSubAdvInput" type="text" name="myMSSubAdv" placeholder="MSSubAdv Name">
-                    <button type="button" onclick="clearSearchText()" class="btn info showUl"><i class="fa fa-list-ul"></i></button>
+                    <button type="button" onclick="showFullMSSubAdvList()" class="btn info showUl"><i class="fa fa-list-ul"></i></button>
                     <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
@@ -269,6 +269,40 @@ th div{
         </h6>
 
 <script>
+
+var SearchTypeEnum = Object.freeze({ "Advisor":"adv", "MSCat":"cat", "MSSubAdv":"sub" });
+
+var allAdvs = {{ advisorNames|safe }};
+var allMSCats = {{ mscatNames|safe }};
+var allMSSubs = {{ mssubadvNames|safe }};
+
+var idOfAdvisorName = {{ idOfAdvisorNameDict|safe }};
+var idOfMSCatName = {{ idOfMSCatNameDict|safe }};
+var idOfMSSubAdvName = {{ idOfMSSubAdvNameDict|safe }};
+
+var selectedAdvisorNames = {{ selectedAdvisorNames|safe }};
+var selectedMSCatNames = {{ selectedMSCatNames|safe }};
+var selectedMSSubAdvNames = {{ selectedMSSubAdvNames|safe }};
+
+/*initiate the autocomplete function on the "searchAdvisorInput" element, and pass along the countries array as possible autocomplete values:*/
+autocomplete(SearchTypeEnum.Advisor, document.getElementById("searchAdvisorInput"), allAdvs);
+autocomplete(SearchTypeEnum.MSCat, document.getElementById("searchMSCatInput"), allMSCats);
+autocomplete(SearchTypeEnum.MSSubAdv, document.getElementById("searchMSSubAdvInput"), allMSSubs);
+
+setupselectedAdvisorNames();
+setupselectedMSCatNames();
+setupselectedMSSubAdvNames();
+
+function showFullAdvisorList() {
+    //
+}
+function showFullMSCatList() {
+    //
+}
+function showFullMSSubAdvList() {
+    //
+}
+
 function autocomplete(searchTypeEnum, inp, arr) {
     /*the autocomplete function takes two arguments,
     the text field element and an array of possible autocompleted values:*/
@@ -415,30 +449,6 @@ function autocomplete(searchTypeEnum, inp, arr) {
         }
     });
 }
-
-var SearchTypeEnum = Object.freeze({ "Advisor":"adv", "MSCat":"cat", "MSSubAdv":"sub" });
-
-var allAdvs = {{ advisorNames|safe }};
-var allMSCats = {{ mscatNames|safe }};
-var allMSSubs = {{ mssubadvNames|safe }};
-
-var idOfAdvisorName = {{ idOfAdvisorNameDict|safe }};
-var idOfMSCatName = {{ idOfMSCatNameDict|safe }};
-var idOfMSSubAdvName = {{ idOfMSSubAdvNameDict|safe }};
-
-var selectedAdvisorNames = {{ selectedAdvisorNames|safe }};
-var selectedMSCatNames = {{ selectedMSCatNames|safe }};
-var selectedMSSubAdvNames = {{ selectedMSSubAdvNames|safe }};
-
-/*initiate the autocomplete function on the "searchAdvisorInput" element, and pass along the countries array as possible autocomplete values:*/
-autocomplete(SearchTypeEnum.Advisor, document.getElementById("searchAdvisorInput"), allAdvs);
-autocomplete(SearchTypeEnum.MSCat, document.getElementById("searchMSCatInput"), allMSCats);
-autocomplete(SearchTypeEnum.MSSubAdv, document.getElementById("searchMSSubAdvInput"), allMSSubs);
-
-setupselectedAdvisorNames();
-setupselectedMSCatNames();
-setupselectedMSSubAdvNames();
-
 
 function setupselectedAdvisorNames() {
     for (i in selectedAdvisorNames) {
