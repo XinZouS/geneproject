@@ -6,7 +6,8 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Add icon library for buttons -->
+<!-- Add icon library for buttons, 
+    ref: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_icon_buttons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <style>
@@ -33,7 +34,7 @@ input {
 }
 input[type=text] {
   background-color: #f1f1f1;
-  width: 70%;
+  width: 60%;
   height: 36px;
 }
 input[type=submit] {
@@ -61,10 +62,14 @@ input[type=submit] {
 }
 .info {color: dodgerblue;}
 
-.add {width: 28%;}
-.add:hover {
+.showUl {width: 10%;}
+.showUl:hover {
     background: #fff;
     font-weight: bold;
+}
+.add    {width: 27%;}
+.add:hover {
+    background: #fff;
 }
 
 .liBtn {
@@ -91,7 +96,7 @@ input[type=submit] {
     padding-top: 10px;
 }
 .clearUlButton {
-    width: 26%;
+    width: 27%;
     height: 100%;
     float: right;
     color: #cc3300;
@@ -199,7 +204,7 @@ th div{
 <body>
 
 
-<section class="scrollable" style="width: 1310px;">
+<section class="scrollable" style="width: 2010px;">
 
     <navleft>
 
@@ -210,6 +215,8 @@ th div{
                 <h6 class="searchTitle">Advisors:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name">
+                    <button type="button" onclick="showFullAdvisorList()" class="btn info showUl">
+                        <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
@@ -225,6 +232,8 @@ th div{
                 <h6 class="searchTitle">MSCats:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchMSCatInput" type="text" name="myMSCat" placeholder="MSCat Name">
+                    <button type="button" onclick="showFullMSCatList()" class="btn info showUl">
+                        <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
@@ -240,6 +249,8 @@ th div{
                 <h6 class="searchTitle">MSSubAdvs:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchMSSubAdvInput" type="text" name="myMSSubAdv" placeholder="MSSubAdv Name">
+                    <button type="button" onclick="showFullMSSubAdvList()" class="btn info showUl">
+                        <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
@@ -261,11 +272,105 @@ th div{
         </h6>
 
 <script>
-function autocomplete(searchTypeEnum, inp, arr) {
-    /*the autocomplete function takes two arguments,
-    the text field element and an array of possible autocompleted values:*/
-    var currentFocus;
-    /*execute a function when someone writes in the text field:*/
+
+var SearchTypeEnum = Object.freeze({ "Advisor":"adv", "MSCat":"cat", "MSSubAdv":"sub" });
+var currentFocus;
+
+var allAdvs = {{ advisorNames|safe }};
+var allMSCats = {{ mscatNames|safe }};
+var allMSSubs = {{ mssubadvNames|safe }};
+
+var idOfAdvisorName = {{ idOfAdvisorNameDict|safe }};
+var idOfMSCatName = {{ idOfMSCatNameDict|safe }};
+var idOfMSSubAdvName = {{ idOfMSSubAdvNameDict|safe }};
+
+var selectedAdvisorNames = {{ selectedAdvisorNames|safe }};
+var selectedMSCatNames = {{ selectedMSCatNames|safe }};
+var selectedMSSubAdvNames = {{ selectedMSSubAdvNames|safe }};
+
+/*initiate the autocomplete function on the "searchAdvisorInput" element, and pass along the countries array as possible autocomplete values:*/
+autocomplete(SearchTypeEnum.Advisor, document.getElementById("searchAdvisorInput"), allAdvs);
+autocomplete(SearchTypeEnum.MSCat, document.getElementById("searchMSCatInput"), allMSCats);
+autocomplete(SearchTypeEnum.MSSubAdv, document.getElementById("searchMSSubAdvInput"), allMSSubs);
+
+setupselectedAdvisorNames();
+setupselectedMSCatNames();
+setupselectedMSSubAdvNames();
+
+function showFullAdvisorList() {
+    constructSearchList(allAdvs, SearchTypeEnum.Advisor);
+}
+function showFullMSCatList() {
+    constructSearchList(allMSCats, SearchTypeEnum.MSCat);
+}
+function showFullMSSubAdvList() {
+    constructSearchList(allMSSubs, SearchTypeEnum.MSSubAdv);
+}
+
+function constructSearchList(arr, searchTypeEnum) {
+    closeAllLists();
+    var fieldId = "";
+    switch (searchTypeEnum) {
+        case SearchTypeEnum.Advisor:
+            fieldId = "searchAdvisorInput";
+            break;
+        case SearchTypeEnum.MSCat:
+            fieldId = "searchMSCatInput";
+            break;
+        case SearchTypeEnum.MSSubAdv:
+            fieldId = "searchMSSubAdvInput";
+            break;
+        default:
+            console.log("--- [ERROR] wrong type: " + searchTypeEnum);
+            return;
+    }
+
+    var textField = document.getElementById(fieldId);
+    var a, c, i;
+    /*create a DIV element that will contain the items (values):*/
+    a = document.createElement("DIV");
+    a.setAttribute("id", textField.id + "autocomplete-list");
+    a.setAttribute("class", "autocomplete-items");
+    textField.parentNode.appendChild(a); /*append DIV as a child of autocomplete container:*/
+
+    // the scroll container for search result list
+    c = document.createElement("DIV");
+    c.setAttribute("class", "vertical-menu");
+    c.setAttribute("id", "autocompleteMenuDiv");
+    a.appendChild(c);
+
+    for (i = 0; i < arr.length; i++) {
+        var targetName = arr[i];
+        /*create a DIV element for each matching element:*/
+        var divB = document.createElement("DIV");
+        divB.innerHTML = targetName;
+        divB.innerHTML += "<input type='hidden' value='" + targetName + "'>";
+
+        divB.setAttribute("id", targetName); // show item that already selected;
+        if (searchTypeEnum == SearchTypeEnum.Advisor && selectedAdvisorNames.includes(targetName)) {
+            divB.classList.add("autocomplete-active");
+        } else
+        if (searchTypeEnum == SearchTypeEnum.MSCat && selectedMSCatNames.includes(targetName)) {
+            divB.classList.add("autocomplete-active");
+        } else
+        if (searchTypeEnum == SearchTypeEnum.MSSubAdv && selectedMSSubAdvNames.includes(targetName)) {
+            divB.classList.add("autocomplete-active");
+        }
+
+        divB.addEventListener("click", function(e) {
+            didSelectSearchListItem(searchTypeEnum, this);
+        });
+        c.appendChild(divB);
+    }
+}
+
+function removeSelectFromAutoComplete(div, selectName, searchTypeEnum) {
+    div.classList.remove("autocomplete-active");
+    removeLiByName(selectName, searchTypeEnum);
+}
+
+function autocomplete(searchTypeEnum, inp, arr) { 
+    // inp: the text field, arr: array of possible autocompleted values
     inp.addEventListener("input", function(e) {
         var a, b, c, i, val = this.value;
         /*close any already open lists of autocompleted values*/
@@ -309,130 +414,105 @@ function autocomplete(searchTypeEnum, inp, arr) {
                 }
 
                 divB.addEventListener("click", function(e) {
-                    var targetLi = this.getElementsByTagName("input")[0]
-                    var selectName = targetLi.value;
-                    var selectDiv = document.getElementById(selectName);
-                    /*insert the value for the autocomplete text field:*/
-                    // inp.value = selectName;
-                    switch (searchTypeEnum) {
-                        case SearchTypeEnum.Advisor:
-                            if (selectedAdvisorNames.includes(selectName)) {
-                                removeSelectFromAutoComplete(selectDiv, selectName, searchTypeEnum);
-                            } else {
-                                selectDiv.classList.add("autocomplete-active");
-                                addSelectName(selectName, searchTypeEnum);
-                            }
-                            break;
-                        case SearchTypeEnum.MSCat:
-                            if (selectedMSCatNames.includes(selectName)) {
-                                removeSelectFromAutoComplete(selectDiv, selectName, searchTypeEnum);
-                            } else {
-                                selectDiv.classList.add("autocomplete-active");
-                                addSelectName(selectName, searchTypeEnum);
-                            }
-                            break;
-                        case SearchTypeEnum.MSSubAdv:
-                            if (selectedMSSubAdvNames.includes(selectName)) {
-                                removeSelectFromAutoComplete(selectDiv, selectName, searchTypeEnum);
-                            } else {
-                                selectDiv.classList.add("autocomplete-active");
-                                addSelectName(selectName, searchTypeEnum);
-                            }
-                            break;
-                        default:
-                            console.log("--- [ERROR] line 340: get unexpected searchTypeEnum: " + searchTypeEnum);
-                    }
-                    //closeAllLists();
+                    didSelectSearchListItem(searchTypeEnum, this); // 'this' is the target div
                 });
                 c.appendChild(divB);
             }
         }
     });
-    function removeSelectFromAutoComplete(div, selectName, searchTypeEnum) {
-        div.classList.remove("autocomplete-active");
-        removeLiByName(selectName, searchTypeEnum);
-    }
     /*execute a function presses a key on the keyboard:*/
     inp.addEventListener("keydown", function(e) {
-        var x = document.getElementById(this.id + "autocomplete-list");
-        if (x) x = x.getElementsByTagName("div");
+        var currList = document.getElementById(this.id + "autocomplete-list");
+        if (currList) currList = currList.getElementsByTagName("div");
         if (e.keyCode == 40) {
             /*If the arrow DOWN key is pressed, increase the currentFocus variable:*/
             currentFocus++;
-            addActive(x); /*and and make the current item more visible:*/
+            addActive(currList); /*and and make the current item more visible:*/
         } else if (e.keyCode == 38) { //up
             /*If the arrow UP key is pressed, decrease the currentFocus variable:*/
             currentFocus--;
-            addActive(x); /*and and make the current item more visible:*/
+            addActive(currList); /*and and make the current item more visible:*/
         } else if (e.keyCode == 13) {
             /*If the ENTER key is pressed, prevent the form from being submitted,*/
             e.preventDefault();
             if (currentFocus > -1) {
                 /*and simulate a click on the "active" item:*/
-                if (x) x[currentFocus].click();
+                if (currList) currList[currentFocus].click();
             }
-        }
-    });
-    function addActive(x) {
-        /*a function to classify an item as "active":*/
-        if (!x) return false;
-        /*start by removing the "active" class on all items:*/
-        removeActive(x);
-        if (currentFocus >= x.length) currentFocus = 0;
-        if (currentFocus < 0) currentFocus = (x.length - 1);
-        /*add class "autocomplete-active":*/
-        x[currentFocus].classList.add("autocomplete-active");
-    }
-    function removeActive(x) {
-        /*a function to remove the "active" class from all autocomplete items:*/
-        for (var i = 0; i < x.length; i++) {
-          x[i].classList.remove("autocomplete-active");
-        }
-    }
-    function closeAllLists(elmnt) {
-        var x = document.getElementsByClassName("autocomplete-items");
-        for (var i = 0; i < x.length; i++) {
-            if (elmnt != x[i] && elmnt != inp) {
-                x[i].parentNode.removeChild(x[i]);
-            }
-        }
-    }
-    function addSelectionHightLight(targetLiId) {
-        var targetLi = document.getElementById(targetLiId);
-        if (targetLi) targetLi = targetLi.getElementsByTagName("li");
-        targetLi.classList.add("autocomplete-active");
-    }
-    /*execute a function when someone clicks in the document:*/
-    document.addEventListener("click", function (e) {
-        if (e.target.parentNode.id != "autocompleteMenuDiv") {
-            closeAllLists(e.target);
         }
     });
 }
+function addActive(x) {
+    /*a function to classify an item as "active":*/
+    if (!x) return false;
+    /*start by removing the "active" class on all items:*/
+    removeActive(x);
+    if (currentFocus >= x.length) currentFocus = 0;
+    if (currentFocus < 0) currentFocus = (x.length - 1);
+    /*add class "autocomplete-active":*/
+    x[currentFocus].classList.add("autocomplete-active");
+}
+function removeActive(x) {
+    /*a function to remove the "active" class from all autocomplete items:*/
+    for (var i = 0; i < x.length; i++) {
+      x[i].classList.remove("autocomplete-active");
+    }
+}
+function closeAllLists(element) {
+    var autoList = document.getElementsByClassName("autocomplete-items");
+    var inputTxtField = document.getElementById("searchAdvisorInput");
+    for (var i = 0; i < autoList.length; i++) {
+        if (element != autoList[i] && element != inputTxtField) {
+            autoList[i].parentNode.removeChild(autoList[i]);
+        }
+    }
+}
+function addSelectionHightLight(targetLiId) {
+    var targetLi = document.getElementById(targetLiId);
+    if (targetLi) targetLi = targetLi.getElementsByTagName("li");
+    targetLi.classList.add("autocomplete-active");
+}
+/*execute a function when someone clicks in the document:*/
+document.addEventListener("click", function (e) {
+    if (e.target.parentNode.id != "autocompleteMenuDiv" && e.target.id != "btnI") {
+        closeAllLists(e.target);
+        clearSearchText();
+    }
+});
 
-var SearchTypeEnum = Object.freeze({ "Advisor":"adv", "MSCat":"cat", "MSSubAdv":"sub" });
-
-var allAdvs = {{ advisorNames|safe }};
-var allMSCats = {{ mscatNames|safe }};
-var allMSSubs = {{ mssubadvNames|safe }};
-
-var idOfAdvisorName = {{ idOfAdvisorNameDict|safe }};
-var idOfMSCatName = {{ idOfMSCatNameDict|safe }};
-var idOfMSSubAdvName = {{ idOfMSSubAdvNameDict|safe }};
-
-var selectedAdvisorNames = {{ selectedAdvisorNames|safe }};
-var selectedMSCatNames = {{ selectedMSCatNames|safe }};
-var selectedMSSubAdvNames = {{ selectedMSSubAdvNames|safe }};
-
-/*initiate the autocomplete function on the "searchAdvisorInput" element, and pass along the countries array as possible autocomplete values:*/
-autocomplete(SearchTypeEnum.Advisor, document.getElementById("searchAdvisorInput"), allAdvs);
-autocomplete(SearchTypeEnum.MSCat, document.getElementById("searchMSCatInput"), allMSCats);
-autocomplete(SearchTypeEnum.MSSubAdv, document.getElementById("searchMSSubAdvInput"), allMSSubs);
-
-setupselectedAdvisorNames();
-setupselectedMSCatNames();
-setupselectedMSSubAdvNames();
-
+function didSelectSearchListItem(searchTypeEnum, targetDiv) {
+    var targetLi = targetDiv.getElementsByTagName("input")[0]
+    var selectName = targetLi.value;
+    var selectDiv = document.getElementById(selectName);
+    switch (searchTypeEnum) {
+        case SearchTypeEnum.Advisor:
+            if (selectedAdvisorNames.includes(selectName)) {
+                removeSelectFromAutoComplete(selectDiv, selectName, searchTypeEnum);
+            } else {
+                selectDiv.classList.add("autocomplete-active");
+                addSelectName(selectName, searchTypeEnum);
+            }
+            break;
+        case SearchTypeEnum.MSCat:
+            if (selectedMSCatNames.includes(selectName)) {
+                removeSelectFromAutoComplete(selectDiv, selectName, searchTypeEnum);
+            } else {
+                selectDiv.classList.add("autocomplete-active");
+                addSelectName(selectName, searchTypeEnum);
+            }
+            break;
+        case SearchTypeEnum.MSSubAdv:
+            if (selectedMSSubAdvNames.includes(selectName)) {
+                removeSelectFromAutoComplete(selectDiv, selectName, searchTypeEnum);
+            } else {
+                selectDiv.classList.add("autocomplete-active");
+                addSelectName(selectName, searchTypeEnum);
+            }
+            break;
+        default:
+            console.log("--- [ERROR] line 340: get unexpected searchTypeEnum: " + searchTypeEnum);
+    }
+}
 
 function setupselectedAdvisorNames() {
     for (i in selectedAdvisorNames) {
@@ -465,8 +545,8 @@ function addSelectName(name="notSet", searchTypeEnum) {
     switch(searchTypeEnum) {
         case SearchTypeEnum.Advisor:
             ulId = "selectedAdvisorUl";
-            idFieldName = "advId";      // ????????????????
-            nameFieldStr = "advName"; // ?????????????????
+            idFieldName = "advId";
+            nameFieldStr = "advName";
             id = idOfAdvisorName[name];
             selectedAdvisorNames.push(name);
             break;
@@ -497,7 +577,7 @@ function addSelectName(name="notSet", searchTypeEnum) {
     var idField = document.createElement("INPUT");
     idField.setAttribute("value", id);
     idField.setAttribute("type", "hidden");
-    idField.setAttribute("name", idFieldName);
+    idField.setAttribute("name", idFieldName); // id, name are for page reloading;
     idField.setAttribute("id", idFieldName);
 
     var nameField = document.createElement("INPUT");
@@ -533,15 +613,12 @@ function removeLiByName(name, searchTypeEnum) {
 
             var selectedNameSet = new Set(selectedAdvisorNames); // remove duplicates
             selectedAdvisorNames = Array.from(selectedNameSet);
-            console.log(selectedAdvisorNames);
             for (var i = 0; i < selectedAdvisorNames.length; i++) {
                 if (selectedAdvisorNames[i] == name) {
                     selectedAdvisorNames.splice(i, 1);
                     break;
                 }
             }
-            console.log("--- should rmeove name: " + name)
-            console.log(selectedAdvisorNames);
             break;
         case SearchTypeEnum.MSCat:
             lsId = '#selectedMSCatUl li';
@@ -602,8 +679,8 @@ function clearSelectedMSSubAdvList() {
     </navleft>
 
 
-    <div style="position: relative; width: 800px; padding-top: 43px; background: #eaeaea; float:right;">
-        <div style="overflow-y:auto; width:800px; height:88vh; padding-right:10px;">        
+    <div style="position: relative; width: 1500px; padding-top: 43px; background: #eaeaea; float:right;">
+        <div style="overflow-y:auto; width:1500px; height:88vh; padding-right:10px;">        
             <table style="margin:0 auto; float:left;">
                 <thead>
                     <tr>
@@ -612,14 +689,17 @@ function clearSelectedMSSubAdvList() {
                     {% endfor %}
                     </tr>
                 </thead>
-                <tbody style="overflow-y:auto; height:90vh; width:800px;">
+                <tbody style="overflow-y:auto; height:90vh; width:1500px;">
                     {% for item in companys %}
                     <tr>
-                        <td style="padding-left: 10px; width:20px;">{{ forloop.counter }}</td>
-                        <td style="width:400px; text-align:left;">{{ item.Name     }}</td>
-                        <td>{{ item.CUSIP    }}</td>
-                        <td>{{ item.SecId    }}</td>
-                        <td>{{ item.FundId   }}</td>
+                        <td style="width:20px; padding-left: 10px;">{{ forloop.counter }}</td>
+                        <td style="width:300px; text-align:left;">{{ item.Name     }}</td>
+                        <td style="width:100px;">{{ item.CUSIP    }}</td>
+                        <td style="width:120px;">{{ item.SecId    }}</td>
+                        <td style="width:120px;">{{ item.FundId   }}</td>
+                        <td style="width:230px; text-align:left;">{{ item.Advisor  }}</td>
+                        <td style="width:200px; text-align:left;">{{ item.MSCat    }}</td>
+                        <td style="width:260px; text-align:left;">{{ item.MSSubAdv }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

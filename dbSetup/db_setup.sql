@@ -43,6 +43,6 @@
 -- where advisor is not null and mscat is not null and mssubadv is not null
 -- order by advisorid_id
 
-select Advisorid_id, Advisor, mscatdbid_id, mSCat, mssubadvId_id, mssubadv from blog_company
+select name, Advisorid_id, Advisor, mscatdbid_id, mSCat, mssubadvId_id, mssubadv from blog_company
 where advisorid_id = 12 and mscatdbid_id in (22, 85) and mssubadvid_id = 2 -- Adv: aberA.M.I, Cat: EmM.B,Paci, Sub: AberA.M.A.L
-order by Advisor 
+order by name 
