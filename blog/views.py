@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import TemplateView
-from .models import Company, Advisors, MSCats
+from .models import Company, Advisors, MSCats, MSSubAdvs
 from django.db.models import Q
 
 import time
@@ -39,8 +39,11 @@ def company_13rows(request):
 def advisor_table(request):
 	cols = ["No.", "Name", "CUSIP", "SecId", "FundId"]
 	companyInfo = []
+
 	selectedAdvisorIds = []
 	selectedAdvisorNames = []
+	selectedMSSubAdvIds = []
+	selectedMSSubAdvNames = []
 	selectedMSCatIds = []
 	selectedMSCatNames = []
 
@@ -48,80 +51,116 @@ def advisor_table(request):
 		selectedAdvisorIds = request.POST.getlist('advId')
 		selectedAdvisorNames = request.POST.getlist('advName', '')
 		selectedAdvisorIdSet = set(selectedAdvisorIds)
-		selectedAdvisorNameset = set(selectedAdvisorNames)
+
+		selectedMSSubAdvIds = request.POST.getlist('subId')
+		selectedMSSubAdvNames = request.POST.getlist('subName', '')
+		selectedMSSubAdvIdSet = set(list(map(lambda x: int(x.encode("utf-8")), selectedMSSubAdvIds)))
 
 		selectedMSCatIds = request.POST.getlist('catId')
 		selectedMSCatNames = request.POST.getlist('catName', '')
 		selectedMSCatIdSet = set(list(map(lambda x: int(x.encode("utf-8")), selectedMSCatIds)))
-		selectedMsCatNameSet = set(selectedMSCatNames)
 
 		start_time = time.time()
-		if len(selectedAdvisorIds) != 0 and len(selectedMSCatIds) != 0:
-			cmpObjByAdv = []
-			for advId in selectedAdvisorIdSet:
+		cmpObjByAll = []
+
+		if selectedAdvisorIds: # len() != 0, in pythonic
+			for advId in selectedAdvisorIds:
 				obj = Company.objects.filter(AdvisorID_id=advId).order_by("Name")
 				if len(obj) == 1:
-					cmpObjByAdv.append(obj[0])
+					cmpObjByAll.append(obj[0])
 				elif len(obj) > 1:
 					for c in obj:
-						cmpObjByAdv.append(c)
-			print("--- query Adv id: %s seconds ---" % (time.time() - start_time))
-			print("--- get Adv.count = %s" % len(cmpObjByAdv))
+						cmpObjByAll.append(c)
+			print("--- 1.1 query Adv id: %s seconds ---" % (time.time() - start_time))
+			print("--- 1.1 cmpObjByAll.count = %s" % len(cmpObjByAll))
 			start_time = time.time()
 
-			cmpObjByAdvCat = []
-			for cmpObj in cmpObjByAdv:
-				if cmpObj.MSCatDbId_id in selectedMSCatIdSet:
-					cmpObjByAdvCat.append(cmpObj)
-			print("---query Cat id: %s seconds ---" % (time.time() - start_time))
-			companyInfo.extend(cmpObjByAdvCat)
+		isResultShouldBeEmpty = False
 
-		else:
-			if len(selectedAdvisorIds) != 0:
-				for advId in selectedAdvisorIdSet:
-					obj = Company.objects.filter(AdvisorID_id=advId).order_by("Name")
-					if len(obj) == 1:
-						companyInfo.append(obj[0])
-					elif len(obj) > 1:
-						companyInfo.extend(obj)
-			else:
+		if selectedMSSubAdvIds:
+			if cmpObjByAll:
+				containMSSub = []
+				for cmpObj in cmpObjByAll:
+					if cmpObj.MSSubAdvId_id in selectedMSSubAdvIdSet:
+						containMSSub.append(cmpObj)
+				cmpObjByAll = containMSSub
+				isResultShouldBeEmpty = len(cmpObjByAll) == 0
+				print("--- 2.1 query Sub id: %s seconds ---" % (time.time() - start_time))
+				print("--- 2.1 cmpObjByAll.count = %s, isResultShouldBeEmpty = %s" % (len(cmpObjByAll), isResultShouldBeEmpty))
 				start_time = time.time()
-				for catId in selectedMSCatIdSet:
+			else:
+				for subId in selectedMSSubAdvIds:
+					obj = Company.objects.filter(MSSubAdvId_id=subId).order_by("Name")
+					if len(obj) == 1:
+						cmpObjByAll.append(obj[0])
+					elif len(obj) > 1:
+						cmpObjByAll.extend(obj)
+				print("--- 2.2 query Sub id: %s seconds ---" % (time.time() - start_time))
+				print("--- 2.2 cmpObjByAll.count = %s" % len(cmpObjByAll))
+				start_time = time.time()
+
+		if selectedMSCatIds and not isResultShouldBeEmpty:
+			if cmpObjByAll:
+				containMSCat = []
+				for cmpObj in cmpObjByAll:
+					if cmpObj.MSCatDbId_id in selectedMSCatIdSet:
+						containMSCat.append(cmpObj)
+				cmpObjByAll = containMSCat
+				print("--- 3.1 filter Cat id: %s seconds ---" % (time.time() - start_time))
+				print("--- 3.1 cmpObjByAll.count = %s" % len(cmpObjByAll))
+				start_time = time.time()
+			else:
+				for catId in selectedMSCatIds:
 					obj = Company.objects.filter(MSCatDbId_id=catId).order_by("Name")
 					if len(obj) == 1:
-						companyInfo.append(obj[0])
+						cmpObjByAll.append(obj[0])
 					elif len(obj) > 1:
-						companyInfo.extend(obj)
-			print("--- only cat id: %s seconds ---" % (time.time() - start_time))
-			start_time = time.time()
+						cmpObjByAll.extend(obj)
+				print("--- 3.2 query Cat id: %s seconds ---" % (time.time() - start_time))
+				print("--- 3.2 cmpObjByAll.count = %s" % len(cmpObjByAll))
+				start_time = time.time()
+
+		companyInfo = cmpObjByAll
+
+
+		selectedAdvisorNameset = set(selectedAdvisorNames)
+		selectedMSSubAdvNameSet = set(selectedMSSubAdvNames)
+		selectedMSCatNameSet = set(selectedMSCatNames)
 
 		selectedAdvisorNames = []
 		for advName in selectedAdvisorNameset:
 			selectedAdvisorNames.append(advName.encode("utf-8"))
 
+		selectedMSSubAdvNames = []
+		for advName in selectedMSSubAdvNameSet:
+			selectedMSSubAdvNames.append(advName.encode("utf-8"))
+
 		selectedMSCatNames = []
-		for catName in selectedMsCatNameSet:
+		for catName in selectedMSCatNameSet:
 			selectedMSCatNames.append(catName.encode("utf-8"))
 
 	else:
 		print "--- [GET] request is GET, init page....,"
 
 	# for Auto-complete search lists
-	advs = Advisors.objects.all()	
-	advsNames = list(map(lambda x: x.Name.encode("utf-8"), advs))
-
+	advs = Advisors.objects.all()
+	subs = MSSubAdvs.objects.all()
 	cats = MSCats.objects.all()
-	mscatNames = list(map(lambda x: x.Name.encode("utf-8"), cats))
+	advsNames 	= list(map(lambda x: x.Name.encode("utf-8"), advs))
+	subNames 	= list(map(lambda x: x.Name.encode("utf-8"), subs))
+	mscatNames  = list(map(lambda x: x.Name.encode("utf-8"), cats))
 
 	idOfAdvisorNameDict = {} # {'Name':'advId'}
+	idOfMSSubAdvNameDict = {}
+	idOfMSCatNameDict = {}
+
 	for adv in advs:
 		idOfAdvisorNameDict[adv.Name.encode("utf-8")] = adv.id
-
-	idOfMSCatNameDict = {}
+	for sub in subs:
+		idOfMSSubAdvNameDict[sub.Name.encode("utf-8")] = sub.id
 	for cat in cats:
 		idOfMSCatNameDict[cat.Name.encode("utf-8")] = cat.id
 
-	# advsObj = Advisors.objects.filter(id=advisorid)
 
 	content = {
 		'companys': companyInfo, # get first n rows 
@@ -131,6 +170,11 @@ def advisor_table(request):
 		'idOfAdvisorNameDict':  idOfAdvisorNameDict,
 		'selectedAdvisorIds':   selectedAdvisorIds,
 		'selectedAdvisorNames': selectedAdvisorNames,
+
+		'mssubadvNames': subNames,
+		'idOfMSSubAdvNameDict':  idOfMSSubAdvNameDict,
+		'selectedMSSubAdvIds':   selectedMSSubAdvIds,
+		'selectedMSSubAdvNames': selectedMSSubAdvNames,
 
 		'mscatNames': mscatNames,
 		'idOfMSCatNameDict' : idOfMSCatNameDict,

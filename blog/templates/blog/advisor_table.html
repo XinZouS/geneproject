@@ -16,10 +16,14 @@
 body {
   font: 16px Arial;  
 }
+.searchTitle {
+    margin-top: 10px;
+    font-weight: bold;
+}
 /*the container must be positioned relative:*/
 .autocomplete {
-  position: relative;
-  display: inline-block;
+    position: relative;
+    display: inline-block;
 }
 input {
   border: 1px solid transparent;
@@ -29,12 +33,19 @@ input {
 }
 input[type=text] {
   background-color: #f1f1f1;
-  width: 100%;
+  width: 70%;
+  height: 36px;
 }
 input[type=submit] {
   background-color: DodgerBlue;
   color: #fff;
   cursor: pointer;
+}
+
+.selectedNamesDiv {
+    height:100px;
+    background-color:#fff;
+    overflow:auto;
 }
 .blankMarginDiv {
     height: 10px;
@@ -42,14 +53,19 @@ input[type=submit] {
 .btn {
   border: none;
   background-color: #eee;
-  height: 40px;
-  padding: 10px;
+  height: 36px;
+  padding: 6px;
   font-size: 16px;
   cursor: pointer;
   display: inline-block;
 }
-.btn:hover {background: #fff;}
 .info {color: dodgerblue;}
+
+.add {width: 28%;}
+.add:hover {
+    background: #fff;
+    font-weight: bold;
+}
 
 .liBtn {
   height: 23px;
@@ -60,6 +76,7 @@ input[type=submit] {
   border: none;
   color: white;
   margin-left: 6px;
+  margin-top: -3px;
   padding: 3px 3px;
   font-size: 14px;
   cursor: pointer;
@@ -68,14 +85,28 @@ input[type=submit] {
   background-color: Red;
 }
 
+.clearUlBtnContainer {
+    width:100%;
+    height:46px;
+    padding-top: 10px;
+}
+.clearUlButton {
+    width: 26%;
+    height: 100%;
+    float: right;
+    color: #cc3300;
+}
+.clearUlButton:hover {background-color: #ffb3b3;}
+
 ul {
   padding: 0;
+  overflow-y: scroll;
 }
 ul li {
   position: relative;
   padding: 6px 10px 6px 20px; /* t, r, b, l */
   list-style-type: circle;
-  font-size: 18px;
+  font-size: 16px;
   transition: 0.2s;
 }
 ul li:nth-child(odd) {
@@ -112,13 +143,14 @@ ul li:hover {
 /*when navigating through the items using the arrow keys:*/
 .autocomplete-active {
   background-color: DodgerBlue !important; 
-  color: #ffffff; 
+  color: #fff; 
 }
 
 .vertical-menu {
-  height: 500px;
-  overflow: auto;
-  white-space: nowrap;
+    height: 500px;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    white-space: nowrap;
 }
 .vertical-menu a {
   color: black;
@@ -172,42 +204,55 @@ th div{
     <navleft>
 
 
-        <div style="width: 100%; height: 560px;">
+        <div style="width: 100%;">
             <form method="POST" autocomplete="off" action="advisor-table">
                 {% csrf_token %}
-                <h5>Search Advisors:</h5>
+                <h6 class="searchTitle">Advisors:</h6>
                 <div class="autocomplete" style="width:100%;">
-                    <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name" style="width: 70%;">
-                    <button type="button" onclick="addSearchAdvisorText()" class="btn info" style="width: 28%;">Add</button>
+                    <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name">
+                    <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
             
-                <div id="selectedAdvisorNamesDiv" style="height:116px; background-color:#fff; overflow:auto;">
+                <div id="selectedAdvisorNamesDiv" class="selectedNamesDiv">
                     <ul id="selectedAdvisorUl"></ul>
                 </div>
-
-                <div id="clearUlBtnContainer" style="width:100%; height:40px; padding-top: 10px;">
-                    <button id="clearAdvisorButton" type="button" onclick="clearSelectedAdvisorList()" class="btn info" style="width:20%; float:right; color:#cc3300">Clear</button>
+                <div class="clearUlBtnContainer">
+                    <button class="btn info clearUlButton" type="button" onclick="clearSelectedAdvisorList()">Clear</button>
                 </div>
 
 
-                <h5 style="margin-top: 10px;">Search MSCats:</h5>
+                <h6 class="searchTitle">MSCats:</h6>
                 <div class="autocomplete" style="width:100%;">
-                    <input id="searchMSCatInput" type="text" name="myMSCat" placeholder="MSCat Name" style="width: 70%;">
-                    <button type="button" onclick="addSearchMSCatText()" class="btn info" style="width: 28%;">Add</button>
+                    <input id="searchMSCatInput" type="text" name="myMSCat" placeholder="MSCat Name">
+                    <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
-                <div id="selectedMSCatNamesDiv" style="height:116px; background-color:#fff; overflow:auto;">
+                <div id="selectedMSCatNamesDiv" class="selectedNamesDiv">
                     <ul id="selectedMSCatUl"></ul>
                 </div>
-
-                <div id="clearUlBtnContainer" style="width:100%; height:50px; padding-top: 10px;">
-                    <button id="clearButton" type="button" onclick="clearSelectedMSCatList()" class="btn info" style="width:20%; float:right; color:#cc3300">Clear</button>
+                <div class="clearUlBtnContainer">
+                    <button class="btn info clearUlButton" type="button" onclick="clearSelectedMSCatList()">Clear</button>
                 </div>
 
 
-                <input id="submitButton" type="submit" style="float:right; width:100%; border-radius: 5px; margin-top: 20px;">
+                <h6 class="searchTitle">MSSubAdvs:</h6>
+                <div class="autocomplete" style="width:100%;">
+                    <input id="searchMSSubAdvInput" type="text" name="myMSSubAdv" placeholder="MSSubAdv Name">
+                    <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
+                </div>
+                <div class="blankMarginDiv"></div>
+
+                <div id="selectedMSSubAdvNamesDiv" class="selectedNamesDiv">
+                    <ul id="selectedMSSubAdvUl"></ul>
+                </div>
+                <div class="clearUlBtnContainer">
+                    <button class="btn info clearUlButton" type="button" onclick="clearSelectedMSSubAdvList()">Clear</button>
+                </div>
+
+
+                <input id="submitButton" type="submit" style="float:right; width:100%; border-radius: 5px; margin-top: 20px; margin-bottom: 10px;">
 
             </form>
         </div>
@@ -258,6 +303,9 @@ function autocomplete(searchTypeEnum, inp, arr) {
                 } else
                 if (searchTypeEnum == SearchTypeEnum.MSCat && selectedMSCatNames.includes(targetName)) {
                     divB.classList.add("autocomplete-active");
+                } else
+                if (searchTypeEnum == SearchTypeEnum.MSSubAdv && selectedMSSubAdvNames.includes(targetName)) {
+                    divB.classList.add("autocomplete-active");
                 }
 
                 divB.addEventListener("click", function(e) {
@@ -266,23 +314,33 @@ function autocomplete(searchTypeEnum, inp, arr) {
                     var selectDiv = document.getElementById(selectName);
                     /*insert the value for the autocomplete text field:*/
                     // inp.value = selectName;
-                    if (searchTypeEnum == SearchTypeEnum.Advisor) {
-                        if (selectedAdvisorNames.includes(selectName)) {
-                            selectDiv.classList.remove("autocomplete-active");
-                            removeSelectAdvisorName(selectName);
-                        } else {
-                            selectDiv.classList.add("autocomplete-active");
-                            addSelectAdvisorName(selectName);
-                        }
-                    } else 
-                    if (searchTypeEnum == SearchTypeEnum.MSCat) {
-                        if (selectedMSCatNames.includes(selectName)) {
-                            selectDiv.classList.remove("autocomplete-active");
-                            removeSelectMSCatName(selectName);
-                        } else {
-                            selectDiv.classList.add("autocomplete-active");
-                            addSelectMSCatName(selectName);
-                        }
+                    switch (searchTypeEnum) {
+                        case SearchTypeEnum.Advisor:
+                            if (selectedAdvisorNames.includes(selectName)) {
+                                removeSelectFromAutoComplete(selectDiv, selectName, searchTypeEnum);
+                            } else {
+                                selectDiv.classList.add("autocomplete-active");
+                                addSelectName(selectName, searchTypeEnum);
+                            }
+                            break;
+                        case SearchTypeEnum.MSCat:
+                            if (selectedMSCatNames.includes(selectName)) {
+                                removeSelectFromAutoComplete(selectDiv, selectName, searchTypeEnum);
+                            } else {
+                                selectDiv.classList.add("autocomplete-active");
+                                addSelectName(selectName, searchTypeEnum);
+                            }
+                            break;
+                        case SearchTypeEnum.MSSubAdv:
+                            if (selectedMSSubAdvNames.includes(selectName)) {
+                                removeSelectFromAutoComplete(selectDiv, selectName, searchTypeEnum);
+                            } else {
+                                selectDiv.classList.add("autocomplete-active");
+                                addSelectName(selectName, searchTypeEnum);
+                            }
+                            break;
+                        default:
+                            console.log("--- [ERROR] line 340: get unexpected searchTypeEnum: " + searchTypeEnum);
                     }
                     //closeAllLists();
                 });
@@ -290,6 +348,10 @@ function autocomplete(searchTypeEnum, inp, arr) {
             }
         }
     });
+    function removeSelectFromAutoComplete(div, selectName, searchTypeEnum) {
+        div.classList.remove("autocomplete-active");
+        removeLiByName(selectName, searchTypeEnum);
+    }
     /*execute a function presses a key on the keyboard:*/
     inp.addEventListener("keydown", function(e) {
         var x = document.getElementById(this.id + "autocomplete-list");
@@ -348,136 +410,172 @@ function autocomplete(searchTypeEnum, inp, arr) {
     });
 }
 
-var SearchTypeEnum = Object.freeze({"Advisor":1, "MSCat":2});
+var SearchTypeEnum = Object.freeze({ "Advisor":"adv", "MSCat":"cat", "MSSubAdv":"sub" });
 
 var allAdvs = {{ advisorNames|safe }};
-var selectedAdvisorNames = {{ selectedAdvisorNames|safe }};
-var idOfAdvisorName = {{ idOfAdvisorNameDict|safe }};
-
 var allMSCats = {{ mscatNames|safe }};
+var allMSSubs = {{ mssubadvNames|safe }};
+
+var idOfAdvisorName = {{ idOfAdvisorNameDict|safe }};
 var idOfMSCatName = {{ idOfMSCatNameDict|safe }};
-var selectedMSCatNames = {{ selectedMSCatNames|safe }}
+var idOfMSSubAdvName = {{ idOfMSSubAdvNameDict|safe }};
+
+var selectedAdvisorNames = {{ selectedAdvisorNames|safe }};
+var selectedMSCatNames = {{ selectedMSCatNames|safe }};
+var selectedMSSubAdvNames = {{ selectedMSSubAdvNames|safe }};
 
 /*initiate the autocomplete function on the "searchAdvisorInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(SearchTypeEnum.Advisor, document.getElementById("searchAdvisorInput"), allAdvs);
 autocomplete(SearchTypeEnum.MSCat, document.getElementById("searchMSCatInput"), allMSCats);
+autocomplete(SearchTypeEnum.MSSubAdv, document.getElementById("searchMSSubAdvInput"), allMSSubs);
 
 setupselectedAdvisorNames();
 setupselectedMSCatNames();
+setupselectedMSSubAdvNames();
 
 
 function setupselectedAdvisorNames() {
     for (i in selectedAdvisorNames) {
-        addSelectAdvisorName(selectedAdvisorNames[i]);
+        addSelectName(selectedAdvisorNames[i], SearchTypeEnum.Advisor);
     }
 }
 function setupselectedMSCatNames() {
     for (i in selectedMSCatNames) {
-        addSelectMSCatName(selectedMSCatNames[i]);
+        addSelectName(selectedMSCatNames[i], SearchTypeEnum.MSCat);
+    }
+}
+function setupselectedMSSubAdvNames() {
+    for (i in selectedMSSubAdvNames) {
+        addSelectName(selectedMSSubAdvNames[i], SearchTypeEnum.MSSubAdv);
     }
 }
 
-function addSearchAdvisorText() {
+function clearSearchText() {
     searchAdvisorInput.value = "";
-}
-function addSearchMSCatText() {
     searchMSCatInput.value = "";
+    searchMSSubAdvInput.value = "";
 }
 
-function addSelectAdvisorName(advName="notSet") {
-    var ul = document.getElementById("selectedAdvisorUl");
-    li = document.createElement("li");
-    li.appendChild(document.createTextNode(advName));
+function addSelectName(name="notSet", searchTypeEnum) {
+    var ulId = "";
+    var id = 0;
+    var idFieldName = "";
+    var nameFieldStr = "";
 
-    var advId = idOfAdvisorName[advName]; 
-    li.setAttribute("id", advId);
-
-    var idField = document.createElement("INPUT");
-    idField.setAttribute("value", advId);
-    idField.setAttribute("type", "hidden");
-    idField.setAttribute("name", "advId");
-    idField.setAttribute("id", "advId");
-
-    var nameField = document.createElement("INPUT");
-    nameField.setAttribute("value", advName);
-    nameField.setAttribute("type", "hidden");
-    nameField.setAttribute("name", "advName");
-    nameField.setAttribute("id", "advName");
-
-    var btnIcon = document.createElement("i");
-    btnIcon.setAttribute("class", "fa fa-close");
-    var rmBtn = document.createElement("BUTTON");
-    rmBtn.setAttribute("class", "liBtn");
-    rmBtn.setAttribute("type", "button");
-    rmBtn.setAttribute("id", advId);
-    rmBtn.appendChild(btnIcon);
-    rmBtn.addEventListener('click', function(event) {
-        removeLiByAdvisorId(advId);
-    });
-
-    li.appendChild(idField);
-    li.appendChild(nameField);
-    li.appendChild(rmBtn);
-    ul.appendChild(li);
-
-    selectedAdvisorNames.push(advName);
-}
-
-function addSelectMSCatName(catName="notSet") {
-    var ul = document.getElementById("selectedMSCatUl");
-    li = document.createElement("li");
-    li.appendChild(document.createTextNode(catName));
-
-    var catId = idOfMSCatName[catName]; 
-    li.setAttribute("id", catId);
-
-    var idField = document.createElement("INPUT");
-    idField.setAttribute("value", catId);
-    idField.setAttribute("type", "hidden");
-    idField.setAttribute("name", "catId");
-    idField.setAttribute("id", "catId");
-
-    var nameField = document.createElement("INPUT");
-    nameField.setAttribute("value", catName);
-    nameField.setAttribute("type", "hidden");
-    nameField.setAttribute("name", "catName");
-    nameField.setAttribute("id", "catName");
-
-    var btnIcon = document.createElement("i");
-    btnIcon.setAttribute("class", "fa fa-close");
-    var rmBtn = document.createElement("BUTTON");
-    rmBtn.setAttribute("class", "liBtn");
-    rmBtn.setAttribute("type", "button");
-    rmBtn.setAttribute("id", catId);
-    rmBtn.appendChild(btnIcon);
-    rmBtn.addEventListener('click', function(event) {
-        removeLiByMSCatId(catId);
-    });
-
-    li.appendChild(idField);
-    li.appendChild(nameField);
-    li.appendChild(rmBtn);
-    ul.appendChild(li);
-
-    selectedMSCatNames.push(catName);
-}
-
-function removeSelectAdvisorName(n="") {
-    var advId = idOfAdvisorName[n];
-    removeLiByAdvisorId(advId);
-    for (var i = 0; i < selectedAdvisorNames.length; i++) {
-        if (selectedAdvisorNames[i] == n) {
-            selectedAdvisorNames.splice(i, 1);
+    switch(searchTypeEnum) {
+        case SearchTypeEnum.Advisor:
+            ulId = "selectedAdvisorUl";
+            idFieldName = "advId";      // ????????????????
+            nameFieldStr = "advName"; // ?????????????????
+            id = idOfAdvisorName[name];
+            selectedAdvisorNames.push(name);
+            break;
+        case SearchTypeEnum.MSCat:
+            ulId = "selectedMSCatUl";
+            idFieldName = "catId";
+            nameFieldStr = "catName";
+            id = idOfMSCatName[name];
+            selectedMSCatNames.push(name);
+            break;
+        case SearchTypeEnum.MSSubAdv:
+            ulId = "selectedMSSubAdvUl";
+            idFieldName = "subId";
+            nameFieldStr = "subName";
+            id = idOfMSSubAdvName[name];
+            selectedMSSubAdvNames.push(name);
+            break;
+        default: // use Advisor
+            console.log("--- [ERROR] get unexpected SearchTypeEnum in func addSelectName: line 463");
             return;
-        }
     }
+    var ul = document.getElementById(ulId);
+    li = document.createElement("li");
+    li.appendChild(document.createTextNode(name));
+
+    li.setAttribute("id", searchTypeEnum + id);
+
+    var idField = document.createElement("INPUT");
+    idField.setAttribute("value", id);
+    idField.setAttribute("type", "hidden");
+    idField.setAttribute("name", idFieldName);
+    idField.setAttribute("id", idFieldName);
+
+    var nameField = document.createElement("INPUT");
+    nameField.setAttribute("value", name);
+    nameField.setAttribute("type", "hidden");
+    nameField.setAttribute("name", nameFieldStr);
+    nameField.setAttribute("id", nameFieldStr);
+
+    var btnIcon = document.createElement("i");
+    btnIcon.setAttribute("class", "fa fa-close");
+    var rmBtn = document.createElement("BUTTON");
+    rmBtn.setAttribute("class", "liBtn");
+    rmBtn.setAttribute("type", "button");
+    rmBtn.setAttribute("id", id);
+    rmBtn.appendChild(btnIcon);
+    rmBtn.addEventListener('click', function(event) {
+        removeLiByName(name, searchTypeEnum);
+    });
+
+    li.appendChild(idField);
+    li.appendChild(nameField);
+    li.appendChild(rmBtn);
+    ul.appendChild(li);
 }
-function removeSelectMSCatName(n="") {
-    var catId = idOfMSCatName[n];
-    removeLiByMSCatId(catId);
-    for (var i = 0; i < selectedMSCatNames.length; i++) {
-        if (selectedMSCatNames[i] == n) {
-            selectedMSCatNames.splice(i, 1);
+
+function removeLiByName(name, searchTypeEnum) {
+    var lsId = '';
+    var itemId = 0;
+    switch (searchTypeEnum) {
+        case SearchTypeEnum.Advisor:
+            lsId = '#selectedAdvisorUl li';
+            itemId = idOfAdvisorName[name];
+
+            var selectedNameSet = new Set(selectedAdvisorNames); // remove duplicates
+            selectedAdvisorNames = Array.from(selectedNameSet);
+            console.log(selectedAdvisorNames);
+            for (var i = 0; i < selectedAdvisorNames.length; i++) {
+                if (selectedAdvisorNames[i] == name) {
+                    selectedAdvisorNames.splice(i, 1);
+                    break;
+                }
+            }
+            console.log("--- should rmeove name: " + name)
+            console.log(selectedAdvisorNames);
+            break;
+        case SearchTypeEnum.MSCat:
+            lsId = '#selectedMSCatUl li';
+            itemId = idOfMSCatName[name];
+            var selectedNameSet = new Set(selectedMSCatNames); // remove duplicates
+            selectedMSCatNames = Array.from(selectedNameSet);
+            for (var i = 0; i < selectedMSCatNames.length; i++) {
+                if (selectedMSCatNames[i] == name) {
+                    selectedMSCatNames.splice(i, 1);
+                    break;
+                }
+            }
+            break;
+        case SearchTypeEnum.MSSubAdv:
+            lsId = '#selectedMSSubAdvUl li';
+            itemId = idOfMSSubAdvName[name];
+            var selectedNameSet = new Set(selectedMSSubAdvNames); // remove duplicates
+            selectedMSSubAdvNames = Array.from(selectedNameSet);
+            for (var i = 0; i < selectedMSSubAdvNames.length; i++) {
+                if (selectedMSSubAdvNames[i] == name) {
+                    selectedMSSubAdvNames.splice(i, 1);
+                    break;
+                }
+            }
+            break;
+        default:
+            console.log("--- [ERROR] removeLiById unexpected searchType: " + searchTypeEnum)
+            return;
+    }
+    var lis = document.querySelectorAll(lsId);
+    var liId = searchTypeEnum + itemId;
+    for(var i=0; li=lis[i]; i++) {
+        if(li.id == liId) {
+            li.parentNode.removeChild(li);
             return;
         }
     }
@@ -493,25 +591,12 @@ function clearSelectedMSCatList() {
     ul.innerHTML = "";
     selectedMSCatNames = [];
 }
+function clearSelectedMSSubAdvList() {
+    var ul = document.getElementById("selectedMSSubAdvUl");
+    ul.innerHTML = "";
+    selectedMSSubAdvNames = [];
+}
 
-function removeLiByAdvisorId(liId){
-    var lis = document.querySelectorAll('#selectedAdvisorUl li');
-    for(var i=0; li=lis[i]; i++) {
-        if(li.id == liId) {
-            li.parentNode.removeChild(li);
-            return;
-        }
-    }
-}
-function removeLiByMSCatId(liId){
-    var lis = document.querySelectorAll('#selectedMSCatUl li');
-    for(var i=0; li=lis[i]; i++) {
-        if(li.id == liId) {
-            li.parentNode.removeChild(li);
-            return;
-        }
-    }
-}
 </script>
 
     </navleft>

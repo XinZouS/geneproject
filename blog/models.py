@@ -12,6 +12,9 @@ class Advisors(models.Model):  # model name must NOT the same as column name!
 class MSCats(models.Model):  # model name must NOT the same as column name!
 	Name = models.CharField(max_length=50,null=False)
 
+class MSSubAdvs(models.Model):  # model name must NOT the same as column name!
+	Name = models.CharField(max_length=730,null=False)
+
 class Company(models.Model):
 	Name	= models.CharField(max_length=40)
 	CUSIP	= models.CharField(max_length=9,null=True)
@@ -43,6 +46,7 @@ class Company(models.Model):
 	EqStyleS	= models.CharField(max_length=12,null=True)
 	FxStyleL	= models.CharField(max_length=16,null=True)
 	MSSubAdv	= models.CharField(max_length=721,null=True)
+	MSSubAdvId = models.ForeignKey(MSSubAdvs, on_delete=models.SET_NULL, null=True)
 	MSSubFee	= models.CharField(max_length=516,null=True)
 	TeamMgd	= models.CharField(max_length=3,null=True)
 	MgrHist	= models.CharField(max_length=5000,null=True)
