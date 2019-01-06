@@ -358,7 +358,6 @@ function constructSearchList(arr, searchTypeEnum) {
 
         divB.addEventListener("click", function(e) {
             didSelectSearchListItem(searchTypeEnum, this);
-            console.log(this);
         });
         c.appendChild(divB);
     }
@@ -465,9 +464,6 @@ function closeAllLists(element) {
     var autoList = document.getElementsByClassName("autocomplete-items");
     var inputTxtField = document.getElementById("searchAdvisorInput");
     for (var i = 0; i < autoList.length; i++) {
-        console.log(element != autoList[i] && element != inputTxtField);
-        console.log(autoList[i]);
-        console.log(element);
         if (element != autoList[i] && element != inputTxtField) {
             autoList[i].parentNode.removeChild(autoList[i]);
         }
@@ -551,8 +547,8 @@ function addSelectName(name="notSet", searchTypeEnum) {
     switch(searchTypeEnum) {
         case SearchTypeEnum.Advisor:
             ulId = "selectedAdvisorUl";
-            idFieldName = "advId";      // ????????????????
-            nameFieldStr = "advName"; // ?????????????????
+            idFieldName = "advId";
+            nameFieldStr = "advName";
             id = idOfAdvisorName[name];
             selectedAdvisorNames.push(name);
             break;
@@ -583,7 +579,7 @@ function addSelectName(name="notSet", searchTypeEnum) {
     var idField = document.createElement("INPUT");
     idField.setAttribute("value", id);
     idField.setAttribute("type", "hidden");
-    idField.setAttribute("name", idFieldName);
+    idField.setAttribute("name", idFieldName); // id, name are for page reloading;
     idField.setAttribute("id", idFieldName);
 
     var nameField = document.createElement("INPUT");
