@@ -22,8 +22,8 @@ body {
 }
 /*the container must be positioned relative:*/
 .autocomplete {
-  position: relative;
-  display: inline-block;
+    position: relative;
+    display: inline-block;
 }
 input {
   border: 1px solid transparent;
@@ -33,7 +33,8 @@ input {
 }
 input[type=text] {
   background-color: #f1f1f1;
-  width: 100%;
+  width: 70%;
+  height: 36px;
 }
 input[type=submit] {
   background-color: DodgerBlue;
@@ -52,8 +53,8 @@ input[type=submit] {
 .btn {
   border: none;
   background-color: #eee;
-  height: 40px;
-  padding: 10px;
+  height: 36px;
+  padding: 6px;
   font-size: 16px;
   cursor: pointer;
   display: inline-block;
@@ -75,6 +76,7 @@ input[type=submit] {
   border: none;
   color: white;
   margin-left: 6px;
+  margin-top: -3px;
   padding: 3px 3px;
   font-size: 14px;
   cursor: pointer;
@@ -85,7 +87,7 @@ input[type=submit] {
 
 .clearUlBtnContainer {
     width:100%;
-    height:50px;
+    height:46px;
     padding-top: 10px;
 }
 .clearUlButton {
@@ -104,7 +106,7 @@ ul li {
   position: relative;
   padding: 6px 10px 6px 20px; /* t, r, b, l */
   list-style-type: circle;
-  font-size: 18px;
+  font-size: 16px;
   transition: 0.2s;
 }
 ul li:nth-child(odd) {
@@ -145,9 +147,10 @@ ul li:hover {
 }
 
 .vertical-menu {
-  height: 500px;
-  overflow: auto;
-  white-space: nowrap;
+    height: 500px;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    white-space: nowrap;
 }
 .vertical-menu a {
   color: black;
@@ -204,9 +207,9 @@ th div{
         <div style="width: 100%;">
             <form method="POST" autocomplete="off" action="advisor-table">
                 {% csrf_token %}
-                <h5 class="searchTitle">Advisors:</h5>
+                <h6 class="searchTitle">Advisors:</h6>
                 <div class="autocomplete" style="width:100%;">
-                    <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name" style="width: 70%;">
+                    <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name">
                     <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
@@ -219,9 +222,9 @@ th div{
                 </div>
 
 
-                <h5 class="searchTitle">MSCats:</h5>
+                <h6 class="searchTitle">MSCats:</h6>
                 <div class="autocomplete" style="width:100%;">
-                    <input id="searchMSCatInput" type="text" name="myMSCat" placeholder="MSCat Name" style="width: 70%;">
+                    <input id="searchMSCatInput" type="text" name="myMSCat" placeholder="MSCat Name">
                     <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
@@ -234,9 +237,9 @@ th div{
                 </div>
 
 
-                <h5 class="searchTitle">MSSubAdvs:</h5>
+                <h6 class="searchTitle">MSSubAdvs:</h6>
                 <div class="autocomplete" style="width:100%;">
-                    <input id="searchMSSubAdvInput" type="text" name="myMSSubAdv" placeholder="MSSubAdv Name" style="width: 70%;">
+                    <input id="searchMSSubAdvInput" type="text" name="myMSSubAdv" placeholder="MSSubAdv Name">
                     <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
                 </div>
                 <div class="blankMarginDiv"></div>
@@ -249,7 +252,7 @@ th div{
                 </div>
 
 
-                <input id="submitButton" type="submit" style="float:right; width:100%; border-radius: 5px; margin-top: 20px;">
+                <input id="submitButton" type="submit" style="float:right; width:100%; border-radius: 5px; margin-top: 20px; margin-bottom: 10px;">
 
             </form>
         </div>
@@ -314,8 +317,7 @@ function autocomplete(searchTypeEnum, inp, arr) {
                     switch (searchTypeEnum) {
                         case SearchTypeEnum.Advisor:
                             if (selectedAdvisorNames.includes(selectName)) {
-                                selectDiv.classList.remove("autocomplete-active");
-                                removeSelectAdvisorName(selectName);
+                                removeSelectFromAutoComplete(selectDiv, selectName, searchTypeEnum);
                             } else {
                                 selectDiv.classList.add("autocomplete-active");
                                 addSelectName(selectName, searchTypeEnum);
@@ -323,8 +325,7 @@ function autocomplete(searchTypeEnum, inp, arr) {
                             break;
                         case SearchTypeEnum.MSCat:
                             if (selectedMSCatNames.includes(selectName)) {
-                                selectDiv.classList.remove("autocomplete-active");
-                                removeSelectMSCatName(selectName);
+                                removeSelectFromAutoComplete(selectDiv, selectName, searchTypeEnum);
                             } else {
                                 selectDiv.classList.add("autocomplete-active");
                                 addSelectName(selectName, searchTypeEnum);
@@ -332,8 +333,7 @@ function autocomplete(searchTypeEnum, inp, arr) {
                             break;
                         case SearchTypeEnum.MSSubAdv:
                             if (selectedMSSubAdvNames.includes(selectName)) {
-                                selectDiv.classList.remove("autocomplete-active");
-                                removeSelectMSSubAdvName(selectName);
+                                removeSelectFromAutoComplete(selectDiv, selectName, searchTypeEnum);
                             } else {
                                 selectDiv.classList.add("autocomplete-active");
                                 addSelectName(selectName, searchTypeEnum);
@@ -348,6 +348,10 @@ function autocomplete(searchTypeEnum, inp, arr) {
             }
         }
     });
+    function removeSelectFromAutoComplete(div, selectName, searchTypeEnum) {
+        div.classList.remove("autocomplete-active");
+        removeLiByName(selectName, searchTypeEnum);
+    }
     /*execute a function presses a key on the keyboard:*/
     inp.addEventListener("keydown", function(e) {
         var x = document.getElementById(this.id + "autocomplete-list");
@@ -417,7 +421,7 @@ var idOfMSCatName = {{ idOfMSCatNameDict|safe }};
 var idOfMSSubAdvName = {{ idOfMSSubAdvNameDict|safe }};
 
 var selectedAdvisorNames = {{ selectedAdvisorNames|safe }};
-var selectedMSCatNames = {{ selectedMSCatNames|safe }}
+var selectedMSCatNames = {{ selectedMSCatNames|safe }};
 var selectedMSSubAdvNames = {{ selectedMSSubAdvNames|safe }};
 
 /*initiate the autocomplete function on the "searchAdvisorInput" element, and pass along the countries array as possible autocomplete values:*/
@@ -519,20 +523,6 @@ function addSelectName(name="notSet", searchTypeEnum) {
     ul.appendChild(li);
 }
 
-function removeSelectAdvisorName(n="") {
-    // var advId = idOfAdvisorName[n];
-    removeLiByName(n, SearchTypeEnum.Advisor);
-}
-function removeSelectMSCatName(n="") {
-    // var catId = idOfMSCatName[n];
-    removeLiByName(n, SearchTypeEnum.MSCat);
-}
-function removeSelectMSSubAdvName(n="") {
-    // var subId = idOfMSSubAdvName[n];
-    removeLiByName(n, SearchTypeEnum.MSSubAdv);
-}
-
-
 function removeLiByName(name, searchTypeEnum) {
     var lsId = '';
     var itemId = 0;
@@ -540,27 +530,40 @@ function removeLiByName(name, searchTypeEnum) {
         case SearchTypeEnum.Advisor:
             lsId = '#selectedAdvisorUl li';
             itemId = idOfAdvisorName[name];
+
+            var selectedNameSet = new Set(selectedAdvisorNames); // remove duplicates
+            selectedAdvisorNames = Array.from(selectedNameSet);
+            console.log(selectedAdvisorNames);
             for (var i = 0; i < selectedAdvisorNames.length; i++) {
                 if (selectedAdvisorNames[i] == name) {
-                    selectedAdvisorNames.splice(i, 1); // NOT break if finded, bcz may has duplicates
+                    selectedAdvisorNames.splice(i, 1);
+                    break;
                 }
             }
+            console.log("--- should rmeove name: " + name)
+            console.log(selectedAdvisorNames);
             break;
         case SearchTypeEnum.MSCat:
             lsId = '#selectedMSCatUl li';
             itemId = idOfMSCatName[name];
+            var selectedNameSet = new Set(selectedMSCatNames); // remove duplicates
+            selectedMSCatNames = Array.from(selectedNameSet);
             for (var i = 0; i < selectedMSCatNames.length; i++) {
                 if (selectedMSCatNames[i] == name) {
-                    selectedMSCatNames.splice(i, 1); // NOT break if finded, bcz may has duplicates
+                    selectedMSCatNames.splice(i, 1);
+                    break;
                 }
             }
             break;
         case SearchTypeEnum.MSSubAdv:
             lsId = '#selectedMSSubAdvUl li';
             itemId = idOfMSSubAdvName[name];
+            var selectedNameSet = new Set(selectedMSSubAdvNames); // remove duplicates
+            selectedMSSubAdvNames = Array.from(selectedNameSet);
             for (var i = 0; i < selectedMSSubAdvNames.length; i++) {
                 if (selectedMSSubAdvNames[i] == name) {
-                    selectedMSSubAdvNames.splice(i, 1); // NOT break if finded, bcz may has duplicates
+                    selectedMSSubAdvNames.splice(i, 1);
+                    break;
                 }
             }
             break;

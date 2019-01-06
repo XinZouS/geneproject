@@ -71,9 +71,11 @@ def advisor_table(request):
 				elif len(obj) > 1:
 					for c in obj:
 						cmpObjByAll.append(c)
-			print("--- 1. query Adv id: %s seconds ---" % (time.time() - start_time))
-			print("--- 1. cmpObjByAll.count = %s" % len(cmpObjByAll))
+			print("--- 1.1 query Adv id: %s seconds ---" % (time.time() - start_time))
+			print("--- 1.1 cmpObjByAll.count = %s" % len(cmpObjByAll))
 			start_time = time.time()
+
+		isResultShouldBeEmpty = False
 
 		if selectedMSSubAdvIds:
 			if cmpObjByAll:
@@ -82,8 +84,9 @@ def advisor_table(request):
 					if cmpObj.MSSubAdvId_id in selectedMSSubAdvIdSet:
 						containMSSub.append(cmpObj)
 				cmpObjByAll = containMSSub
-				print("--- 2. query Sub id: %s seconds ---" % (time.time() - start_time))
-				print("--- 2. cmpObjByAll.count = %s" % len(cmpObjByAll))
+				isResultShouldBeEmpty = len(cmpObjByAll) == 0
+				print("--- 2.1 query Sub id: %s seconds ---" % (time.time() - start_time))
+				print("--- 2.1 cmpObjByAll.count = %s, isResultShouldBeEmpty = %s" % (len(cmpObjByAll), isResultShouldBeEmpty))
 				start_time = time.time()
 			else:
 				for subId in selectedMSSubAdvIds:
@@ -92,19 +95,19 @@ def advisor_table(request):
 						cmpObjByAll.append(obj[0])
 					elif len(obj) > 1:
 						cmpObjByAll.extend(obj)
-				print("--- 2. query Sub id: %s seconds ---" % (time.time() - start_time))
-				print("--- 2. cmpObjByAll.count = %s" % len(cmpObjByAll))
+				print("--- 2.2 query Sub id: %s seconds ---" % (time.time() - start_time))
+				print("--- 2.2 cmpObjByAll.count = %s" % len(cmpObjByAll))
 				start_time = time.time()
 
-		if selectedMSCatIds:
+		if selectedMSCatIds and not isResultShouldBeEmpty:
 			if cmpObjByAll:
 				containMSCat = []
 				for cmpObj in cmpObjByAll:
 					if cmpObj.MSCatDbId_id in selectedMSCatIdSet:
 						containMSCat.append(cmpObj)
 				cmpObjByAll = containMSCat
-				print("--- 3. filter Cat id: %s seconds ---" % (time.time() - start_time))
-				print("--- 3. cmpObjByAll.count = %s" % len(cmpObjByAll))
+				print("--- 3.1 filter Cat id: %s seconds ---" % (time.time() - start_time))
+				print("--- 3.1 cmpObjByAll.count = %s" % len(cmpObjByAll))
 				start_time = time.time()
 			else:
 				for catId in selectedMSCatIds:
@@ -113,11 +116,11 @@ def advisor_table(request):
 						cmpObjByAll.append(obj[0])
 					elif len(obj) > 1:
 						cmpObjByAll.extend(obj)
-				print("--- 3. query Cat id: %s seconds ---" % (time.time() - start_time))
-				print("--- 3. cmpObjByAll.count = %s" % len(cmpObjByAll))
+				print("--- 3.2 query Cat id: %s seconds ---" % (time.time() - start_time))
+				print("--- 3.2 cmpObjByAll.count = %s" % len(cmpObjByAll))
 				start_time = time.time()
 
-		companyInfo.extend(cmpObjByAll)
+		companyInfo = cmpObjByAll
 
 
 		selectedAdvisorNameset = set(selectedAdvisorNames)
