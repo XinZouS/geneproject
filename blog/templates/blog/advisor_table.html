@@ -274,6 +274,7 @@ th div{
 <script>
 
 var SearchTypeEnum = Object.freeze({ "Advisor":"adv", "MSCat":"cat", "MSSubAdv":"sub" });
+var currentFocus;
 
 var allAdvs = {{ advisorNames|safe }};
 var allMSCats = {{ mscatNames|safe }};
@@ -368,11 +369,8 @@ function removeSelectFromAutoComplete(div, selectName, searchTypeEnum) {
     removeLiByName(selectName, searchTypeEnum);
 }
 
-function autocomplete(searchTypeEnum, inp, arr) {
-    /*the autocomplete function takes two arguments,
-    the text field element and an array of possible autocompleted values:*/
-    var currentFocus;
-    /*execute a function when someone writes in the text field:*/
+function autocomplete(searchTypeEnum, inp, arr) { 
+    // inp: the text field, arr: array of possible autocompleted values
     inp.addEventListener("input", function(e) {
         var a, b, c, i, val = this.value;
         /*close any already open lists of autocompleted values*/
@@ -424,22 +422,22 @@ function autocomplete(searchTypeEnum, inp, arr) {
     });
     /*execute a function presses a key on the keyboard:*/
     inp.addEventListener("keydown", function(e) {
-        var x = document.getElementById(this.id + "autocomplete-list");
-        if (x) x = x.getElementsByTagName("div");
+        var currList = document.getElementById(this.id + "autocomplete-list");
+        if (currList) currList = currList.getElementsByTagName("div");
         if (e.keyCode == 40) {
             /*If the arrow DOWN key is pressed, increase the currentFocus variable:*/
             currentFocus++;
-            addActive(x); /*and and make the current item more visible:*/
+            addActive(currList); /*and and make the current item more visible:*/
         } else if (e.keyCode == 38) { //up
             /*If the arrow UP key is pressed, decrease the currentFocus variable:*/
             currentFocus--;
-            addActive(x); /*and and make the current item more visible:*/
+            addActive(currList); /*and and make the current item more visible:*/
         } else if (e.keyCode == 13) {
             /*If the ENTER key is pressed, prevent the form from being submitted,*/
             e.preventDefault();
             if (currentFocus > -1) {
                 /*and simulate a click on the "active" item:*/
-                if (x) x[currentFocus].click();
+                if (currList) currList[currentFocus].click();
             }
         }
     });
