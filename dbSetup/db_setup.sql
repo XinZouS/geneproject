@@ -42,7 +42,7 @@
 -- select name, advisorId_id, advisor, mscatdbId_id, mscat, mssubadvId_id, mssubadv from blog_company
 -- where advisor is not null and mscat is not null and mssubadv is not null
 -- order by advisorid_id
-
+-- == show all for test == --
 select name, Advisorid_id, Advisor, mscatdbid_id, mSCat, mssubadvId_id, mssubadv from blog_company
-where advisorid_id = 12 and mscatdbid_id in (22, 85) and mssubadvid_id = 2 -- Adv: aberA.M.I, Cat: EmM.B,Paci, Sub: AberA.M.A.L
-order by name 
+where Advisorid_id is not null and mscatdbid_id is not null and mssubadvId_id is not null
+order by Advisorid_id, mscatdbid_id, mssubadvId_id

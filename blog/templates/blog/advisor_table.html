@@ -693,13 +693,13 @@ function clearSelectedMSSubAdvList() {
                     {% for item in companys %}
                     <tr>
                         <td style="width:20px; padding-left: 10px;">{{ forloop.counter }}</td>
-                        <td style="width:300px; text-align:left;">{{ item.Name     }}</td>
+                        <td style="text-align:left;">{{ item.Name     }}</td>
                         <td style="width:100px;">{{ item.CUSIP    }}</td>
                         <td style="width:120px;">{{ item.SecId    }}</td>
                         <td style="width:120px;">{{ item.FundId   }}</td>
-                        <td style="width:230px; text-align:left;">{{ item.Advisor  }}</td>
-                        <td style="width:200px; text-align:left;">{{ item.MSCat    }}</td>
-                        <td style="width:260px; text-align:left;">{{ item.MSSubAdv }}</td>
+                        <td style="text-align:left;">{{ item.Advisor  }}</td>
+                        <td style="text-align:left;">{{ item.MSCat    }}</td>
+                        <td style="text-align:left;">{{ item.MSSubAdv }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
