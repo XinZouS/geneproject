@@ -11,12 +11,38 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <style>
-* {
-  box-sizing: border-box;
+* { box-sizing: border-box; }
+body { font: 16px Arial; }
+
+.tab {
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  padding-left: 510px;
 }
-body {
-  font: 16px Arial;  
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
 }
+.tab button:hover {
+  background-color: #ccf3ff;
+}
+.tab button.active {
+  background-color: #80e1ff;
+  color: blue;
+}
+.tabcontent {
+  display: none;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+
 .searchTitle {
     margin-top: 10px;
     font-weight: bold;
@@ -198,10 +224,19 @@ th div{
   border-left: 1px solid #aabbdd;
 }
 
+
 </style>
 </head>     
 
 <body>
+
+<div class="tab">
+  <button class="tablinks" onclick="openTab(event, 'tabId01')" id="defaultOpenBtn">Default</button>
+  <button class="tablinks" onclick="openTab(event, 'tabId02')">Sub-Advisory</button>
+  <button class="tablinks" onclick="openTab(event, 'tabId03')">Performance</button>
+  <button class="tablinks" onclick="openTab(event, 'tabId04')">Tab04</button>
+  <button class="tablinks" onclick="openTab(event, 'tabId05')">Tab05</button>
+</div>
 
 
 <section class="scrollable" style="width: 2010px;">
@@ -270,6 +305,7 @@ th div{
         <h6 style="height:20px; margin-top:10px; color:#008800">
             Total results: {{ companys|length }}
         </h6>
+
 
 <script>
 
@@ -674,13 +710,34 @@ function clearSelectedMSSubAdvList() {
     selectedMSSubAdvNames = [];
 }
 
+
+function openTab(evt, tabId) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  var showDiv = document.getElementById(tabId);
+  if (showDiv) {
+    showDiv.style.display = "block";
+  }
+  evt.currentTarget.className += " active";
+}
+
+document.getElementById("defaultOpenBtn").click(); // default selected tab
+
 </script>
 
     </navleft>
 
 
     <div style="position: relative; width: 1500px; padding-top: 43px; background: #eaeaea; float:right;">
-        <div style="overflow-y:auto; width:1500px; height:88vh; padding-right:10px;">        
+
+        <div id="tabId01" class="tabcontent" style="overflow-y:auto; width:1500px; height:88vh; padding-right:10px; display: block;">
             <table style="margin:0 auto; float:left;">
                 <thead>
                     <tr>
@@ -705,6 +762,49 @@ function clearSelectedMSSubAdvList() {
                 </tbody>
             </table>        
         </div>
+
+        <div id="tabId02" class="tabcontent" style="overflow-y:auto; width:1500px; height:88vh; padding-right:10px;">
+            <table style="margin:0 auto; float:left;">
+                <thead>
+                    <tr>
+                        <th><div>No.</div></th>
+                        <th><div>Name</div></th>
+                        <th><div>MSSubAdv</div></th>
+                    </tr>
+                </thead>
+                <tbody style="overflow-y:auto; height:90vh; width:1500px;">
+                    {% for item in companys %}
+                    <tr>
+                        <td style="width:20px; padding-left: 10px;">{{ forloop.counter }}</td>
+                        <td style="text-align:left;">{{ item.Name     }}</td>
+                        <td style="text-align:left;">{{ item.MSSubAdv }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>        
+        </div>
+
+        <div id="tabId03" class="tabcontent" style="overflow-y:auto; width:600px; height:88vh; padding-right:10px;">
+            <table style="margin:0 auto; float:left;">
+                <thead>
+                    <tr>
+                        <th><div>No.</div></th>
+                        <th><div>Name</div></th>
+                        <th><div>FeeMgt</div></th>
+                    </tr>
+                </thead>
+                <tbody style="overflow-y:auto; height:90vh; width:600px;">
+                    {% for item in companys %}
+                    <tr>
+                        <td style="width:20px; padding-left: 10px;">{{ forloop.counter }}</td>
+                        <td style="width:300px; text-align:left;">{{ item.Name     }}</td>
+                        <td style="width:100px; text-align:left;">{{ item.FeeMgt    }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>        
+        </div>
+
     </div>
 
 </section>
