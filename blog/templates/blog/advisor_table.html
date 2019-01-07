@@ -18,8 +18,7 @@ body { font: 16px Arial; }
   width: 100%;
   overflow: hidden;
   border: 1px solid #ccc;
-  padding-left: 100px;
-  background-color: #f1f1f1;
+  padding-left: 510px;
 }
 .tab button {
   background-color: inherit;
@@ -32,10 +31,11 @@ body { font: 16px Arial; }
   font-size: 17px;
 }
 .tab button:hover {
-  background-color: #ddd;
+  background-color: #ccf3ff;
 }
 .tab button.active {
-  background-color: #ccc;
+  background-color: #80e1ff;
+  color: blue;
 }
 .tabcontent {
   display: none;
@@ -231,11 +231,11 @@ th div{
 <body>
 
 <div class="tab">
-  <button class="tablinks" onclick="openCity(event, 'tabId01')">Default</button>
-  <button class="tablinks" onclick="openCity(event, 'tabId02')">Sub-Advisory</button>
-  <button class="tablinks" onclick="openCity(event, 'tabId03')">Performance</button>
-  <button class="tablinks" onclick="openCity(event, 'tabId04')">Tab04</button>
-  <button class="tablinks" onclick="openCity(event, 'tabId05')">Tab05</button>
+  <button class="tablinks" onclick="openTab(event, 'tabId01')" id="defaultOpenBtn">Default</button>
+  <button class="tablinks" onclick="openTab(event, 'tabId02')">Sub-Advisory</button>
+  <button class="tablinks" onclick="openTab(event, 'tabId03')">Performance</button>
+  <button class="tablinks" onclick="openTab(event, 'tabId04')">Tab04</button>
+  <button class="tablinks" onclick="openTab(event, 'tabId05')">Tab05</button>
 </div>
 
 
@@ -308,20 +308,6 @@ th div{
 
 
 <script>
-
-function openCity(evt, tabId) {
-  var i, tabcontent, tablinks;
-  tabcontent = document.getElementsByClassName("tabcontent");
-  for (i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-  tablinks = document.getElementsByClassName("tablinks");
-  for (i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-  document.getElementById(tabId).style.display = "block";
-  evt.currentTarget.className += " active";
-}
 
 var SearchTypeEnum = Object.freeze({ "Advisor":"adv", "MSCat":"cat", "MSSubAdv":"sub" });
 var currentFocus;
@@ -724,29 +710,34 @@ function clearSelectedMSSubAdvList() {
     selectedMSSubAdvNames = [];
 }
 
+
+function openTab(evt, tabId) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  var showDiv = document.getElementById(tabId);
+  if (showDiv) {
+    showDiv.style.display = "block";
+  }
+  evt.currentTarget.className += " active";
+}
+
+document.getElementById("defaultOpenBtn").click(); // default selected tab
+
 </script>
 
     </navleft>
 
 
-<div id="tabId01" class="tabcontent">
-  <h3>London</h3>
-  <p>London is the capital city of England.</p>
-</div>
-
-<div id="tabId02" class="tabcontent">
-  <h3>Paris</h3>
-  <p>Paris is the capital of France.</p> 
-</div>
-
-<div id="tabId03" class="tabcontent">
-  <h3>Tokyo</h3>
-  <p>Tokyo is the capital of Japan.</p>
-</div>
-
-
     <div style="position: relative; width: 1500px; padding-top: 43px; background: #eaeaea; float:right;">
-        <div style="overflow-y:auto; width:1500px; height:88vh; padding-right:10px;">        
+
+        <div id="tabId01" class="tabcontent" style="overflow-y:auto; width:1500px; height:88vh; padding-right:10px; display: block;">
             <table style="margin:0 auto; float:left;">
                 <thead>
                     <tr>
@@ -771,6 +762,49 @@ function clearSelectedMSSubAdvList() {
                 </tbody>
             </table>        
         </div>
+
+        <div id="tabId02" class="tabcontent" style="overflow-y:auto; width:1500px; height:88vh; padding-right:10px;">
+            <table style="margin:0 auto; float:left;">
+                <thead>
+                    <tr>
+                        <th><div>No.</div></th>
+                        <th><div>Name</div></th>
+                        <th><div>MSSubAdv</div></th>
+                    </tr>
+                </thead>
+                <tbody style="overflow-y:auto; height:90vh; width:1500px;">
+                    {% for item in companys %}
+                    <tr>
+                        <td style="width:20px; padding-left: 10px;">{{ forloop.counter }}</td>
+                        <td style="text-align:left;">{{ item.Name     }}</td>
+                        <td style="text-align:left;">{{ item.MSSubAdv }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>        
+        </div>
+
+        <div id="tabId03" class="tabcontent" style="overflow-y:auto; width:600px; height:88vh; padding-right:10px;">
+            <table style="margin:0 auto; float:left;">
+                <thead>
+                    <tr>
+                        <th><div>No.</div></th>
+                        <th><div>Name</div></th>
+                        <th><div>FeeMgt</div></th>
+                    </tr>
+                </thead>
+                <tbody style="overflow-y:auto; height:90vh; width:600px;">
+                    {% for item in companys %}
+                    <tr>
+                        <td style="width:20px; padding-left: 10px;">{{ forloop.counter }}</td>
+                        <td style="width:300px; text-align:left;">{{ item.Name     }}</td>
+                        <td style="width:100px; text-align:left;">{{ item.FeeMgt    }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>        
+        </div>
+
     </div>
 
 </section>
