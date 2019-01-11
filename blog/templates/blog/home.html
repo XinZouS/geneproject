@@ -1,13 +1,11 @@
-{% extends "blog/base.html" %}
+{% extends "blog/base_home.html" %}
 
-{% block content %}
+{% block base_home_content %}
 
 	<div>
 		<h3><a href="{% url 'blog-company' %}">Company Info table</a></h3>
 		<h3><a href="{% url 'advisor-table' %}">View Advisor Info</a></h3>
 	</div>
-
-
 
 <!-- 	{% for post in posts %}
 		<article class="media content-section">
@@ -45,4 +43,6 @@
 
 	{% endif %}
 
-{% endblock content %}
+
+
+{% endblock base_home_content %}

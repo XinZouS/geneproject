@@ -1,6 +1,6 @@
 {% extends "blog/base_table.html" %}
 
-{% block content %}
+{% block table_content %}
 
 
 <head>
@@ -31,16 +31,20 @@ body { font: 16px Arial; }
   font-size: 17px;
 }
 .tab button:hover {
-  background-color: #ccf3ff;
+  background-color: #eee;
 }
 .tab button.active {
-  background-color: #80e1ff;
+  background-color: #ddd;
   color: blue;
 }
 .tabcontent {
   display: none;
   border: 1px solid #ccc;
   border-top: none;
+  overflow-y:auto;
+  width:1500px;
+  height:85vh;
+  padding-right:10px; 
 }
 
 .searchTitle {
@@ -242,8 +246,6 @@ th div{
 <section class="scrollable" style="width: 2010px;">
 
     <navleft>
-
-
         <div style="width: 100%;">
             <form method="POST" autocomplete="off" action="advisor-table">
                 {% csrf_token %}
@@ -737,7 +739,7 @@ document.getElementById("defaultOpenBtn").click(); // default selected tab
 
     <div style="position: relative; width: 1500px; padding-top: 43px; background: #eaeaea; float:right;">
 
-        <div id="tabId01" class="tabcontent" style="overflow-y:auto; width:1500px; height:88vh; padding-right:10px; display: block;">
+        <div id="tabId01" class="tabcontent" style="display: block;">
             <table style="margin:0 auto; float:left;">
                 <thead>
                     <tr>
@@ -763,7 +765,7 @@ document.getElementById("defaultOpenBtn").click(); // default selected tab
             </table>        
         </div>
 
-        <div id="tabId02" class="tabcontent" style="overflow-y:auto; width:1500px; height:88vh; padding-right:10px;">
+        <div id="tabId02" class="tabcontent">
             <table style="margin:0 auto; float:left;">
                 <thead>
                     <tr>
@@ -784,7 +786,7 @@ document.getElementById("defaultOpenBtn").click(); // default selected tab
             </table>        
         </div>
 
-        <div id="tabId03" class="tabcontent" style="overflow-y:auto; width:600px; height:88vh; padding-right:10px;">
+        <div id="tabId03" class="tabcontent">
             <table style="margin:0 auto; float:left;">
                 <thead>
                     <tr>
@@ -811,7 +813,7 @@ document.getElementById("defaultOpenBtn").click(); // default selected tab
 
 </body>
 
-{% endblock content %}
+{% endblock table_content %}
 
 
 
