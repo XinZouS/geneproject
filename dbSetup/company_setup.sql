@@ -20,7 +20,7 @@
 -- group by mscat
 -- order by mscat
 
--- == insert the MSCat table == -- 
+-- == insert the MSSubCat table == -- 
 -- INSERT INTO blog_mssubadvs (Name)
 -- select MSSubAdv from blog_company 
 -- where MSSubAdv is not null 

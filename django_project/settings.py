@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'django_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', #'django.db.backends.sqlite3',
-        'NAME': 'Gene', #os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': 'sys', #os.path.join(BASE_DIR, 'db.sqlite3'),
         'USER': 'root',
-        'PASSWORD': 'BXY5201314',
+        'PASSWORD': 'Genesys2019',
         'HOST': '127.0.0.1', #'localhost',
         'PORT': '3306',
     }
