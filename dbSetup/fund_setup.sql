@@ -1,3 +1,3 @@
--- select * from blog_funds
+select * from blog_funds
 
 
