@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import db_config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -79,10 +80,10 @@ WSGI_APPLICATION = 'django_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', #'django.db.backends.sqlite3',
-        'NAME': 'Gene', #os.path.join(BASE_DIR, 'db.sqlite3'),
-        'USER': 'root',
-        'PASSWORD': 'BXY5201314',
-        'HOST': '127.0.0.1', #'localhost',
+        'NAME': db_config.database,
+        'USER': db_config.user,
+        'PASSWORD': db_config.passwd,
+        'HOST': db_config.local_host,
         'PORT': '3306',
     }
 }
