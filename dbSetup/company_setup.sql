@@ -43,6 +43,6 @@
 -- where advisor is not null and mscat is not null and mssubadv is not null
 -- order by advisorid_id
 -- == show all for test == --
--- select name, Advisorid_id, Advisor, mscatdbid_id, mSCat, mssubadvId_id, mssubadv from blog_company
--- where Advisorid_id is not null and mscatdbid_id is not null and mssubadvId_id is not null
--- order by Advisorid_id, mscatdbid_id, mssubadvId_id
+select name, Advisorid_id, Advisor, mscatdbid_id, mSCat, mssubadvId_id, mssubadv from blog_company
+where Advisorid_id is not null and mscatdbid_id is not null and mssubadvId_id is not null
+order by Advisorid_id, mscatdbid_id, mssubadvId_id
