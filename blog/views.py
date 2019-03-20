@@ -222,14 +222,17 @@ def advisor_table(request):
 
 
 def getPerformanceInfo(companyInfos):
-	fundIds = map(lambda cmpObj: cmpObj.FundId.encode("utf-8"), companyInfos)
-	getShares = Shares.objects.filter(FundId__in=fundIds)
-	getFunds = Funds.objects.filter(FundId__in=fundIds)
-
 	shareAndFund = []
+	if len(companyInfos) == 0:
+		return shareAndFund
+
+	fundIds = map(lambda cmpObj: cmpObj.FundId.encode("utf-8"), companyInfos)
+	getShares = list(Shares.objects.filter(FundId__in=fundIds))
+	getFunds = list(Funds.objects.filter(FundId__in=fundIds))
+
 	for c in companyInfos:
-		matchShare = getShares.filter(FundId__exact=c.FundId)
-		matchFund = getFunds.filter(FundId__exact=c.FundId)
+		matchShare = filter(lambda s: s.FundId == c.FundId, getShares)
+		matchFund  = filter(lambda f: f.FundId == c.FundId, getFunds)
 		if len(matchShare) > 0 and len(matchFund) > 0:
 			shareAndFund.append([matchShare[0], matchFund[0]]) # list of [shareObj, fundObj]
 	return shareAndFund
