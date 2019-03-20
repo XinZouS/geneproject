@@ -786,21 +786,26 @@ document.getElementById("defaultOpenBtn").click(); // default selected tab
             </table>        
         </div>
 
-        <div id="tabId03" class="tabcontent">
+        <div id="tabId03" class="tabcontent" style="width:2600px">
             <table style="margin:0 auto; float:left;">
                 <thead>
                     <tr>
-                        <th><div>No.</div></th>
-                        <th><div>Name</div></th>
-                        <th><div>FeeMgt</div></th>
+                      {% for col in sharesAndFundsColnames %}
+                        <th><div>{{ col }}</div></th>
+                      {% endfor %}
                     </tr>
                 </thead>
                 <tbody style="overflow-y:auto; height:90vh; width:600px;">
-                    {% for item in companys %}
+                    {% for item in sharesAndFunds %}
                     <tr>
                         <td style="width:20px; padding-left: 10px;">{{ forloop.counter }}</td>
-                        <td style="width:300px; text-align:left;">{{ item.Name     }}</td>
-                        <td style="width:100px; text-align:left;">{{ item.FeeMgt    }}</td>
+                        <td style="width:300px; text-align:left;">{{ item.1.Advisor     }}</td>
+                        <td style="width:100px; text-align:left;">{{ item.0.FundId    }}</td>
+                        <td style="width:100px; text-align:left;">{{ item.1.Category    }}</td>
+                        <td style="width:100px; text-align:left;">{{ item.0.TR_YTD    }}</td>
+                        <td style="text-align:left;">{{ item.0.TR_1Y  }}</td>
+                        <td style="text-align:left;">{{ item.0.TR_2Y  }}</td>
+                        <td style="text-align:left;">{{ item.0.TR_3Y  }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

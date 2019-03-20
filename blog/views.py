@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .models import Company, Advisors, MSCats, MSSubAdvs
+from .models import Company, Advisors, MSCats, MSSubAdvs, Funds, Shares
 
 import time
 
@@ -44,6 +44,8 @@ def company_13rows(request):
 def advisor_table(request):
 	cols = ["No.", "Name", "CUSIP", "SecId", "FundId", "Advisor", "MSCat", "MSSubAdv"]
 	companyInfo = []
+	sharesAndFundsCols = ["No.", "Advisor", "FundId", "Category", "TR_YTD", "TR_1Y", "TR_2Y", "TR_3Y", "TR_4Y", "TR_5Y", "TR_10Y", "TR_15Y", "TR_2018", "TR_2017", "TR_2016", "TR_2015", "TR_2014", "TR_2013", "TR_2012", "TR_2011", "TR_2010", "TR_2009", "TR_2008", "Alpha_3", "Stdev_3", "Beta_3", "ExcessRet_3", "Sharpe_3", "InfoRat_3", "R2_3", "QRK_YTD", "QRK_1Y", "QRK_2Y", "QRK_3Y", "QRK_4Y", "QRK_5Y", "QRK_10Y", "QRK_15Y", "QRK_2018", "QRK_2017", "QRK_2016", "QRK_2015", "QRK_2014", "QRK_2013", "QRK_2012", "QRK_2011", "QRK_2010", "QRK_2009", "QRK_2008", "QRK_Alpha_3", "QRK_Stdev_3", "QRK_Beta_3", "QRK_ExcessRet_3", "QRK_Sharpe_3", "QRK_InfoRat_3", "QRK_R2_3"]
+	sharesAndFunds = []
 
 	selectedAdvisorIds = []
 	selectedAdvisorNames = []
@@ -151,6 +153,8 @@ def advisor_table(request):
 
 		companyInfo = cmpObjByAll
 
+		# for tag Performance
+		sharesAndFunds = getPerformanceInfo(companyInfo)
 
 		selectedAdvisorNameset = set(selectedAdvisorNames)
 		selectedMSSubAdvNameSet = set(selectedMSSubAdvNames)
@@ -209,9 +213,26 @@ def advisor_table(request):
 		'idOfMSCatNameDict' : idOfMSCatNameDict,
 		'selectedMSCatIds':   selectedMSCatIds,
 		'selectedMSCatNames': selectedMSCatNames,
+
+		'sharesAndFunds': sharesAndFunds, # for tag Performance
+		'sharesAndFundsColnames': sharesAndFundsCols,
 	}
 
 	return render(request, 'blog/advisor_table.html', content)
+
+
+def getPerformanceInfo(companyInfos):
+	fundIds = map(lambda cmpObj: cmpObj.FundId.encode("utf-8"), companyInfos)
+	getShares = Shares.objects.filter(FundId__in=fundIds)
+	getFunds = Funds.objects.filter(FundId__in=fundIds)
+
+	shareAndFund = []
+	for c in companyInfos:
+		matchShare = getShares.filter(FundId__exact=c.FundId)
+		matchFund = getFunds.filter(FundId__exact=c.FundId)
+		if len(matchShare) > 0 and len(matchFund) > 0:
+			shareAndFund.append([matchShare[0], matchFund[0]]) # list of [shareObj, fundObj]
+	return shareAndFund
 
 
 def about(request):
