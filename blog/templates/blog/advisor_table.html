@@ -35,7 +35,9 @@ body { font: 16px Arial; }
 }
 .tab button.active {
   background-color: #ddd;
-  color: blue;
+  color: DodgerBlue;
+  font-size: 18px;
+  font-weight: bold;
 }
 .tabcontent {
   display: none;
@@ -802,10 +804,10 @@ document.getElementById("defaultOpenBtn").click(); // default selected tab
                     {% for item in sharesAndFunds %}
                     <tr>
                         <td style="width:20px; padding-left: 10px;">{{ forloop.counter }}</td>
-                        <td class="performance-float" style="width:200px; text-align:left;">{{ item.1.Advisor }}</td>
-                        <td class="performance-float" style="width:90px; text-align:left;">{{ item.0.FundId }}</td>
+                        <td class="performance-float" style="width:260px; text-align:left;">{{ item.1.Advisor }}</td>
+                        <td class="performance-float" style="width:120px; text-align:left;">{{ item.0.FundId }}</td>
                         <td class="performance-float" >{{ item.1.Category }}</td>
-                        <td class="performance-float" style="width:90px;">{{ item.0.TR_YTD }}</td>
+                        <td class="performance-float" >{{ item.0.TR_YTD }}</td>
                         <td class="performance-float" >{{ item.0.TR_1Y  }}</td>
                         <td class="performance-float" >{{ item.0.TR_2Y  }}</td>
                         <td class="performance-float" >{{ item.0.TR_3Y  }}</td>
