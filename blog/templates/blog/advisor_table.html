@@ -36,7 +36,6 @@ body { font: 16px Arial; }
 .tab button.active {
   background-color: #ddd;
   color: DodgerBlue;
-  font-size: 18px;
   font-weight: bold;
 }
 .tabcontent {
@@ -807,58 +806,58 @@ document.getElementById("defaultOpenBtn").click(); // default selected tab
                         <td class="performance-float" style="width:260px; text-align:left;">{{ item.1.Advisor }}</td>
                         <td class="performance-float" style="width:120px; text-align:left;">{{ item.0.FundId }}</td>
                         <td class="performance-float" >{{ item.1.Category }}</td>
-                        <td class="performance-float" >{{ item.0.TR_YTD }}</td>
-                        <td class="performance-float" >{{ item.0.TR_1Y  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_2Y  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_3Y  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_4Y  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_5Y  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_10Y  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_15Y  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_2018  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_2017  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_2016  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_2015  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_2014  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_2013  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_2012  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_2011  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_2010  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_2009  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_2008  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_Alpha_3  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_Stdev_3  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_Beta_3  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_ExcessRet_3  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_Sharpe_3  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_InfoRat_3  }}</td>
-                        <td class="performance-float" >{{ item.0.TR_R2_3  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_YTD  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_1Y  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_2Y  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_3Y  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_4Y  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_5Y  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_10Y  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_15Y  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_2018  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_2017  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_2016  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_2015  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_2014  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_2013  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_2012  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_2011  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_2010  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_2009  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_2008  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_Alpha_3  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_Stdev_3  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_Beta_3  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_ExcessRet_3  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_Sharpe_3  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_InfoRat_3  }}</td>
-                        <td class="performance-float" >{{ item.1.QRK_R2_3  }}</td>
+                        <td class="performance-float" >{{ item.0.TR_YTD | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_1Y | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_2Y | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_3Y | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_4Y | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_5Y | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_10Y | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_15Y | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_2018 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_2017 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_2016 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_2015 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_2014 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_2013 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_2012 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_2011 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_2010 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_2009 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_2008 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_Alpha_3 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_Stdev_3 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_Beta_3 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_ExcessRet_3 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_Sharpe_3 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_InfoRat_3 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.0.TR_R2_3 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_YTD | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_1Y | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_2Y | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_3Y | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_4Y | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_5Y | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_10Y | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_15Y | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_2018 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_2017 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_2016 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_2015 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_2014 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_2013 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_2012 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_2011 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_2010 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_2009 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_2008 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_Alpha_3 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_Stdev_3 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_Beta_3 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_ExcessRet_3 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_Sharpe_3 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_InfoRat_3 | default_if_none:"n/a" }}</td>
+                        <td class="performance-float" >{{ item.1.QRK_R2_3 | default_if_none:"n/a" }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
