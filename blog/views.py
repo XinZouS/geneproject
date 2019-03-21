@@ -44,7 +44,7 @@ def company_13rows(request):
 def advisor_table(request):
 	cols = ["No.", "Name", "CUSIP", "SecId", "FundId", "Advisor", "MSCat", "MSSubAdv"]
 	companyInfo = []
-	sharesAndFundsCols = ["No.", "Advisor", "FundId", "Category", "TR_YTD", "TR_1Y", "TR_2Y", "TR_3Y", "TR_4Y", "TR_5Y", "TR_10Y", "TR_15Y", "TR_2018", "TR_2017", "TR_2016", "TR_2015", "TR_2014", "TR_2013", "TR_2012", "TR_2011", "TR_2010", "TR_2009", "TR_2008", "Alpha_3", "Stdev_3", "Beta_3", "ExcessRet_3", "Sharpe_3", "InfoRat_3", "R2_3", "QRK_YTD", "QRK_1Y", "QRK_2Y", "QRK_3Y", "QRK_4Y", "QRK_5Y", "QRK_10Y", "QRK_15Y", "QRK_2018", "QRK_2017", "QRK_2016", "QRK_2015", "QRK_2014", "QRK_2013", "QRK_2012", "QRK_2011", "QRK_2010", "QRK_2009", "QRK_2008", "QRK_Alpha_3", "QRK_Stdev_3", "QRK_Beta_3", "QRK_ExcessRet_3", "QRK_Sharpe_3", "QRK_InfoRat_3", "QRK_R2_3"]
+	sharesAndFundsCols = ["No.", "Advisor", "Fund", "MSCat", "TR_YTD", "TR_1Y", "TR_2Y", "TR_3Y", "TR_4Y", "TR_5Y", "TR_10Y", "TR_15Y", "TR_2018", "TR_2017", "TR_2016", "TR_2015", "TR_2014", "TR_2013", "TR_2012", "TR_2011", "TR_2010", "TR_2009", "TR_2008", "Alpha3", "Stdev3", "Beta3", "ExRet3", "Sharpe3", "InfoRat3", "R23", "QKYTD", "QK1Y", "QK2Y", "QK3Y", "QK4Y", "QK5Y", "QK10Y", "QK15Y", "QK2018", "QK2017", "QK2016", "QK2015", "QK2014", "QK2013", "QK2012", "QK2011", "QK2010", "QK2009", "QK2008", "QKAlph3", "QKStdv3", "QKBeta3", "QKExRt3", "QKShrp3", "QKInfR3", "QKRsq3p"]
 	sharesAndFunds = []
 
 	selectedAdvisorIds = []
@@ -226,16 +226,36 @@ def getPerformanceInfo(companyInfos):
 	if len(companyInfos) == 0:
 		return shareAndFund
 
-	fundIds = map(lambda cmpObj: cmpObj.FundId.encode("utf-8"), companyInfos)
-	getShares = list(Shares.objects.filter(FundId__in=fundIds))
+	# The "Share" primary key is "SecID"
+	# The "Fund" primary key is "FundID"
+	# The two tables can link by "FundID"
+	secIds = map(lambda cmpObj: cmpObj.SecId.encode("utf-8"), companyInfos)
+	getShares = list(Shares.objects.filter(SecId__in=secIds))
+
+	fundIds = map(lambda s: s.FundId.encode("utf-8"), getShares)
 	getFunds = list(Funds.objects.filter(FundId__in=fundIds))
 
 	for c in companyInfos:
-		matchShare = filter(lambda s: s.FundId == c.FundId, getShares)
+		matchShare = filter(lambda s: s.SecId == c.SecId, getShares)
 		matchFund  = filter(lambda f: f.FundId == c.FundId, getFunds)
 		if len(matchShare) > 0 and len(matchFund) > 0:
-			shareAndFund.append([matchShare[0], matchFund[0]]) # list of [shareObj, fundObj]
+			share = matchShare[0]
+			fund = matchFund[0]
+			tableRow = []
+			tableRow.append(fund.Advisor)
+			tableRow.append(share.FundId)
+			tableRow.append(fund.MSCat)
+			tableRow.append(percentage(share.TR_YTD))
+
+			shareAndFund.append([, [0]]) # list of [shareObj, fundObj]
 	return shareAndFund
+
+
+def percentage(val):
+	if val is not None:
+		return "%s %" % ('%.2f' % (val * 100))
+    return "n/a"
+
 
 
 def about(request):
