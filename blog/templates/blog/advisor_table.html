@@ -793,23 +793,31 @@ document.getElementById("defaultOpenBtn").click(); // default selected tab
 
         <div id="tabId03" class="tabcontent" style="overflow-y:auto; width:7600px;">
             <table style="margin:0 auto; float:left;">
-                <thead>
-                    <tr>
-                      {% for col in sharesAndFundsColnames %}
-                        <th><div>{{ col }}</div></th>
-                      {% endfor %}
-                    </tr>
-                </thead>
-                <tbody style="height:90vh;">
-                    {% for row in sharesAndFunds %}
-                    <tr>
-                        <td style="width:20px; padding-left: 10px;">{{ forloop.counter }}</td>
-                        {% for item in row %}
-                            <td class="performance-float">{{ item | default_if_none:"n/a" }}</td>
-                        {% endfor %}
-                    </tr>
+              <thead>
+                <tr>
+                  {% for col in sharesAndFundsColnames %}
+                    <th><div>{{ col }}</div></th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody style="height:90vh;">
+                {% for row in sharesAndFunds %}
+                <tr>
+                    <td style="width:20px; padding-left: 10px;">{{ forloop.counter }}</td>
+                    {% for item in row %}
+                      {% if forloop.counter == 1 %}
+                        <td class="performance-float" style="width:260px; text-align:left;">{{ item }}</td>
+                      {% elif forloop.counter == 2 %}
+                        <td class="performance-float" style="width:120px; text-align:left;">{{ item }}</td>
+                      {% elif forloop.counter == 3 %}
+                        <td class="performance-float" style="width:200px">{{ item }}</td>
+                      {% else %}
+                        <td class="performance-float">{{ item | default_if_none:"n/a" }}</td>
+                      {% endif %}
                     {% endfor %}
-                </tbody>
+                </tr>
+                {% endfor %}
+              </tbody>
             </table>        
         </div>
 
