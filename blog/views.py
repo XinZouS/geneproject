@@ -238,6 +238,7 @@ def getPerformanceInfo(companyInfos):
 	for c in companyInfos:
 		matchShare = filter(lambda s: s.SecId == c.SecId, getShares)
 		matchFund  = filter(lambda f: f.FundId == c.FundId, getFunds)
+
 		if len(matchShare) > 0 and len(matchFund) > 0:
 			share = matchShare[0]
 			fund = matchFund[0]
@@ -246,15 +247,67 @@ def getPerformanceInfo(companyInfos):
 			tableRow.append(share.FundId)
 			tableRow.append(fund.MSCat)
 			tableRow.append(percentage(share.TR_YTD))
+			tableRow.append(percentage(share.TR_1Y))
+			tableRow.append(percentage(share.TR_2Y))
+			tableRow.append(percentage(share.TR_3Y))
+			tableRow.append(percentage(share.TR_4Y))
+			tableRow.append(percentage(share.TR_5Y))
+			tableRow.append(percentage(share.TR_10Y))
+			tableRow.append(percentage(share.TR_15Y))
+			#tableRow.append(percentage(share.TR_2018))
+			tableRow.append(percentage(share.TR_2017))
+			tableRow.append(percentage(share.TR_2016))
+			tableRow.append(percentage(share.TR_2015))
+			tableRow.append(percentage(share.TR_2014))
+			tableRow.append(percentage(share.TR_2013))
+			tableRow.append(percentage(share.TR_2012))
+			tableRow.append(percentage(share.TR_2011))
+			tableRow.append(percentage(share.TR_2010))
+			tableRow.append(percentage(share.TR_2009))
+			tableRow.append(percentage(share.TR_2008))
+			tableRow.append(percentage(share.Alpha3))
+			tableRow.append(percentage(share.Stdev3))
+			tableRow.append(percentage(share.Beta3))
+			tableRow.append(percentage(share.ExRet3))
+			tableRow.append(percentage(share.Sharpe3))
+			tableRow.append(percentage(share.InfoRat3))
+			tableRow.append(percentage(share.R23))
+			tableRow.append(fund.QKYTD)
+			tableRow.append(fund.QK1Y)
+			tableRow.append(fund.QK2Y)
+			tableRow.append(fund.QK3Y)
+			tableRow.append(fund.QK4Y)
+			tableRow.append(fund.QK5Y)
+			tableRow.append(fund.QK10Y)
+			tableRow.append(fund.QK15Y)
+			#tableRow.append(fund.QK2018)
+			tableRow.append(fund.QK2017)
+			tableRow.append(fund.QK2016)
+			tableRow.append(fund.QK2015)
+			tableRow.append(fund.QK2014)
+			tableRow.append(fund.QK2013)
+			tableRow.append(fund.QK2012)
+			tableRow.append(fund.QK2011)
+			tableRow.append(fund.QK2010)
+			tableRow.append(fund.QK2009)
+			tableRow.append(fund.QK2008)
+			tableRow.append(fund.QKAlph3)
+			tableRow.append(fund.QKStdv3)
+			tableRow.append(fund.QKBeta3)
+			tableRow.append(fund.QKExRt3)
+			tableRow.append(fund.QKShrp3)
+			tableRow.append(fund.QKInfR3)
+			tableRow.append(fund.QKRsq3)
 
-			shareAndFund.append([, [0]]) # list of [shareObj, fundObj]
+			shareAndFund.append(tableRow) # list of [shareObj, fundObj]
 	return shareAndFund
 
 
 def percentage(val):
+	rlt = "n/a"
 	if val is not None:
-		return "%s %" % ('%.2f' % (val * 100))
-    return "n/a"
+		return '%.2f'%(val * 100)
+	return rlt
 
 
 
