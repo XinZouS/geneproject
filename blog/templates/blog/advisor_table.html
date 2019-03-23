@@ -299,6 +299,21 @@ td.red { background-color: #fc887e; }
                 </div>
 
 
+                <h6 class="searchTitle">MgrNames:</h6>
+                <div class="autocomplete" style="width:100%;">
+                    <input id="searchMgrInput" type="text" name="myMgr" placeholder="Manager Name">
+                    <button type="button" onclick="showFullMgrList()" class="btn info showUl">
+                        <i class="fa fa-list-ul" id="btnI"></i></button>
+                    <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
+                    <button class="btn info clearUlButton" type="button" onclick="clearSelectedMgrList()">Clear</button>
+                </div>
+                <div class="blankMarginDiv"></div>
+
+                <div id="selectedMgrNamesDiv" class="selectedNamesDiv">
+                    <ul id="selectedMgrUl"></ul>
+                </div>
+
+
                 <input id="submitButton" type="submit" style="float:right; width:100%; border-radius: 5px; margin-top: 20px; margin-bottom: 10px;">
 
             </form>
@@ -310,29 +325,34 @@ td.red { background-color: #fc887e; }
 
 <script>
 
-var SearchTypeEnum = Object.freeze({ "Advisor":"adv", "MSCat":"cat", "MSSubAdv":"sub" });
+var SearchTypeEnum = Object.freeze({ "Advisor":"adv", "MSCat":"cat", "MSSubAdv":"sub", "MgrName":"mgr" });
 var currentFocus;
 
 var allAdvs = {{ advisorNames|safe }};
 var allMSCats = {{ mscatNames|safe }};
 var allMSSubs = {{ mssubadvNames|safe }};
+var allMgrs = {{ mgrNames|safe }};
 
 var idOfAdvisorName = {{ idOfAdvisorNameDict|safe }};
 var idOfMSCatName = {{ idOfMSCatNameDict|safe }};
 var idOfMSSubAdvName = {{ idOfMSSubAdvNameDict|safe }};
+var idOfMgrName = {{ idOfMgrNameDict|safe }};
 
 var selectedAdvisorNames = {{ selectedAdvisorNames|safe }};
 var selectedMSCatNames = {{ selectedMSCatNames|safe }};
 var selectedMSSubAdvNames = {{ selectedMSSubAdvNames|safe }};
+var selectedMgrNames = {{ selectedMgrNames|safe }};
 
 /*initiate the autocomplete function on the "searchAdvisorInput" element, and pass along the countries array as possible autocomplete values:*/
 autocomplete(SearchTypeEnum.Advisor, document.getElementById("searchAdvisorInput"), allAdvs);
 autocomplete(SearchTypeEnum.MSCat, document.getElementById("searchMSCatInput"), allMSCats);
 autocomplete(SearchTypeEnum.MSSubAdv, document.getElementById("searchMSSubAdvInput"), allMSSubs);
+autocomplete(SearchTypeEnum.MgrName, document.getElementById("searchMgrInput"), allMgrs);
 
 setupselectedAdvisorNames();
 setupselectedMSCatNames();
 setupselectedMSSubAdvNames();
+setupselectedMgrNames();
 
 function showFullAdvisorList() {
     constructSearchList(allAdvs, SearchTypeEnum.Advisor);
@@ -342,6 +362,9 @@ function showFullMSCatList() {
 }
 function showFullMSSubAdvList() {
     constructSearchList(allMSSubs, SearchTypeEnum.MSSubAdv);
+}
+function showFullMgrList() {
+    constructSearchList(allMgrs, SearchTypeEnum.MgrName);
 }
 
 function constructSearchList(arr, searchTypeEnum) {
@@ -356,6 +379,9 @@ function constructSearchList(arr, searchTypeEnum) {
             break;
         case SearchTypeEnum.MSSubAdv:
             fieldId = "searchMSSubAdvInput";
+            break;
+        case SearchTypeEnum.MgrName:
+            fieldId = "searchMgrInput";
             break;
         default:
             console.log("--- [ERROR] wrong type: " + searchTypeEnum);
@@ -391,6 +417,9 @@ function constructSearchList(arr, searchTypeEnum) {
             divB.classList.add("autocomplete-active");
         } else
         if (searchTypeEnum == SearchTypeEnum.MSSubAdv && selectedMSSubAdvNames.includes(targetName)) {
+            divB.classList.add("autocomplete-active");
+        } else
+        if (searchTypeEnum == SearchTypeEnum.MgrName && selectedMgrNames.includes(targetName)) {
             divB.classList.add("autocomplete-active");
         }
 
@@ -447,6 +476,9 @@ function autocomplete(searchTypeEnum, inp, arr) {
                     divB.classList.add("autocomplete-active");
                 } else
                 if (searchTypeEnum == SearchTypeEnum.MSSubAdv && selectedMSSubAdvNames.includes(targetName)) {
+                    divB.classList.add("autocomplete-active");
+                } else
+                if (searchTypeEnum == SearchTypeEnum.MgrName && selectedMgrNames.includes(targetName)) {
                     divB.classList.add("autocomplete-active");
                 }
 
@@ -546,8 +578,16 @@ function didSelectSearchListItem(searchTypeEnum, targetDiv) {
                 addSelectName(selectName, searchTypeEnum);
             }
             break;
+        case SearchTypeEnum.MgrName:
+            if (selectedMgrNames.includes(selectName)) {
+                removeSelectFromAutoComplete(selectDiv, selectName, searchTypeEnum);
+            } else {
+                selectDiv.classList.add("autocomplete-active");
+                addSelectName(selectName, searchTypeEnum);
+            }
+            break;
         default:
-            console.log("--- [ERROR] line 340: get unexpected searchTypeEnum: " + searchTypeEnum);
+            console.log("--- [ERROR] line 580: get unexpected searchTypeEnum: " + searchTypeEnum);
     }
 }
 
@@ -566,11 +606,17 @@ function setupselectedMSSubAdvNames() {
         addSelectName(selectedMSSubAdvNames[i], SearchTypeEnum.MSSubAdv);
     }
 }
+function setupselectedMgrNames() {
+    for (i in selectedMgrNames) {
+        addSelectName(selectedMgrNames[i], SearchTypeEnum.MgrName);
+    }
+}
 
 function clearSearchText() {
     searchAdvisorInput.value = "";
     searchMSCatInput.value = "";
     searchMSSubAdvInput.value = "";
+    searchMgrInput.value = "";
 }
 
 function addSelectName(name="notSet", searchTypeEnum) {
@@ -600,6 +646,13 @@ function addSelectName(name="notSet", searchTypeEnum) {
             nameFieldStr = "subName";
             id = idOfMSSubAdvName[name];
             selectedMSSubAdvNames.push(name);
+            break;
+        case SearchTypeEnum.MgrName:
+            ulId = "selectedMgrUl";
+            idFieldName = "mgrId";
+            nameFieldStr = "mgrName";
+            id = idOfMgrName[name];
+            selectedMgrNames.push(name);
             break;
         default: // use Advisor
             console.log("--- [ERROR] get unexpected SearchTypeEnum in func addSelectName: line 463");
@@ -681,6 +734,18 @@ function removeLiByName(name, searchTypeEnum) {
                 }
             }
             break;
+        case SearchTypeEnum.MgrName:
+            lsId = '#selectedMgrUl li';
+            itemId = idOfMgrName[name];
+            var selectedNameSet = new Set(selectedMgrNames); // remove duplicates
+            selectedMgrNames = Array.from(selectedNameSet);
+            for (var i = 0; i < selectedMgrNames.length; i++) {
+                if (selectedMgrNames[i] == name) {
+                    selectedMgrNames.splice(i, 1);
+                    break;
+                }
+            }
+            break;
         default:
             console.log("--- [ERROR] removeLiById unexpected searchType: " + searchTypeEnum)
             return;
@@ -709,6 +774,11 @@ function clearSelectedMSSubAdvList() {
     var ul = document.getElementById("selectedMSSubAdvUl");
     ul.innerHTML = "";
     selectedMSSubAdvNames = [];
+}
+function clearSelectedMgrList() {
+    var ul = document.getElementById("selectedMgrUl");
+    ul.innerHTML = "";
+    selectedMgrNames = [];
 }
 
 

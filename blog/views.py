@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .models import Company, Advisors, MSCats, MSSubAdvs, Funds, Shares
+from .models import Company, Advisors, MSCats, MSSubAdvs, MgrNames, Funds, Shares
 
 import time
 
@@ -53,6 +53,8 @@ def advisor_table(request):
 	selectedMSSubAdvNames = []
 	selectedMSCatIds = []
 	selectedMSCatNames = []
+	selectedMgrIds = []
+	selectedMgrNames = []
 
 	if request.method == "POST":
 		selectedAdvisorIds = request.POST.getlist('advId')
@@ -66,6 +68,10 @@ def advisor_table(request):
 		selectedMSCatIds = request.POST.getlist('catId')
 		selectedMSCatNames = request.POST.getlist('catName', '')
 		selectedMSCatIdSet = set(list(map(lambda x: int(x.encode("utf-8")), selectedMSCatIds)))
+
+		selectedMgrIds = request.POST.getlist('mgrId')
+		selectedMgrNames = request.POST.getlist('mgrName', '')
+		selectedMgrIdSet = set(list(map(lambda x: int(x.encode("utf-8")), selectedMgrIds)))
 
 		start_time = time.time()
 		cmpObjByAll = []
@@ -129,8 +135,9 @@ def advisor_table(request):
 				else:
 					print("------- !!! too much MSSubAdv selected, AND result should be nil...")
 					cmpObjByAll = []
+				isResultShouldBeEmpty = len(cmpObjByAll) == 0
 				print("--- 3.1 filter Cat id: %s seconds ---" % (time.time() - start_time))
-				print("--- 3.1 cmpObjByAll.count = %s" % len(cmpObjByAll))
+				print("--- 3.1 cmpObjByAll.count = %s, isResultShouldBeEmpty = %s" % (len(cmpObjByAll), isResultShouldBeEmpty))
 				start_time = time.time()
 			else:
 				for catId in selectedMSCatIds:
@@ -140,6 +147,36 @@ def advisor_table(request):
 					elif len(obj) > 1:
 						cmpObjByAll.extend(obj)
 				print("--- 3.2 query Cat id: %s seconds ---" % (time.time() - start_time))
+				print("--- 3.2 cmpObjByAll.count = %s" % len(cmpObjByAll))
+				start_time = time.time()
+
+		if selectedMgrIds and not isResultShouldBeEmpty:
+			if cmpObjByAll:
+				containMgr = []
+				qualifyId = set()
+				for cmpObj in cmpObjByAll:
+					mgrId = cmpObj.MgrNameId_id
+					if mgrId in selectedMgrIdSet:
+						containMgr.append(cmpObj)
+						qualifyId.add(mgrId)
+				print("-------- 3.0 len(qualifyId) = %s, len(MgrIdSet) = %s" % (len(qualifyId), len(selectedMgrIdSet)))
+				if len(qualifyId) >= len(selectedMgrIdSet):
+					cmpObjByAll = containMSCat
+				else:
+					print("------- !!! too much MSSubAdv selected, AND result should be nil...")
+					cmpObjByAll = []
+				isResultShouldBeEmpty = len(cmpObjByAll) == 0
+				print("--- 3.1 filter Cat id: %s seconds ---" % (time.time() - start_time))
+				print("--- 3.1 cmpObjByAll.count = %s" % len(cmpObjByAll))
+				start_time = time.time()
+			else:
+				for mgrId in selectedMgrIds:
+					obj = Company.objects.filter(MgrNameId_id=mgrId).order_by("Name")
+					if len(obj) == 1:
+						cmpObjByAll.append(obj[0])
+					elif len(obj) > 1:
+						cmpObjByAll.extend(obj)
+				print("--- 3.2 query Mgr id: %s seconds ---" % (time.time() - start_time))
 				print("--- 3.2 cmpObjByAll.count = %s" % len(cmpObjByAll))
 				start_time = time.time()
 
@@ -159,6 +196,7 @@ def advisor_table(request):
 		selectedAdvisorNameset = set(selectedAdvisorNames)
 		selectedMSSubAdvNameSet = set(selectedMSSubAdvNames)
 		selectedMSCatNameSet = set(selectedMSCatNames)
+		selectedMgrNameSet = set(selectedMgrNames)
 
 		selectedAdvisorNames = []
 		for advName in selectedAdvisorNameset:
@@ -172,6 +210,10 @@ def advisor_table(request):
 		for catName in selectedMSCatNameSet:
 			selectedMSCatNames.append(catName.encode("utf-8"))
 
+		selectedMgrNames = []
+		for mgrName in selectedMgrNameSet:
+			selectedMgrNames.append(mgrName.encode("utf-8"))
+
 	else:
 		print "--- [GET] request is GET, init page....,"
 
@@ -179,13 +221,16 @@ def advisor_table(request):
 	advs = Advisors.objects.all()
 	subs = MSSubAdvs.objects.all()
 	cats = MSCats.objects.all()
+	mgrs = MgrNames.objects.all()
 	advsNames 	= list(map(lambda x: x.Name.encode("utf-8"), advs))
 	subNames 	= list(map(lambda x: x.Name.encode("utf-8"), subs))
 	mscatNames  = list(map(lambda x: x.Name.encode("utf-8"), cats))
+	mgrNames    = list(map(lambda x: x.Name.encode("utf-8"), mgrs))
 
 	idOfAdvisorNameDict = {} # {'Name':'advId'}
 	idOfMSSubAdvNameDict = {}
 	idOfMSCatNameDict = {}
+	idOfMgrNameDict = {}
 
 	for adv in advs:
 		idOfAdvisorNameDict[adv.Name.encode("utf-8")] = adv.id
@@ -193,6 +238,8 @@ def advisor_table(request):
 		idOfMSSubAdvNameDict[sub.Name.encode("utf-8")] = sub.id
 	for cat in cats:
 		idOfMSCatNameDict[cat.Name.encode("utf-8")] = cat.id
+	for mgr in mgrs:
+		idOfMgrNameDict[mgr.Name.encode("utf-8")] = mgr.id
 
 
 	content = {
@@ -213,6 +260,11 @@ def advisor_table(request):
 		'idOfMSCatNameDict' : idOfMSCatNameDict,
 		'selectedMSCatIds':   selectedMSCatIds,
 		'selectedMSCatNames': selectedMSCatNames,
+
+		'mgrNames': mgrNames,
+		'idOfMgrNameDict' : idOfMgrNameDict,
+		'selectedMgrIds':   selectedMgrIds,
+		'selectedMgrNames': selectedMgrNames,
 
 		'sharesAndFunds': sharesAndFunds, # for tag Performance
 		'sharesAndFundsColnames': sharesAndFundsCols,
