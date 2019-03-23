@@ -27,10 +27,18 @@
 -- group by MSSubAdv 
 -- order by MSSubAdv
 
+-- == insert the MrgName table == -- 
+-- INSERT INTO blog_mgrnames (Name)
+-- select MgrName from blog_company 
+-- where MgrName is not null 
+-- group by MgrName 
+-- order by MgrName
+
 
 -- select * from blog_advisors -- count: 1597
 -- select * from blog_mscats -- count: 123
 -- select * from blog_mssubadvs -- count: 1289
+-- select * from blog_mgrnames
 
 
 -- == test combo search Adv&Cat == --
@@ -42,7 +50,3 @@
 -- select name, advisorId_id, advisor, mscatdbId_id, mscat, mssubadvId_id, mssubadv from blog_company
 -- where advisor is not null and mscat is not null and mssubadv is not null
 -- order by advisorid_id
--- == show all for test == --
-select name, Advisorid_id, Advisor, mscatdbid_id, mSCat, mssubadvId_id, mssubadv from blog_company
-where Advisorid_id is not null and mscatdbid_id is not null and mssubadvId_id is not null
-order by Advisorid_id, mscatdbid_id, mssubadvId_id
