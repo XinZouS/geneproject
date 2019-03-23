@@ -15,6 +15,9 @@ class MSCats(models.Model):  # model name must NOT the same as column name!
 class MSSubAdvs(models.Model):  # model name must NOT the same as column name!
 	Name = models.CharField(max_length=730,null=False)
 
+class MgrNames(models.Model):  # model name must NOT the same as column name!
+	Name = models.CharField(max_length=1000,null=False)
+
 class Company(models.Model):
 	Name	= models.CharField(max_length=40)
 	CUSIP	= models.CharField(max_length=9,null=True)
@@ -51,6 +54,7 @@ class Company(models.Model):
 	TeamMgd	= models.CharField(max_length=3,null=True)
 	MgrHist	= models.CharField(max_length=5000,null=True)
 	MgrName	= models.CharField(max_length=1000,null=True)
+	MgrNameId = models.ForeignKey(MgrNames, on_delete=models.SET_NULL, null=True)
 	MgrTnrAv	=models.DecimalField(max_digits=6,decimal_places=2, null=True)
 	MgrTnrLg	=models.DecimalField(max_digits=6,decimal_places=2, null=True)
 	PPBnch	= models.CharField(max_length=400,null=True)
