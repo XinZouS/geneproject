@@ -15,10 +15,10 @@
 body { font: 16px Arial; }
 
 .tab {
-  width: 100%;
+  width: 900px;
   overflow: hidden;
   border: 1px solid #ccc;
-  padding-left: 400px;
+  padding-left: 20px;
 }
 .tab button {
   background-color: inherit;
@@ -238,14 +238,6 @@ td.red { background-color: #fc887e; }
 </head>     
 
 <body>
-
-<div class="tab">
-  <button class="tablinks" onclick="openTab(event, 'tabId01')" id="defaultOpenBtn">Default</button>
-  <button class="tablinks" onclick="openTab(event, 'tabId02')">Sub-Advisory</button>
-  <button class="tablinks" onclick="openTab(event, 'tabId03')">Performance</button>
-  <button class="tablinks" onclick="openTab(event, 'tabId04')">Tab04</button>
-  <button class="tablinks" onclick="openTab(event, 'tabId05')">Tab05</button>
-</div>
 
 
 <section class="scrollable" style="width: 2010px;">
@@ -819,6 +811,14 @@ document.getElementById("defaultOpenBtn").click(); // default selected tab
 
     </navleft>
 
+
+    <div class="tab">
+      <button class="tablinks" onclick="openTab(event, 'tabId01')" id="defaultOpenBtn">Default</button>
+      <button class="tablinks" onclick="openTab(event, 'tabId02')">Sub-Advisory</button>
+      <button class="tablinks" onclick="openTab(event, 'tabId03')">Performance</button>
+      <button class="tablinks" onclick="openTab(event, 'tabId04')">Tab04</button>
+      <button class="tablinks" onclick="openTab(event, 'tabId05')">Tab05</button>
+    </div>
 
     <div style="position: relative; width: 1600px; padding-top: 43px; background: #eaeaea; float:left;">
 
