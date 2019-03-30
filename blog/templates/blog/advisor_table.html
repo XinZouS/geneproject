@@ -500,37 +500,6 @@ function autocomplete(searchTypeEnum, inp, words) {
                 });
                 c.appendChild(divB);
             }
-
-            /*check if the item starts with the same letters as the text field value:*/
-            // if (words[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-            //     var targetName = words[i];
-            //     /*create a DIV element for each matching element:*/
-            //     divB = document.createElement("DIV");
-            //     /*make the matching letters bold:*/
-            //     divB.innerHTML = "<strong>" + targetName.substr(0, val.length) + "</strong>";
-            //     divB.innerHTML += targetName.substr(val.length);
-            //     /*insert a input field that will hold the current array item's value:*/
-            //     divB.innerHTML += "<input type='hidden' value='" + targetName + "'>";
-
-            //     divB.setAttribute("id", targetName);
-            //     if (searchTypeEnum == SearchTypeEnum.Advisor && selectedAdvisorNames.includes(targetName)) {
-            //         divB.classList.add("autocomplete-active");
-            //     } else
-            //     if (searchTypeEnum == SearchTypeEnum.MSCat && selectedMSCatNames.includes(targetName)) {
-            //         divB.classList.add("autocomplete-active");
-            //     } else
-            //     if (searchTypeEnum == SearchTypeEnum.MSSubAdv && selectedMSSubAdvNames.includes(targetName)) {
-            //         divB.classList.add("autocomplete-active");
-            //     } else
-            //     if (searchTypeEnum == SearchTypeEnum.MgrName && selectedMgrNames.includes(targetName)) {
-            //         divB.classList.add("autocomplete-active");
-            //     }
-
-            //     divB.addEventListener("click", function(e) {
-            //         didSelectSearchListItem(searchTypeEnum, this); // 'this' is the target div
-            //     });
-            //     c.appendChild(divB);
-            // }
         }
     });
     /*execute a function presses a key on the keyboard:*/
