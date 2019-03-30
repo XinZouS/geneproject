@@ -435,8 +435,8 @@ function removeSelectFromAutoComplete(div, selectName, searchTypeEnum) {
     removeLiByName(selectName, searchTypeEnum);
 }
 
-function autocomplete(searchTypeEnum, inp, arr) { 
-    // inp: the text field, arr: array of possible autocompleted values
+function autocomplete(searchTypeEnum, inp, words) { 
+    // inp: the text field, words: array of possible autocompleted values
     inp.addEventListener("input", function(e) {
         var a, b, c, i, val = this.value;
         /*close any already open lists of autocompleted values*/
@@ -456,16 +456,29 @@ function autocomplete(searchTypeEnum, inp, arr) {
         c.setAttribute("id", "autocompleteMenuDiv");
         a.appendChild(c);
 
-        for (i = 0; i < arr.length; i++) {
-            /*check if the item starts with the same letters as the text field value:*/
-            if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
-                var targetName = arr[i];
-                /*create a DIV element for each matching element:*/
+        for (i = 0; i < words.length; i++) {
+            /* matching ALL substrings from the list, not just the begining */
+            var w = 0, v = 0, startIndex = 0;
+            var inpt = val.toLowerCase()
+            var word = words[i].toLowerCase();
+            while (w < word.length && v < inpt.length) {
+                if (word[w] == inpt[v]) {
+                    if (v == 0) { startIndex = w; }
+                    v += 1;
+                }
+                w += 1;
+            }
+            if (v == inpt.length) { // find a full match of input string
+                var targetName = words[i];
                 divB = document.createElement("DIV");
-                /*make the matching letters bold:*/
-                divB.innerHTML = "<strong>" + targetName.substr(0, val.length) + "</strong>";
-                divB.innerHTML += targetName.substr(val.length);
-                /*insert a input field that will hold the current array item's value:*/
+
+                if (word.substr(startIndex, v) == inpt) { // substring match
+                    divB.innerHTML = targetName.substr(0, startIndex);
+                    divB.innerHTML += "<strong>" + targetName.substr(startIndex, v) + "</strong>";
+                    divB.innerHTML += targetName.substr(startIndex + v);
+                } else { // subsequence match
+                    divB.innerHTML = targetName
+                }
                 divB.innerHTML += "<input type='hidden' value='" + targetName + "'>";
 
                 divB.setAttribute("id", targetName);
@@ -487,6 +500,37 @@ function autocomplete(searchTypeEnum, inp, arr) {
                 });
                 c.appendChild(divB);
             }
+
+            /*check if the item starts with the same letters as the text field value:*/
+            // if (words[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            //     var targetName = words[i];
+            //     /*create a DIV element for each matching element:*/
+            //     divB = document.createElement("DIV");
+            //     /*make the matching letters bold:*/
+            //     divB.innerHTML = "<strong>" + targetName.substr(0, val.length) + "</strong>";
+            //     divB.innerHTML += targetName.substr(val.length);
+            //     /*insert a input field that will hold the current array item's value:*/
+            //     divB.innerHTML += "<input type='hidden' value='" + targetName + "'>";
+
+            //     divB.setAttribute("id", targetName);
+            //     if (searchTypeEnum == SearchTypeEnum.Advisor && selectedAdvisorNames.includes(targetName)) {
+            //         divB.classList.add("autocomplete-active");
+            //     } else
+            //     if (searchTypeEnum == SearchTypeEnum.MSCat && selectedMSCatNames.includes(targetName)) {
+            //         divB.classList.add("autocomplete-active");
+            //     } else
+            //     if (searchTypeEnum == SearchTypeEnum.MSSubAdv && selectedMSSubAdvNames.includes(targetName)) {
+            //         divB.classList.add("autocomplete-active");
+            //     } else
+            //     if (searchTypeEnum == SearchTypeEnum.MgrName && selectedMgrNames.includes(targetName)) {
+            //         divB.classList.add("autocomplete-active");
+            //     }
+
+            //     divB.addEventListener("click", function(e) {
+            //         didSelectSearchListItem(searchTypeEnum, this); // 'this' is the target div
+            //     });
+            //     c.appendChild(divB);
+            // }
         }
     });
     /*execute a function presses a key on the keyboard:*/
