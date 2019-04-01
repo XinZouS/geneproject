@@ -456,6 +456,7 @@ function autocomplete(searchTypeEnum, inp, words) {
             while (w < word.length && v < inpt.length) {
                 if (word[w] == inpt[v]) {
                     if (v == 0) { startIndex = w; }
+                    // if (w + 1 < word.length)
                     v += 1;
                 }
                 w += 1;
@@ -464,34 +465,32 @@ function autocomplete(searchTypeEnum, inp, words) {
                 var targetName = words[i];
                 divB = document.createElement("DIV");
 
-                if (word.substr(startIndex, v) == inpt) { // substring match
+                if (word.substr(startIndex, v) == inpt) { // substring match, NO subsequence match;
                     divB.innerHTML = targetName.substr(0, startIndex);
                     divB.innerHTML += "<strong>" + targetName.substr(startIndex, v) + "</strong>";
                     divB.innerHTML += targetName.substr(startIndex + v);
-                } else { // subsequence match
-                    divB.innerHTML = targetName
-                }
-                divB.innerHTML += "<input type='hidden' value='" + targetName + "'>";
+                    divB.innerHTML += "<input type='hidden' value='" + targetName + "'>";
 
-                divB.setAttribute("id", targetName);
-                if (searchTypeEnum == SearchTypeEnum.Advisor && selectedAdvisorNames.includes(targetName)) {
-                    divB.classList.add("autocomplete-active");
-                } else
-                if (searchTypeEnum == SearchTypeEnum.MSCat && selectedMSCatNames.includes(targetName)) {
-                    divB.classList.add("autocomplete-active");
-                } else
-                if (searchTypeEnum == SearchTypeEnum.MSSubAdv && selectedMSSubAdvNames.includes(targetName)) {
-                    divB.classList.add("autocomplete-active");
-                } else
-                if (searchTypeEnum == SearchTypeEnum.MgrName && selectedMgrNames.includes(targetName)) {
-                    divB.classList.add("autocomplete-active");
-                }
+                    divB.setAttribute("id", targetName);
+                    if (searchTypeEnum == SearchTypeEnum.Advisor && selectedAdvisorNames.includes(targetName)) {
+                        divB.classList.add("autocomplete-active");
+                    } else
+                    if (searchTypeEnum == SearchTypeEnum.MSCat && selectedMSCatNames.includes(targetName)) {
+                        divB.classList.add("autocomplete-active");
+                    } else
+                    if (searchTypeEnum == SearchTypeEnum.MSSubAdv && selectedMSSubAdvNames.includes(targetName)) {
+                        divB.classList.add("autocomplete-active");
+                    } else
+                    if (searchTypeEnum == SearchTypeEnum.MgrName && selectedMgrNames.includes(targetName)) {
+                        divB.classList.add("autocomplete-active");
+                    }
 
-                divB.addEventListener("click", function(e) {
-                    didSelectSearchListItem(searchTypeEnum, this); // 'this' is the target div
-                });
-                c.appendChild(divB);
-            }
+                    divB.addEventListener("click", function(e) {
+                        didSelectSearchListItem(searchTypeEnum, this); // 'this' is the target div
+                    });
+                    c.appendChild(divB);
+                }
+              }
         }
     });
     /*execute a function presses a key on the keyboard:*/
