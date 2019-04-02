@@ -450,14 +450,25 @@ function autocomplete(searchTypeEnum, inp, words) {
 
         for (i = 0; i < words.length; i++) {
             /* matching ALL substrings from the list, not just the begining */
-            var w = 0, v = 0, startIndex = 0;
+            var w = 0, v = 0, startIndex = 0, ignoreChars = 0;
+            var space = ' ';
             var inpt = val.toLowerCase()
             var word = words[i].toLowerCase();
             while (w < word.length && v < inpt.length) {
                 if (word[w] == inpt[v]) {
                     if (v == 0) { startIndex = w; }
-                    // if (w + 1 < word.length)
+
+                    if (inpt[v] == space && word[w] == space && v < inpt.length - 1) {
+                        ignoreChars += 1;
+                        w += 1;
+                        while (ignoreChars < 5 && w < word.length && word[w] != space) { 
+                          ignoreChars += 1;
+                          w += 1;
+                        }
+                    }
                     v += 1;
+                } else {
+                    v = 0; // no match, start over;
                 }
                 w += 1;
             }
@@ -465,10 +476,10 @@ function autocomplete(searchTypeEnum, inp, words) {
                 var targetName = words[i];
                 divB = document.createElement("DIV");
 
-                if (word.substr(startIndex, v) == inpt) { // substring match, NO subsequence match;
+                if (word[startIndex] == inpt[0] && word[w - 1] == inpt[v - 1]) { // substring match, NO subsequence match;
                     divB.innerHTML = targetName.substr(0, startIndex);
-                    divB.innerHTML += "<strong>" + targetName.substr(startIndex, v) + "</strong>";
-                    divB.innerHTML += targetName.substr(startIndex + v);
+                    divB.innerHTML += "<strong>" + targetName.substr(startIndex, v + ignoreChars) + "</strong>";
+                    divB.innerHTML += targetName.substr(startIndex + v + ignoreChars);
                     divB.innerHTML += "<input type='hidden' value='" + targetName + "'>";
 
                     divB.setAttribute("id", targetName);
@@ -490,7 +501,7 @@ function autocomplete(searchTypeEnum, inp, words) {
                     });
                     c.appendChild(divB);
                 }
-              }
+            }
         }
     });
     /*execute a function presses a key on the keyboard:*/
