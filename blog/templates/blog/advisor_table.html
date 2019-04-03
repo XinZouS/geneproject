@@ -457,14 +457,10 @@ function autocomplete(searchTypeEnum, inp, words) {
             while (w < word.length && v < inpt.length) {
                 if (word[w] == inpt[v]) {
                     if (v == 0) { startIndex = w; }
-
-                    if (inpt[v] == space && word[w] == space && v < inpt.length - 1) {
-                        ignoreChars += 1;
-                        w += 1;
-                        while (ignoreChars < 5 && w < word.length && word[w] != space) { 
-                          ignoreChars += 1;
-                          w += 1;
-                        }
+                    // check if skipping the middle name match: middleName: _X._
+                    if (inpt[v] == space && word[w] == space && v < inpt.length - 1 && w + 3 < word.length && word[w + 3] == space) {
+                        ignoreChars = 3;
+                        w += 3;
                     }
                     v += 1;
                 } else {
