@@ -451,14 +451,16 @@ function autocomplete(searchTypeEnum, inp, words) {
         for (i = 0; i < words.length; i++) {
             /* matching ALL substrings from the list, not just the begining */
             var w = 0, v = 0, startIndex = 0, ignoreChars = 0;
-            var space = ' ';
+            var space = ' ', dot = '.';
             var inpt = val.toLowerCase()
             var word = words[i].toLowerCase();
+            var isInputMiddleName = inpt.includes(dot)
             while (w < word.length && v < inpt.length) {
                 if (word[w] == inpt[v]) {
                     if (v == 0) { startIndex = w; }
                     // check if skipping the middle name match: middleName: _X._
-                    if (inpt[v] == space && word[w] == space && v < inpt.length - 1 && w + 3 < word.length && word[w + 3] == space) {
+                    if (!isInputMiddleName && inpt[v] == space && word[w] == space &&
+                        v < inpt.length - 1 && w + 2 < word.length && word[w + 2] == dot) {
                         ignoreChars = 3;
                         w += 3;
                     }
