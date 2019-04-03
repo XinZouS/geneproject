@@ -80,9 +80,7 @@ input[type=submit] {
     background-color:#fff;
     overflow:auto;
 }
-.blankMarginDiv {
-    height: 10px;
-}
+.blankMarginDiv { height: 5px; }
 .btn {
   border: none;
   background-color: #eee;
@@ -94,16 +92,19 @@ input[type=submit] {
 }
 .info {color: dodgerblue;}
 
+.searchTitle {
+  top: 0px;
+  padding: 6px 0px 0px 0px; /* t, r, b, l */
+}
 .showUl {width: 10%;}
 .showUl:hover {
     background: #fff;
     font-weight: bold;
 }
-.add    {width: 20%;}
-.add:hover {
-    background: #fff;
-}
+.add        { width: 20%; }
+.add:hover  { background: #fff; }
 
+.liBtn:hover { background-color: Red; }
 .liBtn {
   height: 23px;
   width: 23px;
@@ -119,34 +120,27 @@ input[type=submit] {
   font-size: 14px;
   cursor: pointer;
 }
-.liBtn:hover {
-  background-color: Red;
-}
 
+.clearUlButton:hover {background-color: #ffb3b3;}
 .clearUlButton {
     width: 16%;
     height: 100%;
     float: right;
     color: #cc3300;
 }
-.clearUlButton:hover {background-color: #ffb3b3;}
 
 ul {
   padding: 0;
   overflow-y: scroll;
 }
+ul li:nth-child(odd)  { background: #efefef; }
+ul li:hover           { background: #ddf; }
 ul li {
   position: relative;
   padding: 6px 20px 6px 10px; /* t, r, b, l */
   list-style-type: circle;
   font-size: 16px;
   transition: 0.2s;
-}
-ul li:nth-child(odd) {
-  background: #efefef;
-}
-ul li:hover {
-  background: #ddf;
 }
 
 .autocomplete-items {
@@ -167,12 +161,8 @@ ul li:hover {
   border-bottom: 1px solid #d4d4d4; 
 }
 /*when hovering an item:*/
-.autocomplete-items div:hover {
-  background-color: #e9e9e9; 
-}
-.autocomplete-items div:click {
-  background-color: #22ff33; 
-}
+.autocomplete-items div:hover { background-color: #e9e9e9; }
+.autocomplete-items div:click { background-color: #22ff33; }
 /*when navigating through the items using the arrow keys:*/
 .autocomplete-active {
   background-color: DodgerBlue !important; 
@@ -191,9 +181,7 @@ ul li:hover {
   padding: 12px;
   text-decoration: none;
 }
-.vertical-menu a:hover {
-  background-color: #cceeee;
-}
+.vertical-menu a:hover { background-color: #cceeee; }
 .vertical-menu a.active {
   background-color: #4CAF50;
   color: white;
