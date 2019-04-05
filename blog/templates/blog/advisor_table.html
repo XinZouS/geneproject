@@ -104,12 +104,14 @@ input[type=submit] {
 
 .okBtn:hover  { background: #fff; }
 .okBtn {
-  width: 12%;
+  width: 20%;
+  margin-left: 6px;
   display: none;
 }
 .allBtn:hover  { background: #fff; }
 .allBtn {
-  width: 20%;
+  width: 26%;
+  margin-left: 6px;
   font-weight: bold;
   display: none;
 }
@@ -253,7 +255,7 @@ td.red { background-color: #fc887e; }
                 <h6 class="searchTitle">Advisors:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name">
-                    <button type="button" class="btn showUl" onclick="showFullAdvisorList()">
+                    <button type="button" class="btn showUl" id="lstAdvisors" onclick="showFullAdvisorList()">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" class="btn okBtn" id="okAdvisors" onclick="okButtonTapped()">OK</button>
                     <button type="button" class="btn allBtn" id="allAdvisors" onclick="addAllButtonTapped()">All</button>
@@ -269,7 +271,7 @@ td.red { background-color: #fc887e; }
                 <h6 class="searchTitle">MSCats:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchMSCatInput" type="text" name="myMSCat" placeholder="MSCat Name">
-                    <button type="button" class="btn showUl" onclick="showFullMSCatList()">
+                    <button type="button" class="btn showUl" id="lstMSCats" onclick="showFullMSCatList()">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" class="btn okBtn" id="okMSCats" onclick="okButtonTapped()">OK</button>
                     <button type="button" class="btn allBtn" id="allMSCats" onclick="addAllButtonTapped()">All</button>
@@ -285,7 +287,7 @@ td.red { background-color: #fc887e; }
                 <h6 class="searchTitle">MSSubAdvs:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchMSSubAdvInput" type="text" name="myMSSubAdv" placeholder="MSSubAdv Name">
-                    <button type="button" class="btn showUl" onclick="showFullMSSubAdvList()">
+                    <button type="button" class="btn showUl" id="lstMSSubAdvs" onclick="showFullMSSubAdvList()">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" class="btn okBtn" id="okMSSubAdvs" onclick="okButtonTapped()">OK</button>
                     <button type="button" class="btn allBtn" id="allMSSubAdvs" onclick="addAllButtonTapped()">All</button>
@@ -301,10 +303,10 @@ td.red { background-color: #fc887e; }
                 <h6 class="searchTitle">MgrNames:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchMgrInput" type="text" name="myMgr" placeholder="Manager Name">
-                    <button type="button" class="btn showUl" onclick="showFullMgrList()">
+                    <button type="button" class="btn showUl" id="lstMgrName" onclick="showFullMgrList()">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" class="btn okBtn" id="okMgrName" onclick="okButtonTapped()">OK</button>
-                    <button type="button" class="btn allBtn" id="allMgrName" onclick="addAllButtonTapped()">Add</button>
+                    <button type="button" class="btn allBtn" id="allMgrName" onclick="addAllButtonTapped()">All</button>
                     <button type="button" class="btn clearUlButton" id="clearMgrName" onclick="clearSelectedMgrList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
@@ -438,28 +440,32 @@ function removeSelectFromAutoComplete(div, selectName, searchTypeEnum) {
 }
 
 function animateButtonsFor(searchTypeEnum, isShowing) {
-    var textFieldId, okBtnId, allBtnId, clrBtnId;
+    var textFieldId, lstBtnId, okBtnId, allBtnId, clrBtnId;
     switch (searchTypeEnum) {
       case SearchTypeEnum.Advisor:
           textFieldId = "searchAdvisorInput";
+          lstBtnId = "lstAdvisors";
           okBtnId = "okAdvisors";
           allBtnId = "allAdvisors";
           clrBtnId = "clearAdvisors";
           break;
       case SearchTypeEnum.MSCat:
           textFieldId = "searchMSCatInput";
+          lstBtnId = "lstMSCats";
           okBtnId = "okMSCats";
           allBtnId = "allMSCats";
           clrBtnId = "clearMSCats";
           break;
       case SearchTypeEnum.MSSubAdv:
           textFieldId = "searchMSSubAdvInput";
+          lstBtnId = "lstMSSubAdvs";
           okBtnId = "okMSSubAdvs";
           allBtnId = "allMSSubAdvs";
           clrBtnId = "clearMSSubAdvs";
           break;
       case SearchTypeEnum.MgrName:
           textFieldId = "searchMgrInput";
+          lstBtnId = "lstMgrName";
           okBtnId = "okMgrName";
           allBtnId = "allMgrName";
           clrBtnId = "clearMgrName";
@@ -471,14 +477,16 @@ function animateButtonsFor(searchTypeEnum, isShowing) {
 
       if (isShowing) {
           document.getElementById(textFieldId).className += " active";
+          document.getElementById(lstBtnId).style.display = "none";
           document.getElementById(clrBtnId).style.display = "none";
           document.getElementById(okBtnId).style.display = "inline-block";
           document.getElementById(allBtnId).style.display = "inline-block";
       } else {
-          document.getElementById(textFieldId).classList.remove("active");
-          document.getElementById(clrBtnId).style.display = "inline-block";
           document.getElementById(okBtnId).style.display = "none";
           document.getElementById(allBtnId).style.display = "none";
+          document.getElementById(textFieldId).classList.remove("active");
+          document.getElementById(lstBtnId).style.display = "inline-block";
+          document.getElementById(clrBtnId).style.display = "inline-block";
       }
 }
 
