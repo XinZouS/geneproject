@@ -71,7 +71,7 @@ input[type=text] {
 }
 input[type=text].active {
   background-color: #fff;
-  width: 46%;
+  width: 36%;
   height: 36px;
 }
 input[type=submit] {
@@ -104,12 +104,13 @@ input[type=submit] {
 
 .add:hover  { background: #fff; }
 .add {
-  width: 16%;
+  width: 12%;
   display: none;
 }
 .allBtn:hover  { background: #fff; }
 .allBtn {
-  width: 23%;
+  width: 20%;
+  font-weight: bold;
   display: none;
 }
 
@@ -124,7 +125,7 @@ input[type=submit] {
 .liBtn:hover { background-color: Red; }
 .liBtn {
   height: 23px;
-  width: 23px;
+  width: 8%;
   position: absolute;
   top: 4px;
   right: 6px;
@@ -446,7 +447,6 @@ function autocomplete(searchTypeEnum, inp, words) {
 
         inp.className += " active";
 
-        document.getElementById("clearAdvisors").style.display = "none";
         document.getElementById("okAdvisors").style.display = "inline-block";
         document.getElementById("allAdvisors").style.display = "inline-block";
 
