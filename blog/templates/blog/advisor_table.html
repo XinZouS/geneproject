@@ -66,12 +66,12 @@ input {
 }
 input[type=text] {
   background-color: #f1f1f1;
-  width: 71%;
+  width: 68%;
   height: 36px;
 }
 input[type=text].active {
   background-color: #fff;
-  width: 36%;
+  width: 38%;
   height: 36px;
 }
 input[type=submit] {
@@ -105,13 +105,13 @@ input[type=submit] {
 .okBtn:hover  { background: #fff; }
 .okBtn {
   width: 20%;
-  margin-left: 6px;
+  margin-left: 3px;
   display: none;
 }
 .allBtn:hover  { background: #fff; }
 .allBtn {
   width: 26%;
-  margin-left: 6px;
+  margin-left: 3px;
   font-weight: bold;
   display: none;
 }
@@ -124,24 +124,7 @@ input[type=submit] {
   display: inline-block;
 }
 
-.liBtn:hover { background-color: Red; }
-.liBtn {
-  height: 23px;
-  width: 8%;
-  position: absolute;
-  top: 4px;
-  right: 6px;
-  border-radius: 50%;
-  background-color: DodgerBlue;
-  border: none;
-  color: white;
-  margin-left: 6px;
-  padding: 0px 3px;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-.showUl {width: 10%;}
+.showUl {width: 12%;}
 .showUl:hover {
     background: #fff;
     font-weight: bold;
@@ -158,6 +141,23 @@ ul li {
   list-style-type: circle;
   font-size: 16px;
   transition: 0.2s;
+}
+
+.liBtn:hover { background-color: Red; }
+.liBtn {
+  height: 23px;
+  width: 23px;
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  border-radius: 50%;
+  background-color: DodgerBlue;
+  border: none;
+  color: white;
+  margin-left: 6px;
+  padding: 0px 3px;
+  font-size: 14px;
+  cursor: pointer;
 }
 
 .autocomplete-items {
@@ -894,8 +894,6 @@ function openTab(evt, tabId) {
   evt.currentTarget.className += " active";
 }
 
-document.getElementById("defaultOpenBtn").click(); // default selected tab
-
 
 </script>
 
@@ -910,6 +908,10 @@ document.getElementById("defaultOpenBtn").click(); // default selected tab
       <button class="tablinks" onclick="openTab(event, 'tabId05')">Tab05</button>
     </div>
 
+    <script type="text/javascript">
+      document.getElementById("defaultOpenBtn").click();  // default selected tab
+    </script>
+    
     <div style="position: relative; width: 1600px; padding-top: 43px; background: #eaeaea; float:left;">
 
         <div id="tabId01" class="tabcontent" style="display: block;">
