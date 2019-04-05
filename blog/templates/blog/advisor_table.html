@@ -88,6 +88,7 @@ input[type=submit] {
 .blankMarginDiv { height: 5px; }
 .btn {
   border: none;
+  color: dodgerblue;
   background-color: #eee;
   height: 36px;
   padding: 6px;
@@ -95,15 +96,14 @@ input[type=submit] {
   cursor: pointer;
   display: inline-block;
 }
-.info {color: dodgerblue;}
 
 .searchTitle {
   top: 0px;
   padding: 6px 0px 0px 0px; /* t, r, b, l */
 }
 
-.add:hover  { background: #fff; }
-.add {
+.okBtn:hover  { background: #fff; }
+.okBtn {
   width: 12%;
   display: none;
 }
@@ -253,11 +253,11 @@ td.red { background-color: #fc887e; }
                 <h6 class="searchTitle">Advisors:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name">
-                    <button type="button" onclick="showFullAdvisorList()" class="btn info showUl">
+                    <button type="button" onclick="showFullAdvisorList()" class="btn showUl">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
-                    <button type="button" class="btn info add" id="okAdvisors" onclick="clearSearchText()">OK</button>
-                    <button type="button" class="btn info allBtn" id="allAdvisors" onclick="clearSearchText()">All</button>
-                    <button type="button" class="btn info clearUlButton active" id="clearAdvisors" onclick="clearSelectedAdvisorList()">Clear</button>
+                    <button type="button" class="btn okBtn" id="okAdvisors" onclick="clearSearchText()">OK</button>
+                    <button type="button" class="btn allBtn" id="allAdvisors" onclick="clearSearchText()">All</button>
+                    <button type="button" class="btn clearUlButton active" id="clearAdvisors" onclick="clearSelectedAdvisorList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
             
@@ -269,11 +269,11 @@ td.red { background-color: #fc887e; }
                 <h6 class="searchTitle">MSCats:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchMSCatInput" type="text" name="myMSCat" placeholder="MSCat Name">
-                    <button type="button" onclick="showFullMSCatList()" class="btn info showUl">
+                    <button type="button" onclick="showFullMSCatList()" class="btn showUl">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
-                    <button type="button" class="btn info add" id="okMSCats" onclick="clearSearchText()">OK</button>
-                    <button type="button" class="btn info allBtn" id="allMSCats" onclick="clearSearchText()">All</button>
-                    <button type="button" class="btn info clearUlButton active" id="clearMSCats" onclick="clearSelectedMSCatList()">Clear</button>
+                    <button type="button" class="btn okBtn" id="okMSCats" onclick="clearSearchText()">OK</button>
+                    <button type="button" class="btn allBtn" id="allMSCats" onclick="clearSearchText()">All</button>
+                    <button type="button" class="btn clearUlButton active" id="clearMSCats" onclick="clearSelectedMSCatList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
@@ -285,11 +285,11 @@ td.red { background-color: #fc887e; }
                 <h6 class="searchTitle">MSSubAdvs:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchMSSubAdvInput" type="text" name="myMSSubAdv" placeholder="MSSubAdv Name">
-                    <button type="button" onclick="showFullMSSubAdvList()" class="btn info showUl">
+                    <button type="button" onclick="showFullMSSubAdvList()" class="btn showUl">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
-                    <button type="button" class="btn info add" id="okMSSubAdvs" onclick="clearSearchText()">OK</button>
-                    <button type="button" class="btn info allBtn" id="allMSSubAdvs" onclick="clearSearchText()">All</button>
-                    <button type="button" class="btn info clearUlButton active" id="clearMSSubAdvs" onclick="clearSelectedMSSubAdvList()">Clear</button>
+                    <button type="button" class="btn okBtn" id="okMSSubAdvs" onclick="clearSearchText()">OK</button>
+                    <button type="button" class="btn allBtn" id="allMSSubAdvs" onclick="clearSearchText()">All</button>
+                    <button type="button" class="btn clearUlButton active" id="clearMSSubAdvs" onclick="clearSelectedMSSubAdvList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
@@ -301,11 +301,11 @@ td.red { background-color: #fc887e; }
                 <h6 class="searchTitle">MgrNames:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchMgrInput" type="text" name="myMgr" placeholder="Manager Name">
-                    <button type="button" onclick="showFullMgrList()" class="btn info showUl">
+                    <button type="button" onclick="showFullMgrList()" class="btn showUl">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
-                    <button type="button" class="btn info add" id="okMgrName" onclick="clearSearchText()">OK</button>
-                    <button type="button" class="btn info allBtn" id="allMgrName" onclick="clearSearchText()">Add</button>
-                    <button type="button" class="btn info clearUlButton active" id="clearMgrName" onclick="clearSelectedMgrList()">Clear</button>
+                    <button type="button" class="btn okBtn" id="okMgrName" onclick="clearSearchText()">OK</button>
+                    <button type="button" class="btn allBtn" id="allMgrName" onclick="clearSearchText()">Add</button>
+                    <button type="button" class="btn clearUlButton active" id="clearMgrName" onclick="clearSelectedMgrList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
@@ -682,7 +682,7 @@ function addSelectName(name="notSet", searchTypeEnum) {
             selectedMgrNames.push(name);
             break;
         default: // use Advisor
-            console.log("--- [ERROR] get unexpected SearchTypeEnum in func addSelectName: line 463");
+            console.log("--- [ERROR] get unexpected SearchTypeEnum in func addSelectName()");
             return;
     }
     var ul = document.getElementById(ulId);
@@ -718,6 +718,10 @@ function addSelectName(name="notSet", searchTypeEnum) {
     li.appendChild(nameField);
     li.appendChild(rmBtn);
     ul.appendChild(li);
+}
+
+function addAllFromList() {
+
 }
 
 function removeLiByName(name, searchTypeEnum) {
