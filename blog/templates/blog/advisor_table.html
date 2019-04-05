@@ -66,7 +66,12 @@ input {
 }
 input[type=text] {
   background-color: #f1f1f1;
-  width: 50%;
+  width: 71%;
+  height: 36px;
+}
+input[type=text].active {
+  background-color: #fff;
+  width: 46%;
   height: 36px;
 }
 input[type=submit] {
@@ -97,15 +102,23 @@ input[type=submit] {
   padding: 6px 0px 0px 0px; /* t, r, b, l */
 }
 
-.add        { width: 20%; }
 .add:hover  { background: #fff; }
+.add {
+  width: 16%;
+  display: none;
+}
+.allBtn:hover  { background: #fff; }
+.allBtn {
+  width: 23%;
+  display: none;
+}
 
 .clearUlButton:hover {background-color: #ffb3b3;}
 .clearUlButton {
-    width: 16%;
-    height: 100%;
-    float: right;
-    color: #cc3300;
+  width: 16%;
+  height: 100%;
+  color: #cc3300;
+  display: inline-block;
 }
 
 .liBtn:hover { background-color: Red; }
@@ -241,8 +254,9 @@ td.red { background-color: #fc887e; }
                     <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name">
                     <button type="button" onclick="showFullAdvisorList()" class="btn info showUl">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
-                    <button type="button" class="btn info add" id="addAdvisors" onclick="clearSearchText()">Add</button>
-                    <button type="button" class="btn info clearUlButton" onclick="clearSelectedAdvisorList()">Clear</button>
+                    <button type="button" class="btn info add" id="okAdvisors" onclick="clearSearchText()">OK</button>
+                    <button type="button" class="btn info allBtn" id="allAdvisors" onclick="clearSearchText()">All</button>
+                    <button type="button" class="btn info clearUlButton active" id="clearAdvisors" onclick="clearSelectedAdvisorList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
             
@@ -256,8 +270,9 @@ td.red { background-color: #fc887e; }
                     <input id="searchMSCatInput" type="text" name="myMSCat" placeholder="MSCat Name">
                     <button type="button" onclick="showFullMSCatList()" class="btn info showUl">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
-                    <button type="button" class="btn info add" id="addMSCats" onclick="clearSearchText()">Add</button>
-                    <button type="button" class="btn info clearUlButton" onclick="clearSelectedMSCatList()">Clear</button>
+                    <button type="button" class="btn info add" id="okMSCats" onclick="clearSearchText()">OK</button>
+                    <button type="button" class="btn info allBtn" id="allMSCats" onclick="clearSearchText()">All</button>
+                    <button type="button" class="btn info clearUlButton active" id="clearMSCats" onclick="clearSelectedMSCatList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
@@ -271,8 +286,9 @@ td.red { background-color: #fc887e; }
                     <input id="searchMSSubAdvInput" type="text" name="myMSSubAdv" placeholder="MSSubAdv Name">
                     <button type="button" onclick="showFullMSSubAdvList()" class="btn info showUl">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
-                    <button type="button" class="btn info add" id="addMSSubAdvs" onclick="clearSearchText()">Add</button>
-                    <button type="button" class="btn info clearUlButton" onclick="clearSelectedMSSubAdvList()">Clear</button>
+                    <button type="button" class="btn info add" id="okMSSubAdvs" onclick="clearSearchText()">OK</button>
+                    <button type="button" class="btn info allBtn" id="allMSSubAdvs" onclick="clearSearchText()">All</button>
+                    <button type="button" class="btn info clearUlButton active" id="clearMSSubAdvs" onclick="clearSelectedMSSubAdvList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
@@ -286,8 +302,9 @@ td.red { background-color: #fc887e; }
                     <input id="searchMgrInput" type="text" name="myMgr" placeholder="Manager Name">
                     <button type="button" onclick="showFullMgrList()" class="btn info showUl">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
-                    <button type="button" onclick="clearSearchText()" class="btn info add">Add</button>
-                    <button class="btn info clearUlButton" type="button" onclick="clearSelectedMgrList()">Clear</button>
+                    <button type="button" class="btn info add" id="okMgrName" onclick="clearSearchText()">OK</button>
+                    <button type="button" class="btn info allBtn" id="allMgrName" onclick="clearSearchText()">Add</button>
+                    <button type="button" class="btn info clearUlButton active" id="clearMgrName" onclick="clearSelectedMgrList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
@@ -425,6 +442,13 @@ function autocomplete(searchTypeEnum, inp, words) {
         closeAllLists();
         if (!val) { return false;}
         currentFocus = -1;
+
+
+        inp.className += " active";
+
+        document.getElementById("clearAdvisors").style.display = "none";
+        document.getElementById("okAdvisors").style.display = "inline-block";
+        document.getElementById("allAdvisors").style.display = "inline-block";
 
         /*create a DIV element that will contain the items (values):*/
         a = document.createElement("DIV");
