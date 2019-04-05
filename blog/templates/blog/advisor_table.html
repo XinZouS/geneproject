@@ -256,8 +256,8 @@ td.red { background-color: #fc887e; }
                     <button type="button" onclick="showFullAdvisorList()" class="btn showUl">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" class="btn okBtn" id="okAdvisors" onclick="clearSearchText()">OK</button>
-                    <button type="button" class="btn allBtn" id="allAdvisors" onclick="clearSearchText()">All</button>
-                    <button type="button" class="btn clearUlButton active" id="clearAdvisors" onclick="clearSelectedAdvisorList()">Clear</button>
+                    <button type="button" class="btn allBtn" id="allAdvisors" onclick="addAllAdvisors()">All</button>
+                    <button type="button" class="btn clearUlButton" id="clearAdvisors" onclick="clearSelectedAdvisorList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
             
@@ -272,8 +272,8 @@ td.red { background-color: #fc887e; }
                     <button type="button" onclick="showFullMSCatList()" class="btn showUl">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" class="btn okBtn" id="okMSCats" onclick="clearSearchText()">OK</button>
-                    <button type="button" class="btn allBtn" id="allMSCats" onclick="clearSearchText()">All</button>
-                    <button type="button" class="btn clearUlButton active" id="clearMSCats" onclick="clearSelectedMSCatList()">Clear</button>
+                    <button type="button" class="btn allBtn" id="allMSCats" onclick="addAllMSCats()">All</button>
+                    <button type="button" class="btn clearUlButton" id="clearMSCats" onclick="clearSelectedMSCatList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
@@ -288,8 +288,8 @@ td.red { background-color: #fc887e; }
                     <button type="button" onclick="showFullMSSubAdvList()" class="btn showUl">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" class="btn okBtn" id="okMSSubAdvs" onclick="clearSearchText()">OK</button>
-                    <button type="button" class="btn allBtn" id="allMSSubAdvs" onclick="clearSearchText()">All</button>
-                    <button type="button" class="btn clearUlButton active" id="clearMSSubAdvs" onclick="clearSelectedMSSubAdvList()">Clear</button>
+                    <button type="button" class="btn allBtn" id="allMSSubAdvs" onclick="addAllMSSubAdvs()">All</button>
+                    <button type="button" class="btn clearUlButton" id="clearMSSubAdvs" onclick="clearSelectedMSSubAdvList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
@@ -304,8 +304,8 @@ td.red { background-color: #fc887e; }
                     <button type="button" onclick="showFullMgrList()" class="btn showUl">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" class="btn okBtn" id="okMgrName" onclick="clearSearchText()">OK</button>
-                    <button type="button" class="btn allBtn" id="allMgrName" onclick="clearSearchText()">Add</button>
-                    <button type="button" class="btn clearUlButton active" id="clearMgrName" onclick="clearSelectedMgrList()">Clear</button>
+                    <button type="button" class="btn allBtn" id="allMgrName" onclick="addAllMgrNames()">Add</button>
+                    <button type="button" class="btn clearUlButton" id="clearMgrName" onclick="clearSelectedMgrList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
@@ -435,6 +435,51 @@ function removeSelectFromAutoComplete(div, selectName, searchTypeEnum) {
     removeLiByName(selectName, searchTypeEnum);
 }
 
+function animateButtonsFor(searchTypeEnum, isShowing) {
+    var textFieldId, okBtnId, allBtnId, clrBtnId;
+    switch (searchTypeEnum) {
+      case SearchTypeEnum.Advisor:
+          textFieldId = "searchAdvisorInput";
+          okBtnId = "okAdvisors";
+          allBtnId = "allAdvisors";
+          clrBtnId = "clearAdvisors";
+          break;
+      case SearchTypeEnum.MSCat:
+          textFieldId = "searchMSCatInput";
+          okBtnId = "okMSCats";
+          allBtnId = "allMSCats";
+          clrBtnId = "clearMSCats";
+          break;
+      case SearchTypeEnum.MSSubAdv:
+          textFieldId = "searchMSSubAdvInput";
+          okBtnId = "okMSSubAdvs";
+          allBtnId = "allMSSubAdvs";
+          clrBtnId = "clearMSSubAdvs";
+          break;
+      case SearchTypeEnum.MgrName:
+          textFieldId = "searchMgrInput";
+          okBtnId = "okMgrName";
+          allBtnId = "allMgrName";
+          clrBtnId = "clearMgrName";
+          break;
+      default:
+          console.log("--- [ERROR] wrong type in animateButtonsFor(): " + searchTypeEnum);
+          return;
+      }
+
+      if (isShowing) {
+          document.getElementById(textFieldId).className += " active";
+          document.getElementById(clrBtnId).style.display = "none";
+          document.getElementById(okBtnId).style.display = "inline-block";
+          document.getElementById(allBtnId).style.display = "inline-block";
+      } else {
+          document.getElementById(textFieldId).classList.remove("active");
+          document.getElementById(clrBtnId).style.display = "inline-block";
+          document.getElementById(okBtnId).style.display = "none";
+          document.getElementById(allBtnId).style.display = "none";
+      }
+}
+
 function autocomplete(searchTypeEnum, inp, words) { 
     // inp: the text field, words: array of possible autocompleted values
     inp.addEventListener("input", function(e) {
@@ -444,11 +489,7 @@ function autocomplete(searchTypeEnum, inp, words) {
         if (!val) { return false;}
         currentFocus = -1;
 
-
-        inp.className += " active";
-
-        document.getElementById("okAdvisors").style.display = "inline-block";
-        document.getElementById("allAdvisors").style.display = "inline-block";
+        animateButtonsFor(searchTypeEnum, true);
 
         /*create a DIV element that will contain the items (values):*/
         a = document.createElement("DIV");
@@ -720,8 +761,34 @@ function addSelectName(name="notSet", searchTypeEnum) {
     ul.appendChild(li);
 }
 
-function addAllFromList() {
+function okButtonTapped() {
+  closeAllLists();
+  clearSearchText();
+  animateButtonsFor(currSearchType);
+}
+function addAllAdvisors() {
+  addAllFor(SearchTypeEnum.Advisor);
+}
+function addAllMSCats() {
+  addAllFor(SearchTypeEnum.MSCat);
+}
+function addAllMSSubAdvs() {
+  addAllFor(SearchTypeEnum.MSSubAdv);
+}
+function addAllMgrNames() {
+  addAllFor(SearchTypeEnum.MgrName);
+}
 
+function addAllFor(searchTypeEnum) {
+    var ul = document.getElementById("autocompleteMenuDiv");
+    var items = ul.getElementsByTagName("DIV");
+    for (var i = 0; i < items.length; i++) {
+        didSelectSearchListItem(searchTypeEnum, items[i]);
+    }
+    closeAllLists();
+    clearSearchText();
+
+    animateButtonsFor(searchTypeEnum, false);
 }
 
 function removeLiByName(name, searchTypeEnum) {
