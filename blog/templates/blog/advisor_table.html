@@ -96,13 +96,17 @@ input[type=submit] {
   top: 0px;
   padding: 6px 0px 0px 0px; /* t, r, b, l */
 }
-.showUl {width: 10%;}
-.showUl:hover {
-    background: #fff;
-    font-weight: bold;
-}
+
 .add        { width: 20%; }
 .add:hover  { background: #fff; }
+
+.clearUlButton:hover {background-color: #ffb3b3;}
+.clearUlButton {
+    width: 16%;
+    height: 100%;
+    float: right;
+    color: #cc3300;
+}
 
 .liBtn:hover { background-color: Red; }
 .liBtn {
@@ -121,14 +125,11 @@ input[type=submit] {
   cursor: pointer;
 }
 
-.clearUlButton:hover {background-color: #ffb3b3;}
-.clearUlButton {
-    width: 16%;
-    height: 100%;
-    float: right;
-    color: #cc3300;
+.showUl {width: 10%;}
+.showUl:hover {
+    background: #fff;
+    font-weight: bold;
 }
-
 ul {
   padding: 0;
   overflow-y: scroll;
