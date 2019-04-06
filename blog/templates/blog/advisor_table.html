@@ -316,7 +316,7 @@ td.red { background-color: #fc887e; }
                 </div>
 
 
-                <input id="submitButton" type="submit" style="float:right; width:100%; border-radius: 5px; margin-top: 20px; margin-bottom: 10px;">
+                <input id="submitButton" type="submit" style="float:right; width:100%; border-radius: 5px; margin-top: 20px; margin-bottom: 10px;" onclick="submitButtonTapped()">
 
             </form>
         </div>
@@ -892,6 +892,12 @@ function openTab(evt, tabId) {
     showDiv.style.display = "block";
   }
   evt.currentTarget.className += " active";
+}
+
+
+function submitButtonTapped() {
+    var spinner = document.getElementById("spinner");
+    spinner.style.display = "flex";
 }
 
 
