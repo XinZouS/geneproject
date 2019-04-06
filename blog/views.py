@@ -59,19 +59,19 @@ def advisor_table(request):
 	if request.method == "POST":
 		selectedAdvisorIds = request.POST.getlist('advId')
 		selectedAdvisorNames = request.POST.getlist('advName', '')
-		selectedAdvisorIdSet = set(selectedAdvisorIds)
+		selectedAdvisorIdSet = getSetFromList(selectedAdvisorIds)
 
 		selectedMSSubAdvIds = request.POST.getlist('subId')
 		selectedMSSubAdvNames = request.POST.getlist('subName', '')
-		selectedMSSubAdvIdSet = set(list(map(lambda x: int(x.encode("utf-8")), selectedMSSubAdvIds)))
+		selectedMSSubAdvIdSet = getSetFromList(selectedMSSubAdvIds) #set(list(map(lambda x: int(x), selectedMSSubAdvIds)))
 
 		selectedMSCatIds = request.POST.getlist('catId')
 		selectedMSCatNames = request.POST.getlist('catName', '')
-		selectedMSCatIdSet = set(list(map(lambda x: int(x.encode("utf-8")), selectedMSCatIds)))
+		selectedMSCatIdSet = getSetFromList(selectedMSCatIds) #set(list(map(lambda x: int(x.encode("utf-8")), selectedMSCatIds)))
 
 		selectedMgrIds = request.POST.getlist('mgrId')
 		selectedMgrNames = request.POST.getlist('mgrName', '')
-		selectedMgrIdSet = set(list(map(lambda x: int(x.encode("utf-8")), selectedMgrIds)))
+		selectedMgrIdSet = getSetFromList(selectedMgrIds) #set(list(map(lambda x: int(x.encode("utf-8")), selectedMgrIds)))
 
 		start_time = time.time()
 		cmpObjByAll = []
@@ -159,15 +159,15 @@ def advisor_table(request):
 					if mgrId in selectedMgrIdSet:
 						containMgr.append(cmpObj)
 						qualifyId.add(mgrId)
-				print("-------- 3.0 len(qualifyId) = %s, len(MgrIdSet) = %s" % (len(qualifyId), len(selectedMgrIdSet)))
+				print("-------- 4.0 len(qualifyId) = %s, len(MgrIdSet) = %s" % (len(qualifyId), len(selectedMgrIdSet)))
 				if len(qualifyId) >= len(selectedMgrIdSet):
-					cmpObjByAll = containMSCat
+					cmpObjByAll = containMgr
 				else:
-					print("------- !!! too much MSSubAdv selected, AND result should be nil...")
+					print("------- !!! too much MgrNames selected, AND result should be nil...")
 					cmpObjByAll = []
 				isResultShouldBeEmpty = len(cmpObjByAll) == 0
-				print("--- 3.1 filter Cat id: %s seconds ---" % (time.time() - start_time))
-				print("--- 3.1 cmpObjByAll.count = %s" % len(cmpObjByAll))
+				print("--- 4.1 filter Cat id: %s seconds ---" % (time.time() - start_time))
+				print("--- 4.1 cmpObjByAll.count = %s" % len(cmpObjByAll))
 				start_time = time.time()
 			else:
 				for mgrId in selectedMgrIds:
@@ -176,8 +176,8 @@ def advisor_table(request):
 						cmpObjByAll.append(obj[0])
 					elif len(obj) > 1:
 						cmpObjByAll.extend(obj)
-				print("--- 3.2 query Mgr id: %s seconds ---" % (time.time() - start_time))
-				print("--- 3.2 cmpObjByAll.count = %s" % len(cmpObjByAll))
+				print("--- 4.2 query Mgr id: %s seconds ---" % (time.time() - start_time))
+				print("--- 4.2 cmpObjByAll.count = %s" % len(cmpObjByAll))
 				start_time = time.time()
 
 		if selectedAdvisorIds and not isResultShouldBeEmpty: # filter out the first selection result;
@@ -271,6 +271,18 @@ def advisor_table(request):
 	}
 
 	return render(request, 'blog/advisor_table.html', content)
+
+def getSetFromList(aList):
+	rltSet = set()
+	for idStr in aList:
+		try:
+			num = int(idStr.encode("utf-8"))
+			rltSet.add(num)
+		except ValueError as e:
+			print("-------- [ERROR] type error skipping: [%s --> int failed] " % idStr)
+			print(e)
+			continue
+	return rltSet
 
 
 def getPerformanceInfo(companyInfos):
