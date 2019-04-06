@@ -49,36 +49,43 @@
         }
 
         .spinner {
-          position: relative;
-          display: flex;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          margin-top: -50px;
+          margin-left: -50px;
+          width: 100px;
+          height: 100px;
+          z-index: 99;
+          display: none; /*flex;*/
           justify-content: center;
           align-items: center;
-          width: 200px;
-          height: 200px;
         }
         .spinner-text {
           animation: loadingopacity 2s ease-in-out infinite;
-          font-size: 2em;
+          font-size: 1em;
+          font-weight: bold;
+          background-color: white;
         }
         .spinner-sector {
           border-radius: 50%;
           position: absolute;
           width: 100%;
           height: 100%;
-          border: 15px solid transparent;
+          border: 10px solid transparent;
           mix-blend-mode: overlay;
         }
         .spinner-sector-blue {
           animation: rotate 2s ease-out infinite;
-          border-top: 15px solid lightblue;
+          border-top: 10px solid lightgreen;
         }
         .spinner-sector-red {
-          animation: rotate 2.5s ease-in infinite;
-          border-top: 15px solid lightcoral;
+          animation: rotate 1.5s ease-in infinite;
+          border-top: 10px solid dodgerblue;
         }
         .spinner-sector-green {
-          animation: rotate 1.5s ease-in-out infinite;
-          border-top: 15px solid lightgreen;
+          animation: rotate 2.5s ease-in-out infinite;
+          border-top: 10px solid yellow;
         }
         @keyframes rotate {
           from { transform: rotate(0); }
@@ -93,7 +100,7 @@
     </style>
 </header>
 
-<div class="spinner">
+<div class="spinner" id="spinner">
   <div class="spinner-text">Loading...</div>
   <div class="spinner-sector spinner-sector-red"></div>
   <div class="spinner-sector spinner-sector-blue"></div>
