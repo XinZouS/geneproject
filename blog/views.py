@@ -57,21 +57,22 @@ def advisor_table(request):
 	selectedMgrNames = []
 
 	if request.method == "POST":
-		selectedAdvisorIds = request.POST.getlist('advId')
+		selectedAdvisorIds = intListFrom(request.POST.getlist('advId'))
 		selectedAdvisorNames = request.POST.getlist('advName', '')
-		selectedAdvisorIdSet = getSetFromList(selectedAdvisorIds)
+		selectedAdvisorIdSet = set(selectedAdvisorIds)
 
-		selectedMSSubAdvIds = request.POST.getlist('subId')
+		selectedMSSubAdvIds = intListFrom(request.POST.getlist('subId'))
 		selectedMSSubAdvNames = request.POST.getlist('subName', '')
-		selectedMSSubAdvIdSet = getSetFromList(selectedMSSubAdvIds) #set(list(map(lambda x: int(x), selectedMSSubAdvIds)))
+		selectedMSSubAdvIdSet = set(selectedMSSubAdvIds) #set(list(map(lambda x: int(x), selectedMSSubAdvIds)))
 
-		selectedMSCatIds = request.POST.getlist('catId')
+		selectedMSCatIds = intListFrom(request.POST.getlist('catId'))
 		selectedMSCatNames = request.POST.getlist('catName', '')
-		selectedMSCatIdSet = getSetFromList(selectedMSCatIds) #set(list(map(lambda x: int(x.encode("utf-8")), selectedMSCatIds)))
+		selectedMSCatIdSet = set(selectedMSCatIds) #set(list(map(lambda x: int(x.encode("utf-8")), selectedMSCatIds)))
 
-		selectedMgrIds = request.POST.getlist('mgrId')
+		selectedMgrIds = intListFrom(request.POST.getlist('mgrId'))
 		selectedMgrNames = request.POST.getlist('mgrName', '')
-		selectedMgrIdSet = getSetFromList(selectedMgrIds) #set(list(map(lambda x: int(x.encode("utf-8")), selectedMgrIds)))
+		selectedMgrIdSet = set(selectedMgrIds) #set(list(map(lambda x: int(x.encode("utf-8")), selectedMgrIds)))
+		print(selectedMgrIds)
 
 		start_time = time.time()
 		cmpObjByAll = []
@@ -272,17 +273,18 @@ def advisor_table(request):
 
 	return render(request, 'blog/advisor_table.html', content)
 
-def getSetFromList(aList):
-	rltSet = set()
-	for idStr in aList:
+def intListFrom(aList):
+	rltList = []
+	for string in aList:
 		try:
-			num = int(idStr.encode("utf-8"))
-			rltSet.add(num)
+			num = int(string.encode("utf-8"))
+			rltList.append(num)
 		except ValueError as e:
-			print("-------- [ERROR] type error skipping: [%s --> int failed] " % idStr)
+			print("-------- [ERROR] type error SKIPPING string: [%s --> int failed] " % string)
 			print(e)
 			continue
-	return rltSet
+	return rltList
+
 
 
 def getPerformanceInfo(companyInfos):

@@ -16,6 +16,58 @@
 	{% else %}
 		<title>Genesys Research</title>
 	{% endif %}
+
+	<style type="text/css">
+		.spinner {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          margin-top: 100px;
+          margin-left: -50px;
+          width: 100px;
+          height: 100px;
+          z-index: 99;
+          display: none; /*flex;*/
+          justify-content: center;
+          align-items: center;
+        }
+        .spinner-text {
+          animation: loadingopacity 2s ease-in-out infinite;
+          font-size: 1em;
+          font-weight: bold;
+          background-color: white;
+        }
+        .spinner-sector {
+          border-radius: 50%;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          border: 10px solid transparent;
+          mix-blend-mode: overlay;
+        }
+        .spinner-sector-blue {
+          animation: rotate 2s ease-out infinite;
+          border-top: 10px solid lightgreen;
+        }
+        .spinner-sector-red {
+          animation: rotate 1.5s ease-in infinite;
+          border-top: 10px solid dodgerblue;
+        }
+        .spinner-sector-green {
+          animation: rotate 2.5s ease-in-out infinite;
+          border-top: 10px solid orange;
+        }
+        @keyframes rotate {
+          from { transform: rotate(0); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes loadingopacity {
+          0%, 100% { opacity: 1; }
+          25%, 75% { opacity: .5; }
+          50%      { opacity: .1; }
+        }
+
+	</style>
 </head>
 
 
@@ -54,6 +106,14 @@
 
 	    </div>
 	  </nav>
+	  
+		<div class="spinner" id="spinner">
+		  <div class="spinner-text">Loading...</div>
+		  <div class="spinner-sector spinner-sector-red"></div>
+		  <div class="spinner-sector spinner-sector-blue"></div>
+		  <div class="spinner-sector spinner-sector-green"></div>
+		</div>
+
 	</header>
 
 	{% block base_navbar_content %}
