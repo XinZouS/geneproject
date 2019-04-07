@@ -68,6 +68,15 @@
         }
 
 	</style>
+
+	<script type="text/javascript">
+		function animateActivityIndicator() {
+		    document.getElementById("spinner").style.display = "flex";
+		}
+		function stopActivityIndicator() {
+			document.getElementById("spinner").style.display = "none";
+		}
+	</script>
 </head>
 
 
@@ -106,7 +115,7 @@
 
 	    </div>
 	  </nav>
-	  
+	   
 		<div class="spinner" id="spinner">
 		  <div class="spinner-text">Loading...</div>
 		  <div class="spinner-sector spinner-sector-red"></div>
