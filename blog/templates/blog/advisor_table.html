@@ -14,6 +14,16 @@
 * { box-sizing: border-box; }
 body { font: 16px Arial; }
 
+/* Create two columns/boxes that floats next to each other */
+navleft {
+  float: left;
+  width: 400px;
+  height: 93vh;
+  overflow-y: scroll;
+  background: #ccddee;
+  padding: 0px 30px 30px 30px; /* t, r, b, l */
+}
+
 .tab {
   width: 900px;
   overflow: hidden;
@@ -45,7 +55,7 @@ body { font: 16px Arial; }
   border-top: none;
   overflow-y:auto;
   width:1600px;
-  height:85vh;
+  height:82vh;
   padding-right:10px; 
 }
 
@@ -122,6 +132,27 @@ input[type=submit] {
   height: 100%;
   color: #cc3300;
   display: inline-block;
+}
+
+.clearAllButton:hover {background-color: #ffb3b3;}
+.clearAllButton {
+  color: #cc3300;
+  float: left; 
+  width: 27%;
+  height: 40px;
+  border-radius: 5px; 
+  margin-top: 20px; 
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.submitButton:hover {background-color: deepskyblue;}
+.submitButton {
+  float: right;
+  width: 70%;
+  border-radius: 5px;
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 .showUl {width: 12%;}
@@ -252,6 +283,11 @@ td.red { background-color: #fc887e; }
         <div style="width: 100%;">
             <form method="POST" autocomplete="off" action="advisor-table">
                 {% csrf_token %}
+                <div style="padding-top: -30px;">
+                  <button type="button" class="btn clearAllButton" id="clearAllButton" onclick="clearAllButtonTapped()">Clear All</button>
+                  <input type="submit" class="submitButton" id="submitButton" onclick="submitButtonTapped()">
+                </div>
+
                 <h6 class="searchTitle">Advisors:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name">
@@ -315,8 +351,10 @@ td.red { background-color: #fc887e; }
                     <ul id="selectedMgrUl"></ul>
                 </div>
 
-
-                <input id="submitButton" type="submit" style="float:right; width:100%; border-radius: 5px; margin-top: 20px; margin-bottom: 10px;" onclick="submitButtonTapped()">
+                <div>
+                  <button type="button" class="btn clearAllButton" id="clearAllButton" onclick="clearAllButtonTapped()">Clear All</button>
+                  <input type="submit" class="submitButton" id="submitButton" onclick="submitButtonTapped()">
+                </div>
 
             </form>
         </div>
@@ -842,7 +880,7 @@ function removeLiByName(name, searchTypeEnum) {
             }
             break;
         default:
-            console.log("--- [ERROR] removeLiById unexpected searchType: " + searchTypeEnum)
+            console.log("--- [ERROR] removeLiById unexpected searchType: " + searchTypeEnum);
             return;
     }
     var lis = document.querySelectorAll(lsId);
@@ -896,7 +934,14 @@ function openTab(evt, tabId) {
 
 
 function submitButtonTapped() {
-    animateActivityIndicator()
+    animateActivityIndicator();
+}
+
+function clearAllButtonTapped() {
+    clearSelectedAdvisorList();
+    clearSelectedMSCatList();
+    clearSelectedMSSubAdvList();
+    clearSelectedMgrList();
 }
 
 
