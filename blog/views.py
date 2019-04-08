@@ -101,12 +101,12 @@ def advisor_table(request):
 						containMSSub.append(cmpObj)
 						qualifyId.add(subId)
 				print("-------- 2.0 len(qualifyId) = %s, len(SubIdSet) = %s" % (len(qualifyId), len(selectedMSSubAdvIdSet)))
-				if len(qualifyId) >= len(selectedMSSubAdvIdSet):
-					cmpObjByAll = containMSSub
-				else:
-					print("------- !!! too much MSSubAdv selected, AND result should be nil...")
-					cmpObjByAll = []
-				isResultShouldBeEmpty = len(cmpObjByAll) == 0
+				# if len(qualifyId) >= len(selectedMSSubAdvIdSet):
+				cmpObjByAll = containMSSub
+				# else:
+				# 	print("------- !!! too much MSSubAdv selected, AND result should be nil...")
+				# 	cmpObjByAll = []
+				# isResultShouldBeEmpty = len(cmpObjByAll) == 0
 				print("--- 2.1 query Sub id: %s seconds ---" % (time.time() - start_time))
 				print("--- 2.1 cmpObjByAll.count = %s, isResultShouldBeEmpty = %s" % (len(cmpObjByAll), isResultShouldBeEmpty))
 				start_time = time.time()
@@ -131,12 +131,12 @@ def advisor_table(request):
 						containMSCat.append(cmpObj)
 						qualifyId.add(catId)
 				print("-------- 3.0 len(qualifyId) = %s, len(CatIdSet) = %s" % (len(qualifyId), len(selectedMSCatIdSet)))
-				if len(qualifyId) >= len(selectedMSCatIdSet):
-					cmpObjByAll = containMSCat
-				else:
-					print("------- !!! too much MSSubAdv selected, AND result should be nil...")
-					cmpObjByAll = []
-				isResultShouldBeEmpty = len(cmpObjByAll) == 0
+				# if len(qualifyId) >= len(selectedMSCatIdSet):
+				cmpObjByAll = containMSCat
+				# else:
+				# 	print("------- !!! too much MSSubAdv selected, AND result should be nil...")
+				# 	cmpObjByAll = []
+				# isResultShouldBeEmpty = len(cmpObjByAll) == 0
 				print("--- 3.1 filter Cat id: %s seconds ---" % (time.time() - start_time))
 				print("--- 3.1 cmpObjByAll.count = %s, isResultShouldBeEmpty = %s" % (len(cmpObjByAll), isResultShouldBeEmpty))
 				start_time = time.time()
@@ -161,12 +161,12 @@ def advisor_table(request):
 						containMgr.append(cmpObj)
 						qualifyId.add(mgrId)
 				print("-------- 4.0 len(qualifyId) = %s, len(MgrIdSet) = %s" % (len(qualifyId), len(selectedMgrIdSet)))
-				if len(qualifyId) >= len(selectedMgrIdSet):
-					cmpObjByAll = containMgr
-				else:
-					print("------- !!! too much MgrNames selected, AND result should be nil...")
-					cmpObjByAll = []
-				isResultShouldBeEmpty = len(cmpObjByAll) == 0
+				# if len(qualifyId) >= len(selectedMgrIdSet):
+				cmpObjByAll = containMgr
+				# else:
+				# 	print("------- !!! too much MgrNames selected, AND result should be nil...")
+				# 	cmpObjByAll = []
+				# isResultShouldBeEmpty = len(cmpObjByAll) == 0
 				print("--- 4.1 filter Cat id: %s seconds ---" % (time.time() - start_time))
 				print("--- 4.1 cmpObjByAll.count = %s" % len(cmpObjByAll))
 				start_time = time.time()
@@ -181,13 +181,13 @@ def advisor_table(request):
 				print("--- 4.2 cmpObjByAll.count = %s" % len(cmpObjByAll))
 				start_time = time.time()
 
-		if selectedAdvisorIds and not isResultShouldBeEmpty: # filter out the first selection result;
-			qualifyId = set()
-			for cmpObj in cmpObjByAll:
-				qualifyId.add(cmpObj.AdvisorID_id)
-			if len(qualifyId) < len(selectedAdvisorIdSet):
-				print("------- 4.0 !!! too much AdvisorID_id selected, AND result should be nil...")
-				cmpObjByAll = []
+		# if selectedAdvisorIds and not isResultShouldBeEmpty: # filter out the first selection result;
+		# 	qualifyId = set()
+		# 	for cmpObj in cmpObjByAll:
+		# 		qualifyId.add(cmpObj.AdvisorID_id)
+		# 	if len(qualifyId) < len(selectedAdvisorIdSet):
+		# 		print("------- 4.0 !!! too much AdvisorID_id selected, AND result should be nil...")
+		# 		cmpObjByAll = []
 
 		companyInfo = cmpObjByAll
 
