@@ -29,3 +29,12 @@ class Profile(models.Model):
 			img.save(self.image.path)
 
 
+class UserStrategyGroup(models.Model):
+	user = models.ForeignKey(User, on_delete=models.CASCADE)
+	Name = models.CharField(max_length=60, null=False)
+
+class Strategy(models.Model):
+	GroupId = models.ForeignKey(UserStrategyGroup, on_delete=models.CASCADE)
+	section = models.IntegerField(null=False) # 1:Advisor, 2:MSCat, 3:MSSubAdv, 4:MgrName
+	itemId = models.IntegerField(null=False)  # user selected in the list
+
