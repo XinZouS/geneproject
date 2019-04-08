@@ -141,7 +141,7 @@ input[type=submit] {
   width: 27%;
   height: 40px;
   border-radius: 5px; 
-  margin-top: 20px; 
+  margin-top: 10px; 
   margin-bottom: 10px;
   display: inline-block;
 }
@@ -151,7 +151,7 @@ input[type=submit] {
   float: right;
   width: 70%;
   border-radius: 5px;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 
@@ -290,7 +290,7 @@ td.red { background-color: #fc887e; }
 
                 <h6 class="searchTitle">Advisors:</h6>
                 <div class="autocomplete" style="width:100%;">
-                    <input id="searchAdvisorInput" type="text" name="myAdvisor" placeholder="Advisor Name">
+                    <input type="text" name="myAdvisor" id="searchAdvisorInput" placeholder="Advisor Name">
                     <button type="button" class="btn showUl" id="lstAdvisors" onclick="showFullAdvisorList()">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" class="btn okBtn" id="okAdvisors" onclick="okButtonTapped()">OK</button>
@@ -306,7 +306,7 @@ td.red { background-color: #fc887e; }
 
                 <h6 class="searchTitle">MSCats:</h6>
                 <div class="autocomplete" style="width:100%;">
-                    <input id="searchMSCatInput" type="text" name="myMSCat" placeholder="MSCat Name">
+                    <input type="text" name="myMSCat" id="searchMSCatInput" placeholder="MSCat Name">
                     <button type="button" class="btn showUl" id="lstMSCats" onclick="showFullMSCatList()">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" class="btn okBtn" id="okMSCats" onclick="okButtonTapped()">OK</button>
@@ -322,7 +322,7 @@ td.red { background-color: #fc887e; }
 
                 <h6 class="searchTitle">MSSubAdvs:</h6>
                 <div class="autocomplete" style="width:100%;">
-                    <input id="searchMSSubAdvInput" type="text" name="myMSSubAdv" placeholder="MSSubAdv Name">
+                    <input type="text" name="myMSSubAdv" id="searchMSSubAdvInput" placeholder="MSSubAdv Name">
                     <button type="button" class="btn showUl" id="lstMSSubAdvs" onclick="showFullMSSubAdvList()">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" class="btn okBtn" id="okMSSubAdvs" onclick="okButtonTapped()">OK</button>
@@ -338,7 +338,7 @@ td.red { background-color: #fc887e; }
 
                 <h6 class="searchTitle">MgrNames:</h6>
                 <div class="autocomplete" style="width:100%;">
-                    <input id="searchMgrInput" type="text" name="myMgr" placeholder="Manager Name">
+                    <input type="text" name="myMgr" id="searchMgrInput" placeholder="Manager Name">
                     <button type="button" class="btn showUl" id="lstMgrName" onclick="showFullMgrList()">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" class="btn okBtn" id="okMgrName" onclick="okButtonTapped()">OK</button>
@@ -347,7 +347,7 @@ td.red { background-color: #fc887e; }
                 </div>
                 <div class="blankMarginDiv"></div>
 
-                <div id="selectedMgrNamesDiv" class="selectedNamesDiv">
+                <div id="selectedMgrNamesDiv" class="selectedNamesDiv" style="margin-bottom: 20px;">
                     <ul id="selectedMgrUl"></ul>
                 </div>
 
