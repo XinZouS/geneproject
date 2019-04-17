@@ -456,9 +456,23 @@ class Funds(models.Model):
 	SubDollr	=models.DecimalField(max_digits=36,decimal_places=22, null=True)
 
 
+# List-tables for FitDefault
+class FitCategorys(models.Model):
+	Name = models.CharField(max_length=50,null=False)
+
+class FitAdvisors(models.Model):
+	Name = models.CharField(max_length=200,null=False)
+
+class FitSubAdvisors(models.Model):
+	Name = models.CharField(max_length=200,null=False)
+
+class FitManagerNames(models.Model):
+	Name = models.CharField(max_length=1500,null=False)
+
 class FitDefault(models.Model):
 	Name	= models.CharField(max_length=40)
 	Category	= models.CharField(max_length=50, null=True)# Fund.MSCat
+	# CategoryId	= models.ForeignKey(FitCategorys, on_delete=models.SET_NULL, null=True)
 	MFVA	= models.CharField(max_length=5, null=True)		# Fund.MFVA
 	SubAdvised	= models.CharField(max_length=3, null=True)	# Fund.SubAdvd
 	IndexFund	= models.CharField(max_length=3, null=True)	# Fund.Indexed
@@ -467,7 +481,9 @@ class FitDefault(models.Model):
 	FundOfFunds	= models.CharField(max_length=3, null=True)	# Fund.FoF
 	InceptionDate	=models.DateField(null=True)			# FUnd.InceptDt
 	Advisor	= models.CharField(max_length=200, null=True)	# Fund.Advisor
+	# AdvisorId = models.ForeignKey(FitAdvisors, on_delete=models.SET_NULL, null=True)
 	SubAdvisor	= models.CharField(max_length=200, null=True)	# Fund.SubAdv
+	# SubAdvisorId = models.ForeignKey(FitSubAdvisors, on_delete=models.SET_NULL, null=True)
 	AUM	=models.DecimalField(max_digits=24,decimal_places=16, null=True) # Fund.APAUM
 	NFYTD	=models.DecimalField(max_digits=36,decimal_places=22, null=True) # Fund.NFYTD
 	NF2017	=models.DecimalField(max_digits=36,decimal_places=22, null=True) # Fund.NF2017
@@ -512,6 +528,7 @@ class FitDefault(models.Model):
 	TeamManaged	= models.CharField(max_length=3, null=True)	# Fund.TeamMgd
 	ProspectusNetExpenseRatio=models.DecimalField(max_digits=12,decimal_places=6, null=True) # Share.NExpPrs
 	ManagerName	= models.CharField(max_length=1500, null=True)	# Fund.MgrName
+	# ManagerNameId = models.ForeignKey(FitManagerNames, on_delete=models.SET_NULL, null=True)
 	ManagerTenureLongest =models.DecimalField(max_digits=6,decimal_places=3, null=True)	# Fund.MgrTenL
 	ManagerTenureAverage =models.DecimalField(max_digits=6,decimal_places=3, null=True)	# Fund.MgrTenA
 	Benchmark	= models.CharField(max_length=200, null=True)	# Fund.Bench
