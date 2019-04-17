@@ -276,16 +276,16 @@ class Shares(models.Model):
 class Funds(models.Model):
 	GR_ID	= models.BigIntegerField(null=True)				
 	FundId	= models.CharField(max_length=10, null=True)		
-	SecId	= models.CharField(max_length=10, null=True)		
-	MSCat	= models.CharField(max_length=50, null=True)		
-	ProdType	= models.CharField(max_length=50, null=True)		
-	MFVA	= models.CharField(max_length=5, null=True)		
+	SecId	= models.CharField(max_length=10, null=True)
+	MSCat	= models.CharField(max_length=50, null=True)
+	ProdType	= models.CharField(max_length=50, null=True)
+	MFVA	= models.CharField(max_length=5, null=True)
 	Fund	= models.CharField(max_length=100, null=True)		
 	Advisor	= models.CharField(max_length=200, null=True)		
 	VIT	= models.CharField(max_length=3, null=True)		
-	MultiSub	= models.CharField(max_length=3, null=True)		
-	SubAdv	= models.CharField(max_length=200, null=True)		
-	SubAdvd	= models.CharField(max_length=3, null=True)		
+	MultiSub	= models.CharField(max_length=3, null=True)	
+	SubAdv	= models.CharField(max_length=200, null=True)
+	SubAdvd	= models.CharField(max_length=3, null=True)
 	RealAdv	= models.CharField(max_length=200, null=True)		
 	SubSch	= models.CharField(max_length=200, null=True)		
 	SubStart	= models.CharField(max_length=200, null=True)		
@@ -454,4 +454,65 @@ class Funds(models.Model):
 	SAdvPar	= models.CharField(max_length=500, null=True)
 	MandID	=models.BigIntegerField(null=True)
 	SubDollr	=models.DecimalField(max_digits=36,decimal_places=22, null=True)
+
+
+class FitDefault(models.Model):
+	Name	= models.CharField(max_length=40)
+	Category	= models.CharField(max_length=50, null=True)# Fund.MSCat
+	MFVA	= models.CharField(max_length=5, null=True)		# Fund.MFVA
+	SubAdvised	= models.CharField(max_length=3, null=True)	# Fund.SubAdvd
+	IndexFund	= models.CharField(max_length=3, null=True)	# Fund.Indexed
+	WatchList	= models.CharField(max_length=3, null=True)	# Fund.WatchLst
+	VIT	= models.CharField(max_length=3, null=True)			# Fund.VIT
+	FundOfFunds	= models.CharField(max_length=3, null=True)	# Fund.FoF
+	InceptionDate	=models.DateField(null=True)			# FUnd.InceptDt
+	Advisor	= models.CharField(max_length=200, null=True)	# Fund.Advisor
+	SubAdvisor	= models.CharField(max_length=200, null=True)	# Fund.SubAdv
+	AUM	=models.DecimalField(max_digits=24,decimal_places=16, null=True) # Fund.APAUM
+	NFYTD	=models.DecimalField(max_digits=36,decimal_places=22, null=True) # Fund.NFYTD
+	NF2017	=models.DecimalField(max_digits=36,decimal_places=22, null=True) # Fund.NF2017
+	NF2016	=models.DecimalField(max_digits=36,decimal_places=22, null=True) # Fund.NF2016
+	TR_YTD	=models.DecimalField(max_digits=21,decimal_places=15, null=True) # Share.TR_YTD
+	TR_1Y	=models.DecimalField(max_digits=21,decimal_places=15, null=True) # Share.TR_1Y
+	TR_2Y	=models.DecimalField(max_digits=21,decimal_places=15, null=True) # Share.TR_2Y
+	TR_3Y	=models.DecimalField(max_digits=21,decimal_places=15, null=True) # Share.TR_3Y
+	TR_5Y	=models.DecimalField(max_digits=21,decimal_places=15, null=True) # Share.TR_5Y
+	TR_10Y	=models.DecimalField(max_digits=21,decimal_places=15, null=True) # Share.TR_10Y
+	SubStart	= models.CharField(max_length=200, null=True)		# Fund.SubStart
+	SubSched	= models.CharField(max_length=200, null=True)		# Fund.SubSch
+	SubAdvEffRate=models.DecimalField(max_digits=30,decimal_places=22, null=True) # Fund.SubRateP
+	SubRate	=models.DecimalField(max_digits=21,decimal_places=11, null=True) # Fund.SubRate
+	Alpha	=models.DecimalField(max_digits=21,decimal_places=15, null=True) # Share.Alpha3
+	ExcessRet	=models.DecimalField(max_digits=21,decimal_places=15, null=True) # Share.ExRet3
+	Sharpe	=models.DecimalField(max_digits=21,decimal_places=15, null=True) # Share.Sharpe3
+	InfoRat	=models.DecimalField(max_digits=21,decimal_places=15, null=True) # Share.InfoRat3
+	Beta	=models.DecimalField(max_digits=21,decimal_places=15, null=True) # Share.Beta3
+	Stdev	=models.DecimalField(max_digits=21,decimal_places=15, null=True) # Share.Stdev3
+	R2	=models.DecimalField(max_digits=21,decimal_places=15, null=True)	 # Share.R23
+	UpsideCap	=models.DecimalField(max_digits=21,decimal_places=11, null=True) # Share.UpCap
+	DownsideCap	=models.DecimalField(max_digits=21,decimal_places=11, null=True) # Share.DnCap3
+	TrackingErr	=models.DecimalField(max_digits=21,decimal_places=15, null=True) # Share.TrckErr3
+	QRK_YTD	=models.IntegerField(null=True)		# Fund.QKYTD
+	QRK_1Y	=models.IntegerField(null=True)		# Fund.QK1Y
+	QRK_2Y	=models.IntegerField(null=True)		# Fund.QK2Y
+	QRK_3Y	=models.IntegerField(null=True)		# Fund.QK3Y
+	QRK_5Y	=models.IntegerField(null=True)		# Fund.QK5Y
+	QRK_10Y	=models.IntegerField(null=True)		# Fund.QK10Y
+	QRK_15Y	=models.IntegerField(null=True)		# Fund.QK15Y
+	QRK_Alpha	=models.IntegerField(null=True)		# Fund.QKAlph3
+	QRK_ExcessRet	=models.IntegerField(null=True)	# Fund.QKExRt3
+	QRK_Sharpe	=models.IntegerField(null=True)		# Fund.QKShrp3
+	QRK_InfoRat	=models.IntegerField(null=True)		# Fund.QKInfR3
+	QRK_Beta	=models.IntegerField(null=True)		# Fund.QKBeta3
+	QRK_Stdev	=models.IntegerField(null=True)		# Fund.QKStdv3
+	QRK_R2	=models.IntegerField(null=True)			# Fund.QKRsq3
+	QRK_UpsideCap	=models.IntegerField(null=True)		# Fund.QKUpS3
+	QRK_DownsideCap	=models.IntegerField(null=True)		# Fund.QKDnS3
+	QRK_TrackingErr	=models.IntegerField(null=True)		# Fund.QKTrEr3
+	TeamManaged	= models.CharField(max_length=3, null=True)	# Fund.TeamMgd
+	ProspectusNetExpenseRatio=models.DecimalField(max_digits=12,decimal_places=6, null=True) # Share.NExpPrs
+	ManagerName	= models.CharField(max_length=1500, null=True)	# Fund.MgrName
+	ManagerTenureLongest =models.DecimalField(max_digits=6,decimal_places=3, null=True)	# Fund.MgrTenL
+	ManagerTenureAverage =models.DecimalField(max_digits=6,decimal_places=3, null=True)	# Fund.MgrTenA
+	Benchmark	= models.CharField(max_length=200, null=True)	# Fund.Bench
 
