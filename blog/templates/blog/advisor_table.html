@@ -61,6 +61,7 @@ navleft {
   border: 1px solid #ccc;
   border-top: none;
   display: none;
+  float: left;
   overflow-y:auto;
 }
 
@@ -272,6 +273,10 @@ th div{
 tbody tr td {
   text-align: left;
 }
+
+td.width_s { width: 60px; }
+td.width_m { width: 120px; }
+td.width_l { width: 200px; }
 
 td.green { background-color: #afffbb; }
 td.white { background-color: #fff; }
@@ -977,7 +982,7 @@ function clearAllButtonTapped() {
                 <thead>
                     <tr>
                     {% for col in colnames %}
-                        <th><div>{{ col }}</div></th>
+                        <th><div>{{ col }}</div><div style="color: red;">{{forloop.counter}}</div> </th>
                     {% endfor %}
                     </tr>
                 </thead>
@@ -986,7 +991,13 @@ function clearAllButtonTapped() {
                     <tr>
                         <td style="width:20px; text-align:center; padding-left: 10px;">{{ forloop.counter }}</td>
                         {% for c in row %}
-                          <td style="">{{ c | default_if_none:"n/a" }}</td>
+                          {% if forloop.counter == 1 %}
+                            <td class="width_l">{{ c | default_if_none:"n/a" }}</td>
+                          {% elif forloop.counter == 2 %}
+                            <td class="width_l">{{ c | default_if_none:"n/a" }}</td>
+                          {% else %}
+                            <td style="">{{ c | default_if_none:"n/a" }}</td>
+                          {% endif %}
                         {% endfor %}
                     </tr>
                     {% endfor %}
