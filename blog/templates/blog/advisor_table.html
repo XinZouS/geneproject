@@ -52,7 +52,7 @@ navleft {
 .tablecontainer {
   padding-top: 43px;
   position: relative;
-  background: #eaeaea;
+  background: #e9e9ea;
   float:left;
 }
 .tabcontent {
@@ -269,13 +269,14 @@ th div{
   margin-left: -10px;
   line-height: normal;
   border-left: 1px solid #aabbdd;
+  word-wrap: break-word;
 }
 tbody tr td {
   text-align: left;
 }
 
 td.width_xs { width: 60px; }
-td.width_s { width: 100px; }
+td.width_s { width: 110px; }
 td.width_m { width: 140px; }
 td.width_l { width: 200px; }
 td.width_xl { width: 300px; }
@@ -292,7 +293,7 @@ td.red { background-color: #fc887e; }
 <body>
 
 
-<section class="scrollable" style="width: 6610px;">
+<section class="scrollable" style="width: 9010px;">
 
     <navleft>
         <div style="width: 100%;">
@@ -984,7 +985,7 @@ function clearAllButtonTapped() {
                 <thead>
                     <tr>
                     {% for col in colnames %}
-                        <th><div>{{ col }}</div></th>
+                        <th><div>{{ col }}</div> <div style="color: yellow">{{ forloop.counter }}</div> </th>
                     {% endfor %}
                     </tr>
                 </thead>
@@ -999,9 +1000,15 @@ function clearAllButtonTapped() {
                             <td class="width_xl">{{ c | default_if_none:"n/a" }}</td>
                           {% elif forloop.counter >= 4 and forloop.counter <= 6 %}
                             <td class="width_s">{{ c | default_if_none:"n/a" }}</td>
-                          {% elif forloop.counter == 9 %}
+                          {% elif forloop.counter == 8 or forloop.counter == 9 %}
                             <td class="width_m">{{ c | default_if_none:"n/a" }}</td>
+                          {% elif forloop.counter >= 23 and forloop.counter <= 28 %}
+                            <td class="width_s">{{ c | default_if_none:"n/a" }}</td>
                           {% elif forloop.counter == 33 %}
+                            <td class="width_m">{{ c | default_if_none:"n/a" }}</td>
+                          {% elif forloop.counter == 34 %}
+                            <td class="width_m">{{ c | default_if_none:"n/a" }}</td>
+                          {% elif forloop.counter >= 35 and forloop.counter <= 54 %}
                             <td class="width_m">{{ c | default_if_none:"n/a" }}</td>
                           {% elif forloop.counter == 55 %}
                             <td class="width_xl">{{ c | default_if_none:"n/a" }}</td>
