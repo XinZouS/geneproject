@@ -289,13 +289,12 @@ def fit_default(request):
 		selectedMgrIds = intListFrom(request.POST.getlist('mgrId'))
 		selectedMgrNames = request.POST.getlist('mgrName', '')
 		selectedMgrIdSet = set(selectedMgrIds) #set(list(map(lambda x: int(x.encode("utf-8")), selectedMgrIds)))
-		print(selectedMgrIds)
 
 		start_time = time.time()
 		cmpObjByAll = []
 
 		if selectedAdvisorIds: # len() != 0, in pythonic
-			for advId in selectedAdvisorIds:
+			for advId in selectedAdvisorIds:  # AdvisorId_id is table col name, not model attribute name;
 				obj = FitDefault.objects.filter(AdvisorId_id=advId).order_by("Name")
 				if len(obj) == 1:
 					cmpObjByAll.append(obj[0])
@@ -313,7 +312,7 @@ def fit_default(request):
 				containMSSub = []
 				qualifyId = set()
 				for cmpObj in cmpObjByAll:
-					subId = cmpObj.MSSubAdvId_id
+					subId = cmpObj.SubAdvisorId
 					if subId in selectedMSSubAdvIdSet:
 						containMSSub.append(cmpObj)
 						qualifyId.add(subId)
@@ -343,7 +342,7 @@ def fit_default(request):
 				containMSCat = []
 				qualifyId = set()
 				for cmpObj in cmpObjByAll:
-					catId = cmpObj.MSCatDbId_id
+					catId = cmpObj.CategoryId
 					if catId in selectedMSCatIdSet:
 						containMSCat.append(cmpObj)
 						qualifyId.add(catId)
@@ -373,7 +372,7 @@ def fit_default(request):
 				containMgr = []
 				qualifyId = set()
 				for cmpObj in cmpObjByAll:
-					mgrId = cmpObj.MgrNameId_id
+					mgrId = cmpObj.ManagerNameId
 					if mgrId in selectedMgrIdSet:
 						containMgr.append(cmpObj)
 						qualifyId.add(mgrId)

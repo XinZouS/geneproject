@@ -274,9 +274,11 @@ tbody tr td {
   text-align: left;
 }
 
-td.width_s { width: 60px; }
-td.width_m { width: 120px; }
+td.width_xs { width: 60px; }
+td.width_s { width: 100px; }
+td.width_m { width: 140px; }
 td.width_l { width: 200px; }
+td.width_xl { width: 300px; }
 
 td.green { background-color: #afffbb; }
 td.white { background-color: #fff; }
@@ -290,7 +292,7 @@ td.red { background-color: #fc887e; }
 <body>
 
 
-<section class="scrollable" style="width: 6610px;">
+<section class="scrollable" style="width: 9610px;">
 
     <navleft>
         <div style="width: 100%;">
@@ -992,11 +994,19 @@ function clearAllButtonTapped() {
                         <td style="width:20px; text-align:center; padding-left: 10px;">{{ forloop.counter }}</td>
                         {% for c in row %}
                           {% if forloop.counter == 1 %}
-                            <td class="width_l">{{ c | default_if_none:"n/a" }}</td>
+                            <td class="width_xl">{{ c | default_if_none:"n/a" }}</td>
                           {% elif forloop.counter == 2 %}
-                            <td class="width_l">{{ c | default_if_none:"n/a" }}</td>
+                            <td class="width_xl">{{ c | default_if_none:"n/a" }}</td>
+                          {% elif forloop.counter >= 4 and forloop.counter <= 6 %}
+                            <td class="width_s">{{ c | default_if_none:"n/a" }}</td>
+                          {% elif forloop.counter == 9 %}
+                            <td class="width_m">{{ c | default_if_none:"n/a" }}</td>
+                          {% elif forloop.counter == 33 %}
+                            <td class="width_m">{{ c | default_if_none:"n/a" }}</td>
+                          {% elif forloop.counter == 55 %}
+                            <td class="width_xl">{{ c | default_if_none:"n/a" }}</td>
                           {% else %}
-                            <td style="">{{ c | default_if_none:"n/a" }}</td>
+                            <td class="width">{{ c | default_if_none:"n/a" }}</td>
                           {% endif %}
                         {% endfor %}
                     </tr>
