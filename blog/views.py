@@ -312,7 +312,7 @@ def fit_default(request):
 				containMSSub = []
 				qualifyId = set()
 				for cmpObj in cmpObjByAll:
-					subId = cmpObj.SubAdvisorId
+					subId = cmpObj.SubAdvisorId_id
 					if subId in selectedMSSubAdvIdSet:
 						containMSSub.append(cmpObj)
 						qualifyId.add(subId)
@@ -342,7 +342,7 @@ def fit_default(request):
 				containMSCat = []
 				qualifyId = set()
 				for cmpObj in cmpObjByAll:
-					catId = cmpObj.CategoryId
+					catId = cmpObj.CategoryId_id
 					if catId in selectedMSCatIdSet:
 						containMSCat.append(cmpObj)
 						qualifyId.add(catId)
@@ -372,7 +372,7 @@ def fit_default(request):
 				containMgr = []
 				qualifyId = set()
 				for cmpObj in cmpObjByAll:
-					mgrId = cmpObj.ManagerNameId
+					mgrId = cmpObj.ManagerNameId_id
 					if mgrId in selectedMgrIdSet:
 						containMgr.append(cmpObj)
 						qualifyId.add(mgrId)
