@@ -49,14 +49,19 @@ navleft {
   color: DodgerBlue;
   font-weight: bold;
 }
+.tablecontainer {
+  padding-top: 43px;
+  position: relative;
+  background: #eaeaea;
+  float:left;
+}
 .tabcontent {
-  display: none;
-  border: 1px solid #ccc;
-  border-top: none;
-  overflow-y:auto;
-  width:1600px;
   height:82vh;
   padding-right:10px; 
+  border: 1px solid #ccc;
+  border-top: none;
+  display: none;
+  overflow-y:auto;
 }
 
 .searchTitle {
@@ -264,6 +269,9 @@ th div{
   line-height: normal;
   border-left: 1px solid #aabbdd;
 }
+tbody tr td {
+  text-align: left;
+}
 
 td.green { background-color: #afffbb; }
 td.white { background-color: #fff; }
@@ -277,7 +285,7 @@ td.red { background-color: #fc887e; }
 <body>
 
 
-<section class="scrollable" style="width: 2010px;">
+<section class="scrollable" style="width: 6610px;">
 
     <navleft>
         <div style="width: 100%;">
@@ -288,7 +296,7 @@ td.red { background-color: #fc887e; }
                   <input type="submit" class="submitButton" id="submitButton" onclick="submitButtonTapped()">
                 </div>
 
-                <h6 class="searchTitle">Advisors:</h6>
+                <h6 class="searchTitle">Advisor:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input type="text" name="myAdvisor" id="searchAdvisorInput" placeholder="Advisor Name">
                     <button type="button" class="btn showUl" id="lstAdvisors" onclick="showFullAdvisorList()">
@@ -304,7 +312,7 @@ td.red { background-color: #fc887e; }
                 </div>
 
 
-                <h6 class="searchTitle">MSCats:</h6>
+                <h6 class="searchTitle">Category:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input type="text" name="myMSCat" id="searchMSCatInput" placeholder="MSCat Name">
                     <button type="button" class="btn showUl" id="lstMSCats" onclick="showFullMSCatList()">
@@ -320,7 +328,7 @@ td.red { background-color: #fc887e; }
                 </div>
 
 
-                <h6 class="searchTitle">MSSubAdvs:</h6>
+                <h6 class="searchTitle">SubAdvisors:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input type="text" name="myMSSubAdv" id="searchMSSubAdvInput" placeholder="MSSubAdv Name">
                     <button type="button" class="btn showUl" id="lstMSSubAdvs" onclick="showFullMSSubAdvList()">
@@ -336,7 +344,7 @@ td.red { background-color: #fc887e; }
                 </div>
 
 
-                <h6 class="searchTitle">MgrNames:</h6>
+                <h6 class="searchTitle">Manager Names:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input type="text" name="myMgr" id="searchMgrInput" placeholder="Manager Name">
                     <button type="button" class="btn showUl" id="lstMgrName" onclick="showFullMgrList()">
@@ -962,9 +970,9 @@ function clearAllButtonTapped() {
       document.getElementById("defaultOpenBtn").click();  // default selected tab
     </script>
     
-    <div style="position: relative; width: 1600px; padding-top: 43px; background: #eaeaea; float:left;">
+    <div class="tablecontainer">
 
-        <div id="tabId01" class="tabcontent" style="display: block;">
+        <div id="tabId01" class="tabcontent" style="display:block;">
             <table style="margin:0 auto; float:left;">
                 <thead>
                     <tr>
@@ -973,17 +981,13 @@ function clearAllButtonTapped() {
                     {% endfor %}
                     </tr>
                 </thead>
-                <tbody style="overflow-y:auto; height:90vh;">
-                    {% for item in companys %}
+                <tbody style="height:90vh;">
+                    {% for row in companys %}
                     <tr>
-                        <td style="width:20px; padding-left: 10px;">{{ forloop.counter }}</td>
-                        <td style="text-align:left;">{{ item.Name     }}</td>
-                        <td style="width:100px;">{{ item.CUSIP    }}</td>
-                        <td style="width:120px;">{{ item.SecId    }}</td>
-                        <td style="width:120px;">{{ item.FundId   }}</td>
-                        <td style="text-align:left;">{{ item.Advisor  }}</td>
-                        <td style="text-align:left;">{{ item.MSCat    }}</td>
-                        <td style="text-align:left;">{{ item.MSSubAdv }}</td>
+                        <td style="width:20px; text-align:center; padding-left: 10px;">{{ forloop.counter }}</td>
+                        {% for c in row %}
+                          <td style="">{{ c | default_if_none:"n/a" }}</td>
+                        {% endfor %}
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -999,12 +1003,12 @@ function clearAllButtonTapped() {
                         <th><div>MSSubAdv</div></th>
                     </tr>
                 </thead>
-                <tbody style="overflow-y:auto; height:90vh; width:1900px;">
-                    {% for item in companys %}
+                <tbody style="overflow-y:auto; height:90vh;">
+                    {% for c in companys %}
                     <tr>
                         <td style="width:20px; padding-left: 10px;">{{ forloop.counter }}</td>
-                        <td style="text-align:left;">{{ item.Name     }}</td>
-                        <td style="text-align:left;">{{ item.MSSubAdv }}</td>
+                        <td style="text-align:left;">{{ c.Name     }}</td>
+                        <td style="text-align:left;">{{ c.MSSubAdv }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
