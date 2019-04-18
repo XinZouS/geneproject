@@ -292,7 +292,7 @@ td.red { background-color: #fc887e; }
 <body>
 
 
-<section class="scrollable" style="width: 9610px;">
+<section class="scrollable" style="width: 6610px;">
 
     <navleft>
         <div style="width: 100%;">
@@ -599,7 +599,7 @@ function autocomplete(searchTypeEnum, inp, words) {
                     divB.innerHTML += targetName.substr(startIndex + v + ignoreChars);
                     divB.innerHTML += "<input type='hidden' value='" + targetName + "'>";
 
-                    divB.setAttribute("id", targetName);
+                    divB.setAttribute("id", targetName);  // show item that already selected;
                     if (searchTypeEnum == SearchTypeEnum.Advisor && selectedAdvisorNames.includes(targetName)) {
                         divB.classList.add("autocomplete-active");
                     } else
@@ -984,7 +984,7 @@ function clearAllButtonTapped() {
                 <thead>
                     <tr>
                     {% for col in colnames %}
-                        <th><div>{{ col }}</div><div style="color: red;">{{forloop.counter}}</div> </th>
+                        <th><div>{{ col }}</div></th>
                     {% endfor %}
                     </tr>
                 </thead>
