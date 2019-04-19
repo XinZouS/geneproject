@@ -12,7 +12,7 @@
 
 <style>
 * { box-sizing: border-box; }
-body { font: 16px Arial; }
+body { font: 15px Arial; }
 
 /* Create two columns/boxes that floats next to each other */
 navleft {
@@ -51,7 +51,7 @@ navleft {
 }
 .tablecontainer {
   width: 8600px;
-  padding-top: 60px;
+  padding-top: 40px;
   position: relative;
   background: #e9e9ea;
   float:left;
@@ -244,7 +244,7 @@ ul li {
 }
 
 tr th:first-child div {
-    padding: 23px 0px 0px 20px; /*t,r,b,l*/
+    padding: 14px 0px 0px 20px; /*t,r,b,l*/
     width: 50px;
     border: none;
 }
@@ -264,20 +264,20 @@ th {
   padding: 0px 30px 0px 10px; /*t,r30,b,l30*/
   color: transparent; /*transparent;*/
   border: none;
-  white-space: normal; /*nowarp*/
+  white-space: nowrap; /*nowarp*/
   word-wrap: normal;
 }
 th div{
   position: absolute;
   width: auto;
-  height: 60px;
+  height: 40px;
   color: #101066;
-  padding: 23px 10px; /*t,l*/
+  padding: 14px 10px; /*t,l*/
   top: 0;
   margin-left: -10px;
   line-height: normal;
   border-left: 1px solid #aabbdd;
-  white-space: normal; /*nowarp*/
+  white-space: nowrap; /*nowarp*/
   word-wrap: normal;
 }
 tbody tr td {
@@ -994,7 +994,7 @@ function clearAllButtonTapped() {
                 <thead>
                     <tr>
                     {% for col in colnames %}
-                        <th><div>{{ col }}</div> {{col}} </th>
+                        <th><div>{{ col }} <div style="color: red;">{{forloop.counter}}</div></div> {{col}} </th>
                     {% endfor %}
                     </tr>
                 </thead>
@@ -1010,7 +1010,7 @@ function clearAllButtonTapped() {
                           {% elif forloop.counter == 3 %}
                             <td class="width_xs">{{ c | default_if_none:"n/a" }}</td>
                           {% elif forloop.counter >= 4 and forloop.counter <= 6 %}
-                            <td class="width_s">{{ c | default_if_none:"n/a" }}</td>
+                            <td class="width_xs">{{ c | default_if_none:"n/a" }}</td>
                           {% elif forloop.counter == 8 or forloop.counter == 9 %}
                             <td class="width_m">{{ c | default_if_none:"n/a" }}</td>
                           {% elif forloop.counter == 10 or forloop.counter == 11 %}
