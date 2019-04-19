@@ -252,13 +252,17 @@ td, th {
 .performance-float {
   width: 100px;
 }
+thead tr th:first-child {
+  width: 40px;
+}
 th {
+  width: 100px;
   height: 0;
   line-height: 0;
   padding: 0px 50px 0px 10px;
   color: transparent;
   border: none;
-  white-space: nowrap;
+  white-space: normal; /*nowarp*/
 }
 th div{
   position: absolute;
@@ -277,7 +281,7 @@ tbody tr td {
 
 td.width_xs { width: 60px; }
 td.width_s { width: 110px; }
-td.width_m { width: 140px; }
+td.width_m { width: 150px; }
 td.width_l { width: 200px; }
 td.width_xl { width: 300px; }
 
