@@ -259,7 +259,7 @@ def home(request):
 
 @login_required
 def fit_default(request):
-	cols = ["No.","Name","Category","MF/VA","SubAdvised","Index Fund","Watch_List","VIT","Fund of Funds","Inception Date","Advisor","Subadvisor","AUM","NFYTD","NF2017","NF2016","TR_YTD","TR_1y","TR_2y","TR_3y","TR_5y","TR_10y","SubStart","SubSched","SubAdvEffRate","Sub_Rate($)","Alpha","ExcessRet","Sharpe","InfoRat","Beta","Stdev","R2","UpsideCap","DownsideCap","TrackingErr","QRK_YTD","QRK_1y","QRK_2y","QRK_3y","QRK_5y","QRK_10y","QRK_15y","QRK_Alpha","QRK_ExcessRet","QRK_Sharpe","QRK_InfoRat","QRK_Beta","QRK_Stdev","QRK_R2","QRK_UpsideCap","QRK_DownsideCap","QRK_TrackingErr","Team Managed","Prospectus Net Expense Ratio","Manager Name","Manager Tenure (Longest)","Manager Tenure (Average)","Benchmark"]
+	cols = ["No.","Name","Category","MF/VA","SubAdvised","Index Fund","Watch List","VIT","Fund of Funds","Inception Date","Advisor","Subadvisor","AUM","NFYTD","NF2017","NF2016","SubStart","SubSched","SubAdvEffRate","Sub_Rate($)","TR_YTD","TR_1Y","TR_2Y","TR_3Y","TR_5Y","TR_10Y","Alpha","ExcessRet","Sharpe","InfoRat","Beta","Stdev","R2","UpsideCap","DownsideCap","TrackingErr","QRK_YTD","QRK_1Y","QRK_2Y","QRK_3Y","QRK_5Y","QRK_10Y","QRK_15Y","QRK_Alpha","QRK_ExcessRet","QRK_Sharpe","QRK_InfoRat","QRK_Beta","QRK_Stdev","QRK_R2","QRK_UpsideCap","QRK_DownsideCap","QRK_TrackingErr","Team Managed","Prospectus Net Expense Ratio","Manager Name","Manager Tenure (Longest)","Manager Tenure (Average)","Benchmark"]
 	companyInfo = []
 	sharesAndFundsCols = ["No.", "Advisor", "FundId", "MSCat", "TR_YTD", "TR_1Y", "TR_2Y", "TR_3Y", "TR_4Y", "TR_5Y", "TR_10Y", "TR_15Y", "TR_2017", "TR_2016", "TR_2015", "TR_2014", "TR_2013", "TR_2012", "TR_2011", "TR_2010", "TR_2009", "TR_2008", "Alpha3", "Stdev3", "Beta3", "ExRet3", "Sharpe3", "InfoRat3", "R23", "QKYTD", "QK1Y", "QK2Y", "QK3Y", "QK4Y", "QK5Y", "QK10Y", "QK15Y", "QK2017", "QK2016", "QK2015", "QK2014", "QK2013", "QK2012", "QK2011", "QK2010", "QK2009", "QK2008", "QKAlph3", "QKStdv3", "QKBeta3", "QKExRt3", "QKShrp3", "QKInfR3", "QKRsq3p"]
 	sharesAndFunds = []
@@ -519,30 +519,30 @@ def formatedFitDefaultList(companyInfos):
 		row.append(c.InceptionDate)
 		row.append(c.Advisor)
 		row.append(c.SubAdvisor)
-		row.append(percentage(c.AUM))
-		row.append(percentage(c.NFYTD))
-		row.append(percentage(c.NF2017))
-		row.append(percentage(c.NF2016))
-		row.append(percentage(c.TR_YTD))
-		row.append(percentage(c.TR_1Y))
-		row.append(percentage(c.TR_2Y))
-		row.append(percentage(c.TR_3Y))
-		row.append(percentage(c.TR_5Y))
-		row.append(percentage(c.TR_10Y))
+		row.append(toInt(c.AUM))
+		row.append(toInt(c.NFYTD))
+		row.append(toInt(c.NF2017))
+		row.append(toInt(c.NF2016))
 		row.append(c.SubStart)
 		row.append(c.SubSched)
 		row.append(percentage(c.SubAdvEffRate))
 		row.append(percentage(c.SubRate))
-		row.append(percentage(c.Alpha))
-		row.append(percentage(c.ExcessRet))
-		row.append(percentage(c.Sharpe))
-		row.append(percentage(c.InfoRat))
-		row.append(percentage(c.Beta))
-		row.append(percentage(c.Stdev))
-		row.append(percentage(c.R2))
-		row.append(percentage(c.UpsideCap))
-		row.append(percentage(c.DownsideCap))
-		row.append(percentage(c.TrackingErr))
+		row.append([percentage(c.TR_YTD), c.QRK_YTD]) # counter = 20
+		row.append([percentage(c.TR_1Y), c.QRK_1Y])
+		row.append([percentage(c.TR_2Y), c.QRK_2Y])
+		row.append([percentage(c.TR_3Y), c.QRK_3Y])
+		row.append([percentage(c.TR_5Y), c.QRK_5Y])
+		row.append([percentage(c.TR_10Y), c.QRK_10Y])
+		row.append([percentage(c.Alpha), c.QRK_Alpha])
+		row.append([percentage(c.ExcessRet), c.QRK_ExcessRet])
+		row.append([percentage(c.Sharpe), c.QRK_Sharpe])
+		row.append([percentage(c.InfoRat), c.QRK_InfoRat])
+		row.append([percentage(c.Beta), c.QRK_Beta]) # cnt = 30
+		row.append([percentage(c.Stdev), c.QRK_Stdev])
+		row.append([percentage(c.R2), c.QRK_R2])
+		row.append([toInt(c.UpsideCap), c.QRK_UpsideCap])
+		row.append([toInt(c.DownsideCap), c.QRK_DownsideCap])
+		row.append([percentage(c.TrackingErr), c.QRK_TrackingErr]) # counter = 35
 		row.append(c.QRK_YTD)
 		row.append(c.QRK_1Y)
 		row.append(c.QRK_2Y)
@@ -561,10 +561,10 @@ def formatedFitDefaultList(companyInfos):
 		row.append(c.QRK_DownsideCap)
 		row.append(c.QRK_TrackingErr)
 		row.append(c.TeamManaged)
-		row.append(percentage(c.ProspectusNetExpenseRatio))
+		row.append(toFloat_2(c.ProspectusNetExpenseRatio))
 		row.append(c.ManagerName)
-		row.append(c.ManagerTenureLongest)
-		row.append(c.ManagerTenureAverage)
+		row.append(toFloat_2(c.ManagerTenureLongest))
+		row.append(toFloat_2(c.ManagerTenureAverage))
 		row.append(c.Benchmark)
 
 		fitList.append(row)
@@ -655,11 +655,18 @@ def getPerformanceInfo(companyInfos):
 
 
 def percentage(val):
-	rlt = "n/a"
 	if val is not None:
 		return "%s %%" % ('%.2f'%(val * 100))
-	return rlt
+	return "n/a"
 
+def toFloat_2(val):
+	if val is not None:
+		return '%.2f' % val
+
+def toInt(val):
+	if val is not None:
+		return int(val)
+	return "n/a"
 
 
 def about(request):
