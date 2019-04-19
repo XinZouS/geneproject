@@ -7,7 +7,7 @@ urlpatterns = [
 	url(r'^$', views.home, name='blog-home'),
 	# url(r'^advisor/(?P<advisorid>\d+)$', views.advisor_table, name='advisor-table'),
 	# url(r'^advisor/', views.advisor_table, name='advisor-table'),
-	url(r'^fitdefault/', views.fit_default, name='fit-default'),
+	url(r'^fitdefault/', views.fit_default, name='fitdefault'),
 	url(r'^about/$', views.about, name='blog-about'),
 
 
