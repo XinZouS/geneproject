@@ -994,7 +994,9 @@ function clearAllButtonTapped() {
                 <thead>
                     <tr>
                     {% for col in colnames %}
-                        <th><div>{{ col }} <div style="color: red;">{{forloop.counter}}</div></div> {{col}} </th>
+                        <th><div>
+                          {{ col }} <div style="color: red;">{{forloop.counter}}</div></div> {{col}}
+                        </th>
                     {% endfor %}
                     </tr>
                 </thead>
