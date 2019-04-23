@@ -10,6 +10,10 @@
     ref: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_icon_buttons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+<!-- js for sorting table
+    ref: https://www.kryogenix.org/code/browser/sorttable/ -->
+<!-- <script type="text/javascript" src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+ -->
 <style>
 * { box-sizing: border-box; }
 body { font: 15px Arial; }
@@ -267,7 +271,12 @@ th {
   white-space: nowrap; /*nowarp*/
   word-wrap: normal;
 }
-th div{
+/* Sortable tables */
+div.sorted {
+    background-color: deepskyblue;
+    color: #fff;
+}
+th div.thdiv {
   position: absolute;
   width: auto;
   height: 40px;
@@ -970,6 +979,60 @@ function clearAllButtonTapped() {
 }
 
 
+function sortTable(evt, n) {
+  n -= 1;
+  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+  var headerDivs = document.getElementsByClassName("sorted");
+  for (i = 0; i < headerDivs.length; i++) {
+    headerDivs[i].className = headerDivs[i].className.replace(" sorted", "");
+  }
+  evt.currentTarget.className += " sorted";
+
+  var getTables = document.getElementsByClassName('sortable');
+  if (getTables.length > 0) {
+      table = getTables[0];
+  } else {
+      return;
+  }
+  switching = true;
+  dir = "asc"; 
+
+  while (switching) {
+      switching = false;
+      rows = table.rows;
+      for (i = 1; i < (rows.length - 1); i++) {
+        shouldSwitch = false;
+        x = rows[i].getElementsByTagName("td")[n];
+        y = rows[i + 1].getElementsByTagName("td")[n];
+        if (x == null || y == null) {
+          break;
+        }
+        if (dir == "asc") {
+          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+            shouldSwitch= true;
+            break;
+          }
+        } else if (dir == "desc") {
+          if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+      }
+      if (shouldSwitch) {
+        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+        switching = true;
+        switchcount ++;      
+      } else {
+        if (switchcount == 0 && dir == "asc") {
+          dir = "desc";
+          switching = true;
+        }
+      }
+  }
+}
+
+
 </script>
 
     </navleft>
@@ -990,12 +1053,14 @@ function clearAllButtonTapped() {
     <div class="tablecontainer">
 
         <div id="tabId01" class="tabcontent" style="display:block;">
-            <table style="margin:0 auto; float:left;">
+            <table class="sortable" style="margin:0 auto; float:left;">
                 <thead>
                     <tr>
                     {% for col in colnames %}
-                        <th><div>
-                          {{ col }} <div style="color: red;">{{forloop.counter}}</div></div> {{col}}
+                        <th><div class="thdiv" onclick="sortTable(event,{{forloop.counter}})">
+                          {{ col }} 
+                          <div style="color: red;">{{forloop.counter}}</div>
+                          </div> {{col}}
                         </th>
                     {% endfor %}
                     </tr>
