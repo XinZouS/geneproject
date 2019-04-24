@@ -1,0 +1,308 @@
+* { box-sizing: border-box; }
+body { font: 15px Arial; }
+
+/* Create two columns/boxes that floats next to each other */
+navleft {
+  float: left;
+  width: 400px;
+  height: 906px;
+  overflow-y: scroll;
+  background: #ccddee;
+  padding: 0px 30px 30px 30px; /* t, r, b, l */
+}
+
+.tab {
+  width: 900px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+  padding-left: 20px;
+}
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-weight: bold;
+  font-size: 17px;
+}
+.tab button:hover {
+  background-color: #eee;
+}
+.tab button.active {
+  background-color: #ddd;
+  color: DodgerBlue;
+  font-weight: bold;
+}
+.tablecontainer {
+  width: 8600px;
+  padding-top: 40px;
+  position: relative;
+  background: #e9e9ea;
+  float:left;
+  overflow-y: auto;
+}
+.tabcontent {
+  height: 810px; /*82vh;*/
+  padding-right:10px; 
+  border: 1px solid #ccc;
+  border-top: none;
+  display: none;
+  float: left;
+  overflow-y:auto;
+}
+
+.searchTitle {
+    margin-top: 10px;
+    font-weight: bold;
+}
+/*the container must be positioned relative:*/
+.autocomplete {
+    position: relative;
+    display: inline-block;
+}
+input {
+  border: 1px solid transparent;
+  background-color: #f1f1f1;
+  padding: 10px;
+  font-size: 16px;
+}
+input[type=text] {
+  background-color: #f1f1f1;
+  width: 67%;
+  height: 36px;
+}
+input[type=text].active {
+  background-color: #fff;
+  width: 38%;
+  height: 36px;
+}
+input[type=submit] {
+  background-color: DodgerBlue;
+  color: #fff;
+  cursor: pointer;
+}
+
+.selectedNamesDiv {
+    height:100px;
+    background-color:#fff;
+    overflow:auto;
+}
+.blankMarginDiv { height: 5px; }
+.btn {
+  border: none;
+  color: dodgerblue;
+  background-color: #eee;
+  height: 36px;
+  padding: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.searchTitle {
+  top: 0px;
+  padding: 6px 0px 0px 0px; /* t, r, b, l */
+}
+
+.okBtn:hover  { background: #fff; }
+.okBtn {
+  width: 20%;
+  margin-left: 3px;
+  font-weight: bold;
+  display: none;
+}
+.allBtn:hover  { background: #fff; }
+.allBtn {
+  width: 26%;
+  margin-left: 3px;
+  display: none;
+}
+
+.clearUlButton:hover {background-color: #ffb3b3;}
+.clearUlButton {
+  width: 18%;
+  height: 100%;
+  color: #cc3300;
+  display: inline-block;
+}
+
+.clearAllButton:hover {background-color: #ffb3b3;}
+.clearAllButton {
+  color: #cc3300;
+  float: left; 
+  width: 27%;
+  height: 40px;
+  border-radius: 5px; 
+  margin-top: 10px; 
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.submitButton:hover {background-color: deepskyblue;}
+.submitButton {
+  float: right;
+  width: 70%;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.showUl {width: 12%;}
+.showUl:hover {
+    background: #fff;
+    font-weight: bold;
+}
+ul {
+  padding: 0;
+  overflow-y: scroll;
+}
+ul li:nth-child(odd)  { background: #efefef; }
+ul li:hover           { background: #ddf; }
+ul li {
+  position: relative;
+  padding: 6px 20px 6px 10px; /* t, r, b, l */
+  list-style-type: circle;
+  font-size: 16px;
+  transition: 0.2s;
+}
+
+.liBtn:hover { background-color: Red; }
+.liBtn {
+  height: 23px;
+  width: 23px;
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  border-radius: 50%;
+  background-color: DodgerBlue;
+  border: none;
+  color: white;
+  margin-left: 6px;
+  padding: 0px 3px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.autocomplete-items {
+  position: absolute;
+  border: 1px solid #d4d4d4;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+.autocomplete-items div {
+  padding: 10px;
+  cursor: pointer;
+  background-color: #fff; 
+  border-bottom: 1px solid #d4d4d4; 
+}
+/*when hovering an item:*/
+.autocomplete-items div:hover { background-color: #e9e9e9; }
+.autocomplete-items div:click { background-color: #22ff33; }
+/*when navigating through the items using the arrow keys:*/
+.autocomplete-active {
+  background-color: DodgerBlue !important; 
+  color: #fff; 
+}
+
+.vertical-menu {
+    height: 500px;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    white-space: nowrap;
+}
+.vertical-menu a {
+  color: black;
+  display: block;
+  padding: 12px;
+  text-decoration: none;
+}
+.vertical-menu a:hover { background-color: #cceeee; }
+.vertical-menu a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+tr th:first-child div {
+    padding: 14px 0px 0px 20px; /*t,r,b,l*/
+    width: 50px;
+    border: none;
+}
+td, th {
+  padding: 10px 10px;
+}
+.performance-float {
+  width: 100px;
+}
+thead tr th:first-child {
+  width: 40px;
+}
+th {
+  height: 1px;
+  width: 80px;
+  line-height: 0;
+  padding: 0px 30px 0px 10px; /*t,r30,b,l30*/
+  color: transparent; /*transparent;*/
+  border: none;
+  white-space: nowrap; /*nowarp*/
+  word-wrap: normal;
+}
+/* Sortable tables */
+div.sorted {
+    background-color: lightgray;
+    color: #fff;
+}
+.ascending, .descending {}
+
+th div.thdiv {
+  position: absolute;
+  width: auto;
+  height: 40px;
+  color: #101066;
+  padding: 14px 10px; /*t,l*/
+  top: 0;
+  margin-left: -10px;
+  line-height: normal;
+  border-left: 1px solid #aabbdd;
+  white-space: nowrap; /*nowarp*/
+  word-wrap: normal;
+}
+arrow {
+  display: none; /*inline-block;*/
+  width: 0;
+  height: 0; 
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid Dodgerblue;
+}
+.up {
+  transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
+}
+.down {
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+}
+
+tbody tr td {
+  text-align: left;
+}
+
+td.width_xs { width: 60px; }
+td.width_s { width: 110px; }
+td.width_m { width: 150px; }
+td.width_l { width: 200px; }
+td.width_xl { width: 300px; }
+
+td.green  { background-color: #afffbb; }
+td.white  { background-color: #fff; }
+td.yellow { background-color: #fff78e; }
+td.red    { background-color: #fc887e; }
+
