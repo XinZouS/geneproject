@@ -1043,6 +1043,8 @@ function sortTable(evt, n) {
         return;
     }
 
+    rows = table.rows;
+console.log(arrowClass);
     if (arrowClass == "up") { // ascending
         quickSort(rows, 1, rows.length - 1, n, isGreaterThan);
     } else {
@@ -1060,7 +1062,7 @@ function quickSort(rows, left, right, colNum, compare) {
 
     while (l <= r) {
       while (l < sz && compare(rows[l].getElementsByTagName("td")[n].innerHTML.toLowerCase(), pivot)) { l++; }
-      while (r > 0  && compare(rows[r].getElementsByTagName("td")[n].innerHTML.toLowerCase(), pivot)) { r--; }
+      while (r > 0  && compare(pivot, rows[r].getElementsByTagName("td")[n].innerHTML.toLowerCase())) { r--; }
       if (l <= r) { // swap 2 rows
         let curLeft = rows[l];
         let curRight = rows[r];
@@ -1075,18 +1077,25 @@ function quickSort(rows, left, right, colNum, compare) {
         r--;
       }
     }
-    quickSort(rows, left, l - 1, colNum);
-    quickSort(rows, l, right, colNum);
+    quickSort(rows, left, l - 1, colNum, compare);
+    quickSort(rows, l, right, colNum, compare);
 }
 
 function isGreaterThan(a, b) {
-
-  return true;
+  a = tryToConvertToNum(a);
+  b = tryToConvertToNum(b);
+  return a > b;
 }
 
 function isLessThan(a, b) {
+  a = tryToConvertToNum(a);
+  b = tryToConvertToNum(b);
+  return a < b;
+}
 
-  return true;
+function tryToConvertToNum(s) {
+  if (!isNaN(s)) { return Number(s); }
+  return s;
 }
 
 </script>
