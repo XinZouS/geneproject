@@ -273,7 +273,7 @@ th {
 }
 /* Sortable tables */
 div.sorted {
-    background-color: deepskyblue;
+    background-color: lightgray;
     color: #fff;
 }
 th div.thdiv {
@@ -289,6 +289,23 @@ th div.thdiv {
   white-space: nowrap; /*nowarp*/
   word-wrap: normal;
 }
+arrow {
+  display: none; /*inline-block;*/
+  width: 0;
+  height: 0; 
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 8px solid Dodgerblue;
+}
+.up {
+  transform: rotate(0deg);
+  -webkit-transform: rotate(0deg);
+}
+.down {
+  transform: rotate(180deg);
+  -webkit-transform: rotate(180deg);
+}
+
 tbody tr td {
   text-align: left;
 }
@@ -981,12 +998,19 @@ function clearAllButtonTapped() {
 
 function sortTable(evt, n) {
   n -= 1;
-  var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-  var headerDivs = document.getElementsByClassName("sorted");
-  for (i = 0; i < headerDivs.length; i++) {
-    headerDivs[i].className = headerDivs[i].className.replace(" sorted", "");
+  var table, rows, switching, i, curr, next, shouldSwitch, dir, switchcount = 0;
+  /* remove the sorted marker first */
+  var sortedHeaders = document.getElementsByClassName("sorted");
+  for (i = 0; i < sortedHeaders.length; i++) {
+    var hdDiv = sortedHeaders[i];
+    hdDiv.className = hdDiv.className.replace(" sorted", "");
+    var arrows = hdDiv.getElementsByTagName("arrow");
+    if (arrows != null && arrows.length < 0) {
+        arrow.style.display = "none";
+    }
   }
-  evt.currentTarget.className += " sorted";
+  var currHeadDiv = evt.currentTarget;
+  currHeadDiv.className += " sorted";
 
   var getTables = document.getElementsByClassName('sortable');
   if (getTables.length > 0) {
@@ -1000,38 +1024,58 @@ function sortTable(evt, n) {
   while (switching) {
       switching = false;
       rows = table.rows;
+
       for (i = 1; i < (rows.length - 1); i++) {
         shouldSwitch = false;
-        x = rows[i].getElementsByTagName("td")[n];
-        y = rows[i + 1].getElementsByTagName("td")[n];
-        if (x == null || y == null) {
+        curr = rows[i].getElementsByTagName("td")[n];
+        next = rows[i + 1].getElementsByTagName("td")[n];
+        if (curr == null || next == null) {
           break;
         }
         if (dir == "asc") {
-          if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+          if (curr.innerHTML.toLowerCase() > next.innerHTML.toLowerCase()) {
             shouldSwitch= true;
             break;
           }
         } else if (dir == "desc") {
-          if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+          if (curr.innerHTML.toLowerCase() < next.innerHTML.toLowerCase()) {
             shouldSwitch = true;
             break;
           }
         }
       }
-      if (shouldSwitch) {
-        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-        switching = true;
-        switchcount ++;      
-      } else {
-        if (switchcount == 0 && dir == "asc") {
-          dir = "desc";
-          switching = true;
-        }
-      }
   }
+  quickSort(rows, 1, rows.length - 1, n);
 }
 
+function quickSort(rows, left, right, colNum) {
+    if (left >= right) {
+      return;
+    }
+    let n = colNum, l = left, r = right, sz = rows.length;
+    let mid = Math.floor(l + (r - l) / 2);
+    let pivot = rows[mid].getElementsByTagName("td")[n].innerHTML.toLowerCase();
+
+    while (l <= r) {
+      while (l < sz && rows[l].getElementsByTagName("td")[n].innerHTML.toLowerCase() < pivot) { l++; }
+      while (r > 0  && rows[r].getElementsByTagName("td")[n].innerHTML.toLowerCase() > pivot) { r--; }
+      if (l <= r) { // swap 2 rows
+        let curLeft = rows[l];
+        let curRight = rows[r];
+        let postLeft = rows[l + 1];
+        if (curRight == postLeft) { // in case [curL, (curR,postL)];
+            curLeft.parentNode.insertBefore(curRight, curLeft);
+        } else {
+            curLeft.parentNode.insertBefore(curLeft, curRight);
+            curLeft.parentNode.insertBefore(curRight, postLeft);
+        }
+        l++;
+        r--;
+      }
+    }
+    quickSort(rows, left, l - 1, colNum);
+    quickSort(rows, l, right, colNum);
+}
 
 </script>
 
@@ -1058,7 +1102,7 @@ function sortTable(evt, n) {
                     <tr>
                     {% for col in colnames %}
                         <th><div class="thdiv" onclick="sortTable(event,{{forloop.counter}})">
-                          {{ col }} 
+                          {{ col }} <arrow class="up"></arrow>
                           <div style="color: red;">{{forloop.counter}}</div>
                           </div> {{col}}
                         </th>
