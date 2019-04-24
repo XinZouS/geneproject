@@ -276,6 +276,8 @@ div.sorted {
     background-color: lightgray;
     color: #fff;
 }
+.ascending, .descending {}
+
 th div.thdiv {
   position: absolute;
   width: auto;
@@ -997,58 +999,58 @@ function clearAllButtonTapped() {
 
 
 function sortTable(evt, n) {
-  n -= 1;
-  var table, rows, switching, i, curr, next, shouldSwitch, dir, switchcount = 0;
-  /* remove the sorted marker first */
-  var sortedHeaders = document.getElementsByClassName("sorted");
-  for (i = 0; i < sortedHeaders.length; i++) {
-    var hdDiv = sortedHeaders[i];
-    hdDiv.className = hdDiv.className.replace(" sorted", "");
-    var arrows = hdDiv.getElementsByTagName("arrow");
-    if (arrows != null && arrows.length < 0) {
-        arrow.style.display = "none";
+    n -= 1; // the tr starts from 1, yet array need to start from 0, so n--;
+    let table, rows, sortDir, arrowClass, switching, i, curr, next, shouldSwitch, dir, switchcount = 0;
+
+    // check if curr header is a sorted col
+    let currHeadDiv = evt.currentTarget;
+    if (currHeadDiv.classList.contains("ascending")) { // last time is Asc, then make curr Desc
+        sortDir = " sorted descending";
+        arrowClass = "down";
+    } else { // default use ascending
+        sortDir = " sorted ascending";
+        arrowClass = "up";
     }
-  }
-  var currHeadDiv = evt.currentTarget;
-  currHeadDiv.className += " sorted";
 
-  var getTables = document.getElementsByClassName('sortable');
-  if (getTables.length > 0) {
-      table = getTables[0];
-  } else {
-      return;
-  }
-  switching = true;
-  dir = "asc"; 
-
-  while (switching) {
-      switching = false;
-      rows = table.rows;
-
-      for (i = 1; i < (rows.length - 1); i++) {
-        shouldSwitch = false;
-        curr = rows[i].getElementsByTagName("td")[n];
-        next = rows[i + 1].getElementsByTagName("td")[n];
-        if (curr == null || next == null) {
-          break;
-        }
-        if (dir == "asc") {
-          if (curr.innerHTML.toLowerCase() > next.innerHTML.toLowerCase()) {
-            shouldSwitch= true;
-            break;
-          }
-        } else if (dir == "desc") {
-          if (curr.innerHTML.toLowerCase() < next.innerHTML.toLowerCase()) {
-            shouldSwitch = true;
-            break;
-          }
-        }
+    // remove the sorted marker first
+    let sortedHeaders = document.getElementsByClassName("sorted");
+    for (i = 0; i < sortedHeaders.length; i++) {
+      let hdDiv = sortedHeaders[i];
+      hdDiv.className = hdDiv.className.replace(" sorted", "");
+      hdDiv.className = hdDiv.className.replace(" ascending", "");
+      hdDiv.className = hdDiv.className.replace(" descending", "");
+      let arrows = hdDiv.getElementsByTagName("arrow");
+      if (arrows != null && arrows.length > 0) {
+          let currArrow = arrows[0];
+          currArrow.style.display = "none";
+          currArrow.className = "";
       }
-  }
-  quickSort(rows, 1, rows.length - 1, n);
+    }
+    // then display selected col header and arrow
+    currHeadDiv.className += sortDir;
+    let currArrows = currHeadDiv.getElementsByTagName("arrow");
+    if (currArrows != null && currArrows.length > 0) {
+        let currArrow = currArrows[0];
+        currArrow.style.display = "inline-block";
+        currArrow.className += arrowClass;
+    }
+
+    // then grab the table to do sorting
+    var getTables = document.getElementsByClassName('sortable');
+    if (getTables.length > 0) {
+        table = getTables[0];
+    } else {
+        return;
+    }
+
+    if (arrowClass == "up") { // ascending
+        quickSort(rows, 1, rows.length - 1, n, isGreaterThan);
+    } else {
+        quickSort(rows, 1, rows.length - 1, n, isLessThan);
+    }
 }
 
-function quickSort(rows, left, right, colNum) {
+function quickSort(rows, left, right, colNum, compare) {
     if (left >= right) {
       return;
     }
@@ -1057,8 +1059,8 @@ function quickSort(rows, left, right, colNum) {
     let pivot = rows[mid].getElementsByTagName("td")[n].innerHTML.toLowerCase();
 
     while (l <= r) {
-      while (l < sz && rows[l].getElementsByTagName("td")[n].innerHTML.toLowerCase() < pivot) { l++; }
-      while (r > 0  && rows[r].getElementsByTagName("td")[n].innerHTML.toLowerCase() > pivot) { r--; }
+      while (l < sz && compare(rows[l].getElementsByTagName("td")[n].innerHTML.toLowerCase(), pivot)) { l++; }
+      while (r > 0  && compare(rows[r].getElementsByTagName("td")[n].innerHTML.toLowerCase(), pivot)) { r--; }
       if (l <= r) { // swap 2 rows
         let curLeft = rows[l];
         let curRight = rows[r];
@@ -1075,6 +1077,16 @@ function quickSort(rows, left, right, colNum) {
     }
     quickSort(rows, left, l - 1, colNum);
     quickSort(rows, l, right, colNum);
+}
+
+function isGreaterThan(a, b) {
+
+  return true;
+}
+
+function isLessThan(a, b) {
+
+  return true;
 }
 
 </script>
@@ -1101,10 +1113,10 @@ function quickSort(rows, left, right, colNum) {
                 <thead>
                     <tr>
                     {% for col in colnames %}
-                        <th><div class="thdiv" onclick="sortTable(event,{{forloop.counter}})">
-                          {{ col }} <arrow class="up"></arrow>
-                          <div style="color: red;">{{forloop.counter}}</div>
-                          </div> {{col}}
+                        <th>{{ col }}
+                          <div class="thdiv" onclick="sortTable(event,{{forloop.counter}})">
+                          {{ col }} <arrow class=""></arrow>
+                          </div>
                         </th>
                     {% endfor %}
                     </tr>
