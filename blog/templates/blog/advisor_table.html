@@ -297,9 +297,9 @@ function autocomplete(searchTypeEnum, inp, words) {
             /* matching ALL substrings from the list, not just the begining */
             var w = 0, v = 0, startIndex = 0, ignoreChars = 0;
             var space = ' ', dot = '.';
-            var inpt = val.toLowerCase()
+            var inpt = val.toLowerCase();
             var word = words[i].toLowerCase();
-            var isInputMiddleName = inpt.includes(dot)
+            var isInputMiddleName = inpt.includes(dot);
             while (w < word.length && v < inpt.length) {
                 if (word[w] == inpt[v]) {
                     if (v == 0) { startIndex = w; }
@@ -407,7 +407,7 @@ document.addEventListener("click", function (e) {
 });
 
 function didSelectSearchListItem(searchTypeEnum, targetDiv) {
-    var targetLi = targetDiv.getElementsByTagName("input")[0]
+    var targetLi = targetDiv.getElementsByTagName("input")[0];
     var selectName = targetLi.value;
     var selectDiv = document.getElementById(selectName);
     switch (searchTypeEnum) {
