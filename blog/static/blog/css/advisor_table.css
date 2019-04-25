@@ -236,7 +236,7 @@ tr th:first-child div {
     border: none;
 }
 td, th {
-  padding: 10px 10px;
+  padding: 6px 10px; /*tb,rl*/
 }
 .performance-float {
   width: 100px;
@@ -255,11 +255,11 @@ th {
   word-wrap: normal;
 }
 /* Sortable tables */
-div.sorted {
-    background-color: lightgray;
-}
+div.sorted { background-color: lightgray; }
+
 .ascending, .descending {}
 
+th div.thdiv:hover { background-color: #ddf; }
 th div.thdiv {
   position: absolute;
   width: auto;
@@ -272,6 +272,7 @@ th div.thdiv {
   border-left: 1px solid #aabbdd;
   white-space: nowrap; /*nowarp*/
   word-wrap: normal;
+  cursor: pointer;
 }
 arrow {
   display: none; /*inline-block;*/
