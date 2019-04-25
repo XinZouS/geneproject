@@ -781,9 +781,9 @@ function isLessThan(a, b) {
 }
 
 function tryToConvertToNum(s) {
+  if (s === "n/a") { return Number.MAX_VALUE; }
   let rlt = Number(s.replace(" %", ""));
   if (!isNaN(rlt)) { return rlt; }
-  if (s === "n/a") { return Number.MAX_VALUE; }
   return s;
 }
 
@@ -814,6 +814,7 @@ function tryToConvertToNum(s) {
                         <th>{{ col }}
                           <div class="thdiv" onclick="sortTable(event,{{forloop.counter}})">
                           {{ col }} <arrow class=""></arrow>
+                          <div style="color: red;">{{forloop.counter}}</div>
                           </div>
                         </th>
                     {% endfor %}
@@ -822,7 +823,7 @@ function tryToConvertToNum(s) {
                 <tbody style="height:90vh;">
                     {% for row in companys %}
                     <tr>
-                        <td style="width:20px; text-align:center; padding-left: 10px;">{{ forloop.counter }}</td>
+                        <td style="width:20px; text-align:center;">{{ forloop.counter }}</td>
                         {% for c in row %}
                           {% if forloop.counter == 1 %}
                             <td class="width_xl">{{ c | default_if_none:"n/a" }}</td>
@@ -836,8 +837,14 @@ function tryToConvertToNum(s) {
                             <td class="width_m">{{ c | default_if_none:"n/a" }}</td>
                           {% elif forloop.counter == 10 or forloop.counter == 11 %}
                             <td class="width_xl">{{ c | default_if_none:"n/a" }}</td>
+                          {% elif forloop.counter >= 12 and forloop.counter <= 15 %}
+                            <td class="numerical">{{ c | default_if_none:"n/a" }}</td>
+                          {% elif forloop.counter >= 16 and forloop.counter <= 17 %}
+                            <td class="width_xl strings">{{ c | default_if_none:"n/a" }}</td>
+                          {% elif forloop.counter >= 18 and forloop.counter <= 19 %}
+                            <td class="numerical">{{ c | default_if_none:"n/a" }}</td>
                           {% elif forloop.counter >= 20 and forloop.counter <= 35 %}
-                            <td class="performance-float 
+                            <td class="performance-float numerical
                                 {% if c.1 == 1 %} green
                                 {% elif c.1 == 2 %} white
                                 {% elif c.1 == 3 %} yellow
@@ -845,7 +852,7 @@ function tryToConvertToNum(s) {
                                 {% endif %}
                                 ">{{ c.0 | default_if_none:"n/a" }}</td>
                           {% elif forloop.counter >= 36 and forloop.counter <= 54 %}
-                            <td class="width_m">{{ c | default_if_none:"n/a" }}</td>
+                            <td class="width_m numerical">{{ c | default_if_none:"n/a" }}</td>
                           {% elif forloop.counter == 55 %}
                             <td class="width_xl">{{ c | default_if_none:"n/a" }}</td>
                           {% else %}

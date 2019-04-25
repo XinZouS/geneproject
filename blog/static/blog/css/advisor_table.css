@@ -1,5 +1,5 @@
 * { box-sizing: border-box; }
-body { font: 15px Arial; }
+body { font: 14px Arial; }
 
 /* Create two columns/boxes that floats next to each other */
 navleft {
@@ -38,7 +38,7 @@ navleft {
 }
 .tablecontainer {
   width: 8600px;
-  padding-top: 40px;
+  padding-top: 36px;
   position: relative;
   background: #e9e9ea;
   float:left;
@@ -257,16 +257,15 @@ th {
 /* Sortable tables */
 div.sorted {
     background-color: lightgray;
-    color: #fff;
 }
 .ascending, .descending {}
 
 th div.thdiv {
   position: absolute;
   width: auto;
-  height: 40px;
+  height: 36px;
   color: #101066;
-  padding: 14px 10px; /*t,l*/
+  padding: 12px 10px; /*t,l*/
   top: 0;
   margin-left: -10px;
   line-height: normal;
@@ -291,9 +290,8 @@ arrow {
   -webkit-transform: rotate(180deg);
 }
 
-tbody tr td {
-  text-align: left;
-}
+td.strings { text-align: left; }
+td.numerical { text-align: right; }
 
 td.width_xs { width: 60px; }
 td.width_s { width: 110px; }
