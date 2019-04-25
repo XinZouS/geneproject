@@ -814,7 +814,7 @@ function tryToConvertToNum(s) {
                         <th>{{ col }}
                           <div class="thdiv" onclick="sortTable(event,{{forloop.counter}})">
                           {{ col }} <arrow class=""></arrow>
-                          <div style="color: transparent;">{{forloop.counter}}</div>
+                          <div style="color: red;">{{forloop.counter}}</div>
                           </div>
                         </th>
                     {% endfor %}
@@ -852,8 +852,10 @@ function tryToConvertToNum(s) {
                                 {% endif %}
                                 ">{{ c.0 | default_if_none:"n/a" }}</td>
                           {% elif forloop.counter >= 36 and forloop.counter <= 54 %}
-                            <td class="width_m numerical">{{ c | default_if_none:"n/a" }}</td>
+                            <td class="width_s numerical">{{ c | default_if_none:"n/a" }}</td>
                           {% elif forloop.counter == 55 %}
+                            <td class="width_xl">{{ c | default_if_none:"n/a" }}</td>
+                          {% elif forloop.counter == 58 %}
                             <td class="width_xl">{{ c | default_if_none:"n/a" }}</td>
                           {% else %}
                             <td class="width">{{ c | default_if_none:"n/a" }}</td>
