@@ -300,7 +300,11 @@ td.width_l { width: 200px; }
 td.width_xl { width: 300px; }
 
 td.green  { background-color: #afffbb; }
+td.green:hover  { background-color: #aff0cc; }
 td.white  { background-color: #fff; }
-td.yellow { background-color: #fff78e; }
-td.red    { background-color: #fc887e; }
+td.white:hover  { background-color: #eef; }
+td.yellow { background-color: #fffd8e; }
+td.yellow:hover { background-color: #fffdd0; }
+td.red    { background-color: #fa8877; }
+td.red:hover    { background-color: #ffaaaa; }
 
