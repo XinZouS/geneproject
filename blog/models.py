@@ -532,4 +532,6 @@ class FitDefault(models.Model):
 	ManagerTenureLongest =models.DecimalField(max_digits=6,decimal_places=3, null=True)	# Fund.MgrTenL
 	ManagerTenureAverage =models.DecimalField(max_digits=6,decimal_places=3, null=True)	# Fund.MgrTenA
 	Benchmark	= models.CharField(max_length=200, null=True)	# Fund.Bench
+	SecId	= models.CharField(max_length=10, null=True)	# Share.SecId
+	FundId	= models.CharField(max_length=10, null=True)	# Share.FundId
 

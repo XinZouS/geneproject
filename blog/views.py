@@ -18,7 +18,7 @@ import time
 def home(request):
 	content = {
 		# 'companys': Company.objects.all()
-		'companys': FitDefault.objects.order_by("Name")[:10] # get first 10 rows 
+		# 'companys': FitDefault.objects.order_by("Name")[:10] # get first 10 rows 
 	}
 	return render(request, 'blog/home.html', content)
 

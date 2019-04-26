@@ -688,11 +688,12 @@ function clearAllButtonTapped() {
 
 function sortTable(evt, n) {
     n -= 1; // the tr starts from 1, yet array need to start from 0, so n--;
-    let table, rows, sortDir, arrowClass, switching, i, curr, next, shouldSwitch, dir, switchcount = 0;
+    let table, rows, sortDir, arrowClass;
 
     // check if curr header is a sorted col
     let currHeadDiv = evt.currentTarget;
-    if (currHeadDiv.classList.contains("ascending")) { // last time is Asc, then make curr Desc
+    if (currHeadDiv.classList.contains("ascending")) {
+        // last time is Asc, then make curr Desc
         sortDir = " sorted descending";
         arrowClass = "down";
     } else { // default use ascending
@@ -702,7 +703,7 @@ function sortTable(evt, n) {
 
     // remove the sorted marker first
     let sortedHeaders = document.getElementsByClassName("sorted");
-    for (i = 0; i < sortedHeaders.length; i++) {
+    for (let i = 0; i < sortedHeaders.length; i++) {
       let hdDiv = sortedHeaders[i];
       hdDiv.className = hdDiv.className.replace(" sorted", "");
       hdDiv.className = hdDiv.className.replace(" ascending", "");
@@ -733,9 +734,11 @@ function sortTable(evt, n) {
 
     rows = table.rows;
     if (arrowClass == "up") { // ascending
-        quickSort(rows, 1, rows.length - 1, n, isGreaterThan);
+        // quickSort(rows, 1, rows.length - 1, n, isGreaterThan);
+        insertionSort(rows, 1, n, isGreaterThan);
     } else {
-        quickSort(rows, 1, rows.length - 1, n, isLessThan);
+        // quickSort(rows, 1, rows.length - 1, n, isLessThan);
+        insertionSort(rows, 1, n, isLessThan);
     }
 }
 
@@ -748,8 +751,11 @@ function quickSort(rows, left, right, colNum, compare) {
     let pivot = rows[mid].getElementsByTagName("td")[n].innerHTML.toLowerCase();
 
     while (l <= r) {
-      while (l < sz && compare(pivot, rows[l].getElementsByTagName("td")[n].innerHTML.toLowerCase())) { l++; }
-      while (r > 0  && compare(rows[r].getElementsByTagName("td")[n].innerHTML.toLowerCase(), pivot)) { r--; }
+      while (l < sz && compare(pivot, rows[l].getElementsByTagName("td")[n].innerHTML.toLowerCase()))
+          { l++; }
+      while (r > 0  && compare(rows[r].getElementsByTagName("td")[n].innerHTML.toLowerCase(), pivot))
+          { r--; }
+
       if (l <= r) { // swap 2 rows
         let curLeft = rows[l];
         let curRight = rows[r];
@@ -766,6 +772,27 @@ function quickSort(rows, left, right, colNum, compare) {
     }
     quickSort(rows, left, l - 1, colNum, compare);
     quickSort(rows, l, right, colNum, compare);
+}
+
+function insertionSort(rows, startIndex, colNum, compare) {
+    if (rows.length - startIndex < 2) {
+      return;
+    }
+    let n = colNum;
+    for (let i = startIndex + 1; i < rows.length; i++) {
+        let iStr = rows[i].getElementsByTagName("td")[n].innerHTML.toLowerCase();
+        let anchor = i - 1;
+        while (anchor >= startIndex) {
+            let anchorStr = rows[anchor].getElementsByTagName("td")[n].innerHTML.toLowerCase();
+            if (anchor == startIndex && compare(anchorStr, iStr)) {
+                rows[i].parentNode.insertBefore(rows[i], rows[anchor]); // insertBefore(newItem, existingItem);
+            } else if (!compare(anchorStr, iStr)) {
+                rows[i].parentNode.insertBefore(rows[i], rows[anchor + 1]);
+                break;
+            }
+            anchor -= 1;
+        }
+    }
 }
 
 function isGreaterThan(a, b) {
@@ -785,6 +812,15 @@ function tryToConvertToNum(s) {
   let rlt = Number(s.replace(" %", ""));
   if (!isNaN(rlt)) { return rlt; }
   return s;
+}
+
+function printAll(rows, n) {
+  let rlt = [];
+  for (let i = 1; i < rows.length; i++) {
+    let str = rows[i].getElementsByTagName("td")[n].innerHTML.toLowerCase();
+    rlt.push(str);
+  }
+  console.log(rlt);
 }
 
 </script>
