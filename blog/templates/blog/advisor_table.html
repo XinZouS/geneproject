@@ -688,7 +688,7 @@ function clearAllButtonTapped() {
 }
 
 
-function sortTable(evt, n) {
+function sortTable(evt, n, tableId) {
     n -= 1; // the tr starts from 1, yet array need to start from 0, so n--;
     let table, rows, sortDir, arrowClass;
 
@@ -726,14 +726,9 @@ function sortTable(evt, n) {
         currArrow.className += arrowClass;
     }
 
-    // then grab the table to do sorting
-    var getTables = document.getElementsByClassName('sortable');
-    if (getTables.length > 0) {
-        table = getTables[0];
-    } else {
-        return;
-    }
-
+    // grab the table by ID to do sorting
+    table = document.getElementById(tableId);
+    
     rows = table.rows;
     if (arrowClass == "up") { // ascending
         // quickSort(rows, 1, rows.length - 1, n, isGreaterThan);
@@ -845,12 +840,12 @@ function printAll(rows, n) {
     <div class="tablecontainer">
 
         <div id="tabId01" class="tabcontent" style="display:block;">
-            <table class="sortable">
+            <table id="tableId01" class="sortable">
                 <thead>
                     <tr>
                     {% for col in colnames %}
                         <th>{{ col }}
-                          <div class="thdiv" onclick="sortTable(event,{{forloop.counter}})">
+                          <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},'tableId01')">
                           {{ col }} <arrow class=""></arrow>
                           <div style="color: red;">{{forloop.counter}}</div>
                           </div>
@@ -906,7 +901,7 @@ function printAll(rows, n) {
         </div>
 
         <div id="tabId02" class="tabcontent">
-            <table>
+            <table id="tableId02" class="sortable">
                 <thead>
                     <tr>
                         <th><div>No.</div></th>
@@ -927,12 +922,12 @@ function printAll(rows, n) {
         </div>
 
         <div id="tabId03" class="tabcontent">
-            <table class="sortable">
+            <table id="tableId03" class="sortable">
               <thead>
                 <tr>
                 {% for col in sharesAndFundsColnames %}
                   <th>{{ col }}
-                    <div class="thdiv" onclick="sortTable(event,{{forloop.counter}})">
+                    <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},'tableId03')">
                     {{ col }} <arrow class=""></arrow>
                     <div style="color: skyblue;">{{forloop.counter}}</div>
                     </div>
