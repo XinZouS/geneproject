@@ -658,6 +658,7 @@ function clearSelectedMgrList() {
 
 function openTab(evt, tabId) {
   var i, tabcontent, tablinks;
+  // close all tab
   tabcontent = document.getElementsByClassName("tabcontent");
   for (i = 0; i < tabcontent.length; i++) {
     tabcontent[i].style.display = "none";
@@ -666,6 +667,7 @@ function openTab(evt, tabId) {
   for (i = 0; i < tablinks.length; i++) {
     tablinks[i].className = tablinks[i].className.replace(" active", "");
   }
+  // open curr tab
   var showDiv = document.getElementById(tabId);
   if (showDiv) {
     showDiv.style.display = "block";
@@ -843,7 +845,7 @@ function printAll(rows, n) {
     <div class="tablecontainer">
 
         <div id="tabId01" class="tabcontent" style="display:block;">
-            <table class="sortable" style="margin:0 auto; float:left;">
+            <table class="sortable">
                 <thead>
                     <tr>
                     {% for col in colnames %}
@@ -904,7 +906,7 @@ function printAll(rows, n) {
         </div>
 
         <div id="tabId02" class="tabcontent">
-            <table style="margin:0 auto; float:left;">
+            <table>
                 <thead>
                     <tr>
                         <th><div>No.</div></th>
@@ -924,13 +926,18 @@ function printAll(rows, n) {
             </table>        
         </div>
 
-        <div id="tabId03" class="tabcontent" style="overflow-y:auto; width:5660px;">
-            <table style="margin:0 auto; float:left;">
+        <div id="tabId03" class="tabcontent">
+            <table class="sortable">
               <thead>
                 <tr>
-                  {% for col in sharesAndFundsColnames %}
-                    <th><div>{{ col }}</div></th>
-                  {% endfor %}
+                {% for col in sharesAndFundsColnames %}
+                  <th>{{ col }}
+                    <div class="thdiv" onclick="sortTable(event,{{forloop.counter}})">
+                    {{ col }} <arrow class=""></arrow>
+                    <div style="color: skyblue;">{{forloop.counter}}</div>
+                    </div>
+                  </th>
+                {% endfor %}
                 </tr>
               </thead>
               <tbody style="height:90vh;">

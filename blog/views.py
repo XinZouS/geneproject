@@ -317,12 +317,7 @@ def fit_default(request):
 						containMSSub.append(cmpObj)
 						qualifyId.add(subId)
 				print("-------- 2.0 len(qualifyId) = %s, len(SubIdSet) = %s" % (len(qualifyId), len(selectedMSSubAdvIdSet)))
-				# if len(qualifyId) >= len(selectedMSSubAdvIdSet):
 				cmpObjByAll = containMSSub
-				# else:
-				# 	print("------- !!! too much MSSubAdv selected, AND result should be nil...")
-				# 	cmpObjByAll = []
-				# isResultShouldBeEmpty = len(cmpObjByAll) == 0
 				print("--- 2.1 query Sub id: %s seconds ---" % (time.time() - start_time))
 				print("--- 2.1 cmpObjByAll.count = %s, isResultShouldBeEmpty = %s" % (len(cmpObjByAll), isResultShouldBeEmpty))
 				start_time = time.time()
@@ -347,12 +342,7 @@ def fit_default(request):
 						containMSCat.append(cmpObj)
 						qualifyId.add(catId)
 				print("-------- 3.0 len(qualifyId) = %s, len(CatIdSet) = %s" % (len(qualifyId), len(selectedMSCatIdSet)))
-				# if len(qualifyId) >= len(selectedMSCatIdSet):
 				cmpObjByAll = containMSCat
-				# else:
-				# 	print("------- !!! too much MSSubAdv selected, AND result should be nil...")
-				# 	cmpObjByAll = []
-				# isResultShouldBeEmpty = len(cmpObjByAll) == 0
 				print("--- 3.1 filter Cat id: %s seconds ---" % (time.time() - start_time))
 				print("--- 3.1 cmpObjByAll.count = %s, isResultShouldBeEmpty = %s" % (len(cmpObjByAll), isResultShouldBeEmpty))
 				start_time = time.time()
@@ -377,12 +367,7 @@ def fit_default(request):
 						containMgr.append(cmpObj)
 						qualifyId.add(mgrId)
 				print("-------- 4.0 len(qualifyId) = %s, len(MgrIdSet) = %s" % (len(qualifyId), len(selectedMgrIdSet)))
-				# if len(qualifyId) >= len(selectedMgrIdSet):
 				cmpObjByAll = containMgr
-				# else:
-				# 	print("------- !!! too much MgrNames selected, AND result should be nil...")
-				# 	cmpObjByAll = []
-				# isResultShouldBeEmpty = len(cmpObjByAll) == 0
 				print("--- 4.1 filter Cat id: %s seconds ---" % (time.time() - start_time))
 				print("--- 4.1 cmpObjByAll.count = %s" % len(cmpObjByAll))
 				start_time = time.time()
@@ -397,18 +382,11 @@ def fit_default(request):
 				print("--- 4.2 cmpObjByAll.count = %s" % len(cmpObjByAll))
 				start_time = time.time()
 
-		# if selectedAdvisorIds and not isResultShouldBeEmpty: # filter out the first selection result;
-		# 	qualifyId = set()
-		# 	for cmpObj in cmpObjByAll:
-		# 		qualifyId.add(cmpObj.AdvisorID_id)
-		# 	if len(qualifyId) < len(selectedAdvisorIdSet):
-		# 		print("------- 4.0 !!! too much AdvisorID_id selected, AND result should be nil...")
-		# 		cmpObjByAll = []
-
+		# === for tag Default ===
 		companyInfo = formatedFitDefaultList(cmpObjByAll)
 
-		# for tag Performance
-		# sharesAndFunds = getPerformanceInfo(companyInfo)
+		# === for tag Performance ===
+		sharesAndFunds = getPerformanceInfo(cmpObjByAll)
 
 		selectedAdvisorNameset = set(selectedAdvisorNames)
 		selectedMSSubAdvNameSet = set(selectedMSSubAdvNames)
@@ -565,7 +543,9 @@ def formatedFitDefaultList(companyInfos):
 		row.append(c.ManagerName)
 		row.append(toFloat_2(c.ManagerTenureLongest))
 		row.append(toFloat_2(c.ManagerTenureAverage))
-		row.append(c.Benchmark)
+		row.append(c.Benchmark) # 58, the last col to display
+		row.append(c.SecId)
+		row.append(c.FundId)
 
 		fitList.append(row)
 
@@ -574,83 +554,83 @@ def formatedFitDefaultList(companyInfos):
 
 def getPerformanceInfo(companyInfos):
 	shareAndFund = []
-	# if len(companyInfos) == 0:
-	# 	return shareAndFund
+	if len(companyInfos) == 0:
+		return shareAndFund
 
-	# # The "Share" primary key is "SecID"
-	# # The "Fund" primary key is "FundID"
-	# # The two tables can link by "FundID"
-	# secIds = map(lambda cmpObj: cmpObj.SecId.encode("utf-8"), companyInfos)
-	# getShares = list(Shares.objects.filter(SecId__in=secIds))
+	# The "Share" primary key is "SecID"
+	# The "Fund" primary key is "FundID"
+	# The two tables can link by "FundID"
+	secIds = map(lambda cmpObj: cmpObj.SecId.encode("utf-8"), companyInfos)
+	getShares = list(Shares.objects.filter(SecId__in=secIds))
 
-	# fundIds = map(lambda s: s.FundId.encode("utf-8"), getShares)
-	# getFunds = list(Funds.objects.filter(FundId__in=fundIds))
+	fundIds = map(lambda s: s.FundId.encode("utf-8"), getShares)
+	getFunds = list(Funds.objects.filter(FundId__in=fundIds))
 
-	# for c in companyInfos:
-	# 	matchShare = filter(lambda s: s.SecId == c.SecId, getShares)
-	# 	matchFund  = filter(lambda f: f.FundId == c.FundId, getFunds)
+	for c in companyInfos:
+		matchShare = filter(lambda s: s.SecId == c.SecId, getShares)
+		matchFund  = filter(lambda f: f.FundId == c.FundId, getFunds)
 
-	# 	if len(matchShare) > 0 and len(matchFund) > 0:
-	# 		share = matchShare[0]
-	# 		fund = matchFund[0]
-	# 		tableRow = []
-	# 		tableRow.append(fund.Advisor)
-	# 		tableRow.append(share.FundId)
-	# 		tableRow.append(fund.MSCat)
-	# 		tableRow.append([percentage(share.TR_YTD), fund.QKYTD]) # forloop.counter = 4
-	# 		tableRow.append([percentage(share.TR_1Y), fund.QK1Y])
-	# 		tableRow.append([percentage(share.TR_2Y), fund.QK2Y])
-	# 		tableRow.append([percentage(share.TR_3Y), fund.QK3Y])
-	# 		tableRow.append([percentage(share.TR_4Y), fund.QK4Y])
-	# 		tableRow.append([percentage(share.TR_5Y), fund.QK5Y])
-	# 		tableRow.append([percentage(share.TR_10Y), fund.QK10Y])
-	# 		tableRow.append([percentage(share.TR_15Y), fund.QK15Y])
-	# 		#tableRow.append([percentage(share.TR_2018), fund.QK2018Y])
-	# 		tableRow.append([percentage(share.TR_2017), fund.QK2017])
-	# 		tableRow.append([percentage(share.TR_2016), fund.QK2016])
-	# 		tableRow.append([percentage(share.TR_2015), fund.QK2015])
-	# 		tableRow.append([percentage(share.TR_2014), fund.QK2014])
-	# 		tableRow.append([percentage(share.TR_2013), fund.QK2013])
-	# 		tableRow.append([percentage(share.TR_2012), fund.QK2012])
-	# 		tableRow.append([percentage(share.TR_2011), fund.QK2011])
-	# 		tableRow.append([percentage(share.TR_2010), fund.QK2010])
-	# 		tableRow.append([percentage(share.TR_2009), fund.QK2009])
-	# 		tableRow.append([percentage(share.TR_2008), fund.QK2008])
-	# 		tableRow.append([percentage(share.Alpha3), fund.QKAlph3])
-	# 		tableRow.append([percentage(share.Stdev3), fund.QKStdv3])
-	# 		tableRow.append([percentage(share.Beta3), fund.QKBeta3])
-	# 		tableRow.append([percentage(share.ExRet3), fund.QKExRt3])
-	# 		tableRow.append([percentage(share.Sharpe3), fund.QKShrp3])
-	# 		tableRow.append([percentage(share.InfoRat3), fund.QKInfR3])
-	# 		tableRow.append([percentage(share.R23), fund.QKRsq3]) # forloop.counter = 29
-	# 		tableRow.append(fund.QKYTD)
-	# 		tableRow.append(fund.QK1Y)
-	# 		tableRow.append(fund.QK2Y)
-	# 		tableRow.append(fund.QK3Y)
-	# 		tableRow.append(fund.QK4Y)
-	# 		tableRow.append(fund.QK5Y)
-	# 		tableRow.append(fund.QK10Y)
-	# 		tableRow.append(fund.QK15Y)
-	# 		#tableRow.append(fund.QK2018)
-	# 		tableRow.append(fund.QK2017)
-	# 		tableRow.append(fund.QK2016)
-	# 		tableRow.append(fund.QK2015)
-	# 		tableRow.append(fund.QK2014)
-	# 		tableRow.append(fund.QK2013)
-	# 		tableRow.append(fund.QK2012)
-	# 		tableRow.append(fund.QK2011)
-	# 		tableRow.append(fund.QK2010)
-	# 		tableRow.append(fund.QK2009)
-	# 		tableRow.append(fund.QK2008)
-	# 		tableRow.append(fund.QKAlph3)
-	# 		tableRow.append(fund.QKStdv3)
-	# 		tableRow.append(fund.QKBeta3)
-	# 		tableRow.append(fund.QKExRt3)
-	# 		tableRow.append(fund.QKShrp3)
-	# 		tableRow.append(fund.QKInfR3)
-	# 		tableRow.append(fund.QKRsq3)
+		if len(matchShare) > 0 and len(matchFund) > 0:
+			share = matchShare[0]
+			fund = matchFund[0]
+			row = []
+			row.append(fund.Advisor)
+			row.append(share.FundId)
+			row.append(fund.MSCat)
+			row.append([percentage(share.TR_YTD), fund.QKYTD]) # forloop.counter = 4
+			row.append([percentage(share.TR_1Y), fund.QK1Y])
+			row.append([percentage(share.TR_2Y), fund.QK2Y])
+			row.append([percentage(share.TR_3Y), fund.QK3Y])
+			row.append([percentage(share.TR_4Y), fund.QK4Y])
+			row.append([percentage(share.TR_5Y), fund.QK5Y])
+			row.append([percentage(share.TR_10Y), fund.QK10Y]) # forloop.counter = 10
+			row.append([percentage(share.TR_15Y), fund.QK15Y])
+			#row.append([percentage(share.TR_2018), fund.QK2018Y])
+			row.append([percentage(share.TR_2017), fund.QK2017])
+			row.append([percentage(share.TR_2016), fund.QK2016])
+			row.append([percentage(share.TR_2015), fund.QK2015])
+			row.append([percentage(share.TR_2014), fund.QK2014])
+			row.append([percentage(share.TR_2013), fund.QK2013])
+			row.append([percentage(share.TR_2012), fund.QK2012])
+			row.append([percentage(share.TR_2011), fund.QK2011])
+			row.append([percentage(share.TR_2010), fund.QK2010])
+			row.append([percentage(share.TR_2009), fund.QK2009]) # forloop.counter = 20
+			row.append([percentage(share.TR_2008), fund.QK2008])
+			row.append([percentage(share.Alpha3), fund.QKAlph3])
+			row.append([percentage(share.Stdev3), fund.QKStdv3])
+			row.append([percentage(share.Beta3), fund.QKBeta3])
+			row.append([percentage(share.ExRet3), fund.QKExRt3])
+			row.append([percentage(share.Sharpe3), fund.QKShrp3])
+			row.append([percentage(share.InfoRat3), fund.QKInfR3])
+			row.append([percentage(share.R23), fund.QKRsq3]) # forloop.counter = 29
+			row.append(fund.QKYTD)
+			row.append(fund.QK1Y)
+			row.append(fund.QK2Y)
+			row.append(fund.QK3Y)
+			row.append(fund.QK4Y)
+			row.append(fund.QK5Y)
+			row.append(fund.QK10Y)
+			row.append(fund.QK15Y)
+			#row.append(fund.QK2018)
+			row.append(fund.QK2017)
+			row.append(fund.QK2016)
+			row.append(fund.QK2015)
+			row.append(fund.QK2014)
+			row.append(fund.QK2013)
+			row.append(fund.QK2012)
+			row.append(fund.QK2011)
+			row.append(fund.QK2010)
+			row.append(fund.QK2009)
+			row.append(fund.QK2008)
+			row.append(fund.QKAlph3)
+			row.append(fund.QKStdv3)
+			row.append(fund.QKBeta3)
+			row.append(fund.QKExRt3)
+			row.append(fund.QKShrp3)
+			row.append(fund.QKInfR3)
+			row.append(fund.QKRsq3)
 
-	# 		shareAndFund.append(tableRow) # list of [shareObj, fundObj]
+			shareAndFund.append(row) # list of [shareObj, fundObj]
 	return shareAndFund
 
 

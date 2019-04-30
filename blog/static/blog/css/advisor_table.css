@@ -36,6 +36,11 @@ navleft {
   color: DodgerBlue;
   font-weight: bold;
 }
+
+table {
+  margin:0 auto;
+  float:left;
+}
 .tablecontainer {
   width: 8600px;
   padding-top: 36px;
@@ -230,9 +235,9 @@ ul li {
   color: white;
 }
 
-tr th:first-child div {
+thead tr th:first-child div {
     padding: 14px 0px 0px 20px; /*t,r,b,l*/
-    width: 50px;
+    width: 40px;
     border: none;
 }
 td, th {
@@ -240,9 +245,6 @@ td, th {
 }
 .performance-float {
   width: 100px;
-}
-thead tr th:first-child {
-  width: 40px;
 }
 th {
   height: 1px;
