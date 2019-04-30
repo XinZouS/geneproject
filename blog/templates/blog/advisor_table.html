@@ -728,7 +728,7 @@ function sortTable(evt, n, tableId) {
 
     // grab the table by ID to do sorting
     table = document.getElementById(tableId);
-    
+
     rows = table.rows;
     if (arrowClass == "up") { // ascending
         // quickSort(rows, 1, rows.length - 1, n, isGreaterThan);
@@ -856,7 +856,7 @@ function printAll(rows, n) {
                 <tbody style="height:90vh;">
                     {% for row in companys %}
                     <tr>
-                        <td style="width:20px; text-align:center;">{{ forloop.counter }}</td>
+                        <td>{{ forloop.counter }}</td>
                         {% for c in row %}
                           {% if forloop.counter == 1 %}
                             <td class="width_xl">{{ c | default_if_none:"n/a" }}</td>
@@ -938,7 +938,7 @@ function printAll(rows, n) {
               <tbody style="height:90vh;">
                 {% for row in sharesAndFunds %}
                 <tr>
-                    <td style="width:20px; padding-left: 10px;">{{ forloop.counter }}</td>
+                    <td>{{ forloop.counter }}</td>
                     {% for item in row %}
                       {% if forloop.counter == 1 %}
                         <td class="performance-float" style="width:260px; text-align:left;">{{ item }}</td>

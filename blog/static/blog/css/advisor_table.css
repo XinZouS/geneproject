@@ -235,10 +235,18 @@ ul li {
   color: white;
 }
 
+thead tr th:first-child {
+    width: 40px;
+}
 thead tr th:first-child div {
     padding: 14px 0px 0px 20px; /*t,r,b,l*/
     width: 40px;
     border: none;
+}
+tbody tr td:first-child {
+    width: 20px;
+    padding-left: 10px;
+    text-align: center;
 }
 td, th {
   padding: 6px 10px; /*tb,rl*/
