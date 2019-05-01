@@ -312,26 +312,16 @@ def fit_default(request):
 		# === for tag Performance ===
 		sharesAndFunds = getPerformanceInfo(cmpObjByAll)
 
+		# remove duplicates
 		selectedAdvisorNameset = set(selectedAdvisorNames)
 		selectedMSSubAdvNameSet = set(selectedMSSubAdvNames)
 		selectedMSCatNameSet = set(selectedMSCatNames)
 		selectedMgrNameSet = set(selectedMgrNames)
 
-		selectedAdvisorNames = []
-		for advName in selectedAdvisorNameset:
-			selectedAdvisorNames.append(advName.encode("utf-8"))
-
-		selectedMSSubAdvNames = []
-		for advName in selectedMSSubAdvNameSet:
-			selectedMSSubAdvNames.append(advName.encode("utf-8"))
-
-		selectedMSCatNames = []
-		for catName in selectedMSCatNameSet:
-			selectedMSCatNames.append(catName.encode("utf-8"))
-
-		selectedMgrNames = []
-		for mgrName in selectedMgrNameSet:
-			selectedMgrNames.append(mgrName.encode("utf-8"))
+		selectedAdvisorNames 	= list(map(lambda x: x.encode("utf-8"), selectedAdvisorNameset))
+		selectedMSSubAdvNames 	= list(map(lambda x: x.encode("utf-8"), selectedMSSubAdvNameSet))
+		selectedMSCatNames 		= list(map(lambda x: x.encode("utf-8"), selectedMSCatNameSet))
+		selectedMgrNames 		= list(map(lambda x: x.encode("utf-8"), selectedMgrNameSet))
 
 	else:
 		print "--- [GET] request is GET, init page....,"
