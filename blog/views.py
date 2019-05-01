@@ -293,94 +293,18 @@ def fit_default(request):
 		start_time = time.time()
 		cmpObjByAll = []
 
-		if selectedAdvisorIds: # len() != 0, in pythonic
-			for advId in selectedAdvisorIds:  # AdvisorId_id is table col name, not model attribute name;
-				obj = FitDefault.objects.filter(AdvisorId_id=advId).order_by("Name")
-				if len(obj) == 1:
-					cmpObjByAll.append(obj[0])
-				elif len(obj) > 1:
-					for c in obj:
-						cmpObjByAll.append(c)
-			print("--- 1.1 query Adv id: %s seconds ---" % (time.time() - start_time))
-			print("--- 1.1 cmpObjByAll.count = %s" % len(cmpObjByAll))
-			start_time = time.time()
-
-		isResultShouldBeEmpty = False
-
+		filters = Q()
+		if selectedAdvisorIds:
+			filters &= Q(AdvisorId_id__in=selectedAdvisorIds,)
+		if selectedMSCatIds:
+			filters &= Q(CategoryId_id__in=selectedMSCatIds,)
 		if selectedMSSubAdvIds:
-			if cmpObjByAll:
-				containMSSub = []
-				qualifyId = set()
-				for cmpObj in cmpObjByAll:
-					subId = cmpObj.SubAdvisorId_id
-					if subId in selectedMSSubAdvIdSet:
-						containMSSub.append(cmpObj)
-						qualifyId.add(subId)
-				print("-------- 2.0 len(qualifyId) = %s, len(SubIdSet) = %s" % (len(qualifyId), len(selectedMSSubAdvIdSet)))
-				cmpObjByAll = containMSSub
-				print("--- 2.1 query Sub id: %s seconds ---" % (time.time() - start_time))
-				print("--- 2.1 cmpObjByAll.count = %s, isResultShouldBeEmpty = %s" % (len(cmpObjByAll), isResultShouldBeEmpty))
-				start_time = time.time()
-			else:
-				for subId in selectedMSSubAdvIds:
-					obj = FitDefault.objects.filter(SubAdvisorId_id=subId).order_by("Name")
-					if len(obj) == 1:
-						cmpObjByAll.append(obj[0])
-					elif len(obj) > 1:
-						cmpObjByAll.extend(obj)
-				print("--- 2.2 query Sub id: %s seconds ---" % (time.time() - start_time))
-				print("--- 2.2 cmpObjByAll.count = %s" % len(cmpObjByAll))
-				start_time = time.time()
+			filters &= Q(SubAdvisorId_id__in=selectedMSSubAdvIds,)
+		if selectedMgrIds:
+			filters &= Q(ManagerNameId_id__in=selectedMgrIds)
 
-		if selectedMSCatIds and not isResultShouldBeEmpty:
-			if cmpObjByAll:
-				containMSCat = []
-				qualifyId = set()
-				for cmpObj in cmpObjByAll:
-					catId = cmpObj.CategoryId_id
-					if catId in selectedMSCatIdSet:
-						containMSCat.append(cmpObj)
-						qualifyId.add(catId)
-				print("-------- 3.0 len(qualifyId) = %s, len(CatIdSet) = %s" % (len(qualifyId), len(selectedMSCatIdSet)))
-				cmpObjByAll = containMSCat
-				print("--- 3.1 filter Cat id: %s seconds ---" % (time.time() - start_time))
-				print("--- 3.1 cmpObjByAll.count = %s, isResultShouldBeEmpty = %s" % (len(cmpObjByAll), isResultShouldBeEmpty))
-				start_time = time.time()
-			else:
-				for catId in selectedMSCatIds:
-					obj = FitDefault.objects.filter(CategoryId_id=catId).order_by("Name")
-					if len(obj) == 1:
-						cmpObjByAll.append(obj[0])
-					elif len(obj) > 1:
-						cmpObjByAll.extend(obj)
-				print("--- 3.2 query Cat id: %s seconds ---" % (time.time() - start_time))
-				print("--- 3.2 cmpObjByAll.count = %s" % len(cmpObjByAll))
-				start_time = time.time()
-
-		if selectedMgrIds and not isResultShouldBeEmpty:
-			if cmpObjByAll:
-				containMgr = []
-				qualifyId = set()
-				for cmpObj in cmpObjByAll:
-					mgrId = cmpObj.ManagerNameId_id
-					if mgrId in selectedMgrIdSet:
-						containMgr.append(cmpObj)
-						qualifyId.add(mgrId)
-				print("-------- 4.0 len(qualifyId) = %s, len(MgrIdSet) = %s" % (len(qualifyId), len(selectedMgrIdSet)))
-				cmpObjByAll = containMgr
-				print("--- 4.1 filter Cat id: %s seconds ---" % (time.time() - start_time))
-				print("--- 4.1 cmpObjByAll.count = %s" % len(cmpObjByAll))
-				start_time = time.time()
-			else:
-				for mgrId in selectedMgrIds:
-					obj = FitDefault.objects.filter(ManagerNameId_id=mgrId).order_by("Name")
-					if len(obj) == 1:
-						cmpObjByAll.append(obj[0])
-					elif len(obj) > 1:
-						cmpObjByAll.extend(obj)
-				print("--- 4.2 query Mgr id: %s seconds ---" % (time.time() - start_time))
-				print("--- 4.2 cmpObjByAll.count = %s" % len(cmpObjByAll))
-				start_time = time.time()
+		cmpObjByAll = FitDefault.objects.filter(filters)
+		print("--- database query finish in [ %s ] seconds ---" % (time.time() - start_time))
 
 		# === for tag Default ===
 		companyInfo = formatedFitDefaultList(cmpObjByAll)
