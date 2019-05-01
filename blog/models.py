@@ -548,7 +548,7 @@ class SubAdv(models.Model):
 	AgrmEnd		=models.DateField(null=True)
 	SubStart	=models.DateField(null=True)
 	SubEnd		=models.DateField(null=True)
-	SubAlloc=models.DecimalField(max_digits=12,decimal_places=5, null=True)
+	SubAlloc=models.DecimalField(max_digits=12,decimal_places=5, null=True) # TODO: use dec=3, not 5
 	SubAUM	=models.DecimalField(max_digits=12,decimal_places=5, null=True)
 	FundAUM	=models.DecimalField(max_digits=12,decimal_places=5, null=True)
 	EffSub	=models.DecimalField(max_digits=12,decimal_places=5, null=True)

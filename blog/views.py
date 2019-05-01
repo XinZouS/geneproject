@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from .models import Funds, Shares
+from .models import Funds, Shares, SubAdv
 # --- use Static table ---
 # from .models import Company, Advisors, MSCats, MSSubAdvs, MgrNames
 # --- use FitDefault table ---
@@ -28,6 +28,8 @@ def home(request):
 def fit_default(request):
 	defaultCols = ["No.","Name","Category","MF/VA","SubAdvised","Index Fund","Watch List","VIT","Fund of Funds","Inception Date","Advisor","Subadvisor","AUM","NFYTD","NF2017","NF2016","SubStart","SubSched","SubAdvEffRate","Sub_Rate($)","TR_YTD","TR_1Y","TR_2Y","TR_3Y","TR_5Y","TR_10Y","Alpha","ExcessRet","Sharpe","InfoRat","Beta","Stdev","R2","UpsideCap","DownsideCap","TrackingErr","QRK_YTD","QRK_1Y","QRK_2Y","QRK_3Y","QRK_5Y","QRK_10Y","QRK_15Y","QRK_Alpha","QRK_ExcessRet","QRK_Sharpe","QRK_InfoRat","QRK_Beta","QRK_Stdev","QRK_R2","QRK_UpsideCap","QRK_DownsideCap","QRK_TrackingErr","Team Managed","Prospectus Net Expense Ratio","Manager Name","Manager Tenure (Longest)","Manager Tenure (Average)","Benchmark"]
 	companyInfo = []
+	subAdvCols = ["No.", "FundId", "Fund", "SubAdvisor", "SubAdvisorParent", "AdvisorParent", "SubAdvised", "AgrmStart", "AgrmEnd", "SubStart", "SubEnd", "SubAlloc", "SubAUM", "FundAUM", "EffSub", "SubSched3"]
+	subAdvs = []
 	sharesAndFundsCols = ["No.", "Advisor", "FundId", "MSCat", "TR_YTD", "TR_1Y", "TR_2Y", "TR_3Y", "TR_4Y", "TR_5Y", "TR_10Y", "TR_15Y", "TR_2017", "TR_2016", "TR_2015", "TR_2014", "TR_2013", "TR_2012", "TR_2011", "TR_2010", "TR_2009", "TR_2008", "Alpha3", "Stdev3", "Beta3", "ExRet3", "Sharpe3", "InfoRat3", "R23", "QKYTD", "QK1Y", "QK2Y", "QK3Y", "QK4Y", "QK5Y", "QK10Y", "QK15Y", "QK2017", "QK2016", "QK2015", "QK2014", "QK2013", "QK2012", "QK2011", "QK2010", "QK2009", "QK2008", "QKAlph3", "QKStdv3", "QKBeta3", "QKExRt3", "QKShrp3", "QKInfR3", "QKRsq3p"]
 	sharesAndFunds = []
 
@@ -73,6 +75,9 @@ def fit_default(request):
 		# === for tag Default ===
 		companyInfo = formatedFitDefaultList(cmpObjByAll)
 
+		# === for tag SubAdvisor ===
+		subAdvs = getSubAdvisors(cmpObjByAll)
+
 		# === for tag Performance ===
 		sharesAndFunds = getPerformanceInfo(cmpObjByAll)
 
@@ -114,9 +119,6 @@ def fit_default(request):
 
 
 	content = {
-		'companys': companyInfo, # get first n rows 
-		'colnames': defaultCols,
-
 		'advisorNames': advsNames,
 		'idOfAdvisorNameDict':  idOfAdvisorNameDict,
 		'selectedAdvisorIds':   selectedAdvisorIds,
@@ -136,6 +138,12 @@ def fit_default(request):
 		'idOfMgrNameDict' : idOfMgrNameDict,
 		'selectedMgrIds':   selectedMgrIds,
 		'selectedMgrNames': selectedMgrNames,
+
+		'colnames': defaultCols,
+		'companys': companyInfo,
+
+		'subAdvCols': subAdvCols,
+		'subAdvs': subAdvs,
 
 		'sharesAndFunds': sharesAndFunds, # for tag Performance
 		'sharesAndFundsColnames': sharesAndFundsCols,
@@ -228,14 +236,45 @@ def formatedFitDefaultList(companyInfos):
 	return fitList
 
 
+def getSubAdvisors(companyInfos):
+	subAdvs = []
+	if len(companyInfos) == 0:
+		return subAdvs
+
+	fundIds = list(map(lambda cmpObj: cmpObj.FundId.encode("utf-8"), companyInfos))
+	getSubAdvs = SubAdv.objects.filter(FundId__in=fundIds)
+
+	for s in getSubAdvs:
+		row = []
+		row.append(s.FundId)
+		row.append(s.Fund)
+		row.append(s.SubAdvisor)
+		row.append(s.SubAdvisorParent)
+		row.append(s.AdvisorParent)
+		row.append(s.SubAdvised)
+		row.append(s.AgrmStart)
+		row.append(s.AgrmEnd)
+		row.append(s.SubStart)
+		row.append(s.SubEnd)
+		row.append(s.SubAlloc)
+		row.append(s.SubAUM)
+		row.append(s.FundAUM)
+		row.append(s.EffSub)
+		row.append(s.SubSched3)
+
+		subAdvs.append(row)
+
+	return subAdvs
+
+
 def getPerformanceInfo(companyInfos):
 	shareAndFund = []
 	if len(companyInfos) == 0:
 		return shareAndFund
 
-	# The "Share" primary key is "SecID"
-	# The "Fund" primary key is "FundID"
-	# The two tables can link by "FundID"
+	# The "Share" primary key is "SecId"
+	# The "Fund" primary key is "FundId"
+	# The two tables can link by "FundId"
 	secIds = map(lambda cmpObj: cmpObj.SecId.encode("utf-8"), companyInfos)
 	getShares = list(Shares.objects.filter(SecId__in=secIds))
 

@@ -243,6 +243,9 @@ thead tr th:first-child div {
     width: 40px;
     border: none;
 }
+tbody {
+  height: 92vh;
+}
 tbody tr td:first-child {
     width: 20px;
     padding-left: 10px;

@@ -853,7 +853,7 @@ function printAll(rows, n) {
                     {% endfor %}
                     </tr>
                 </thead>
-                <tbody style="height:90vh;">
+                <tbody style="">
                     {% for row in companys %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
@@ -904,17 +904,23 @@ function printAll(rows, n) {
             <table id="tableId02" class="sortable">
                 <thead>
                     <tr>
-                        <th><div>No.</div></th>
-                        <th><div>Name</div></th>
-                        <th><div>MSSubAdv</div></th>
+                      {% for col in subAdvCols %}
+                        <th>{{ col }}
+                          <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},'tableId02')">
+                          {{ col }} <arrow class=""></arrow>
+                          <div style="color: orange;">{{forloop.counter}}</div>
+                          </div>
+                        </th>
+                      {% endfor %}
                     </tr>
                 </thead>
-                <tbody style="overflow-y:auto; height:90vh;">
-                    {% for c in companys %}
+                <tbody>
+                    {% for row in subAdvs %}
                     <tr>
-                        <td style="width:20px; padding-left: 10px;">{{ forloop.counter }}</td>
-                        <td style="text-align:left;">{{ c.Name     }}</td>
-                        <td style="text-align:left;">{{ c.MSSubAdv }}</td>
+                        <td>{{ forloop.counter }}</td>
+                        {% for item in row %}
+                            <td>{{ item }}</td>
+                        {% endfor %}
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -935,7 +941,7 @@ function printAll(rows, n) {
                 {% endfor %}
                 </tr>
               </thead>
-              <tbody style="height:90vh;">
+              <tbody>
                 {% for row in sharesAndFunds %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
