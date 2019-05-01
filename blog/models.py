@@ -535,3 +535,22 @@ class FitDefault(models.Model):
 	SecId	= models.CharField(max_length=10, null=True)	# Share.SecId
 	FundId	= models.CharField(max_length=10, null=True)	# Share.FundId
 
+
+class SubAdv(models.Model):
+	FundId	= models.CharField(max_length=10, null=True)
+	Fund	= models.CharField(max_length=100)
+	SubAdvisor	= models.CharField(max_length=200, null=True)
+	SubAdvisorId = models.ForeignKey(FitSubAdvisors, on_delete=models.SET_NULL, null=True)
+	SubAdvisorParent= models.CharField(max_length=200, null=True)
+	AdvisorParent	= models.CharField(max_length=100, null=True)
+	SubAdvised		= models.CharField(max_length=3, null=True)
+	AgrmStart	=models.DateField(null=True)
+	AgrmEnd		=models.DateField(null=True)
+	SubStart	=models.DateField(null=True)
+	SubEnd		=models.DateField(null=True)
+	SubAlloc=models.DecimalField(max_digits=12,decimal_places=5, null=True)
+	SubAUM	=models.DecimalField(max_digits=12,decimal_places=5, null=True)
+	FundAUM	=models.DecimalField(max_digits=12,decimal_places=5, null=True)
+	EffSub	=models.DecimalField(max_digits=12,decimal_places=5, null=True)
+	SubSched3	= models.CharField(max_length=	150, null=True)
+
