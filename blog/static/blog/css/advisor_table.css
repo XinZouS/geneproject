@@ -84,11 +84,6 @@ input[type=text].active {
   width: 38%;
   height: 36px;
 }
-input[type=submit] {
-  background-color: DodgerBlue;
-  color: #fff;
-  cursor: pointer;
-}
 
 .selectedNamesDiv {
     height:100px;
@@ -148,11 +143,23 @@ input[type=submit] {
 
 .submitButton:hover {background-color: deepskyblue;}
 .submitButton {
+  background-color: DodgerBlue;
+  color: #fff;
   float: right;
   width: 70%;
   border-radius: 5px;
   margin-top: 10px;
   margin-bottom: 10px;
+  cursor: pointer;
+}
+.buttonDisabled {
+  background-color: lightgray;
+  float: right;
+  width: 70%;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  cursor: wait; /* not-allowed; */
 }
 
 .showUl {width: 12%;}
