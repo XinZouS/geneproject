@@ -33,7 +33,6 @@ def fit_default(request):
 	sharesAndFundsCols = ["No.", "Advisor", "FundId", "MSCat", "TR_YTD", "TR_1Y", "TR_2Y", "TR_3Y", "TR_4Y", "TR_5Y", "TR_10Y", "TR_15Y", "TR_2017", "TR_2016", "TR_2015", "TR_2014", "TR_2013", "TR_2012", "TR_2011", "TR_2010", "TR_2009", "TR_2008", "Alpha3", "Stdev3", "Beta3", "ExRet3", "Sharpe3", "InfoRat3", "R23", "QKYTD", "QK1Y", "QK2Y", "QK3Y", "QK4Y", "QK5Y", "QK10Y", "QK15Y", "QK2017", "QK2016", "QK2015", "QK2014", "QK2013", "QK2012", "QK2011", "QK2010", "QK2009", "QK2008", "QKAlph3", "QKStdv3", "QKBeta3", "QKExRt3", "QKShrp3", "QKInfR3", "QKRsq3p"]
 	sharesAndFunds = []
 
-
 	selectedAdvisorIds = []
 	selectedAdvisorNames = []
 	selectedMSSubAdvIds = []
@@ -59,19 +58,22 @@ def fit_default(request):
 		start_time = time.time()
 		cmpObjByAll = []
 
-		filters = Q()
-		if selectedAdvisorIds:
-			filters &= Q(AdvisorId_id__in=selectedAdvisorIds,)
-		if selectedMSCatIds:
-			filters &= Q(CategoryId_id__in=selectedMSCatIds,)
-		if selectedMSSubAdvIds:
-			filters &= Q(SubAdvisorId_id__in=selectedMSSubAdvIds,)
-		if selectedMgrIds:
-			filters &= Q(ManagerNameId_id__in=selectedMgrIds)
+		if len(selectedAdvisorIds) + len(selectedMSSubAdvIds) + len(selectedMSCatIds) + len(selectedMgrIds) > 0:
+			filters = Q()
+			if selectedAdvisorIds:
+				filters &= Q(AdvisorId_id__in=selectedAdvisorIds,)
+			if selectedMSCatIds:
+				filters &= Q(CategoryId_id__in=selectedMSCatIds,)
+			if selectedMSSubAdvIds:
+				filters &= Q(SubAdvisorId_id__in=selectedMSSubAdvIds,)
+			if selectedMgrIds:
+				filters &= Q(ManagerNameId_id__in=selectedMgrIds)
 
-		cmpObjByAll = FitDefault.objects.filter(filters)
-		print("--- database query finish in [ %s ] seconds ---" % (time.time() - start_time))
-		print("--- get objects [ %s ] rows ---" % len(cmpObjByAll))
+			cmpObjByAll = FitDefault.objects.filter(filters)
+			print("--- database query finish in [ %s ] seconds ---" % (time.time() - start_time))
+			print("--- get objects [ %s ] rows ---" % len(cmpObjByAll))
+		else:
+			print("--- Filter is empty, gets [ 0 ] rows ---")
 
 		# === for tag Default ===
 		companyInfo = formatedFitDefaultList(cmpObjByAll)
