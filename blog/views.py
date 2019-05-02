@@ -55,10 +55,10 @@ def fit_default(request):
 		selectedMgrIds = intListFrom(request.POST.getlist('mgrId'))
 		selectedMgrNames = request.POST.getlist('mgrName', '')
 
-		start_time = time.time()
 		cmpObjByAll = []
 
 		if len(selectedAdvisorIds) + len(selectedMSSubAdvIds) + len(selectedMSCatIds) + len(selectedMgrIds) > 0:
+			start_time = time.time()
 			filters = Q()
 			if selectedAdvisorIds:
 				filters &= Q(AdvisorId_id__in=selectedAdvisorIds,)
