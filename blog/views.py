@@ -228,8 +228,8 @@ def formatedFitDefaultList(companyInfos):
 		row.append(toFloat_2(c.ManagerTenureLongest))
 		row.append(toFloat_2(c.ManagerTenureAverage))
 		row.append(c.Benchmark) # 58, the last col to display
-		row.append(c.SecId)
-		row.append(c.FundId)
+		# row.append(c.SecId)
+		# row.append(c.FundId)
 
 		fitList.append(row)
 

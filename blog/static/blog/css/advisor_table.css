@@ -152,7 +152,7 @@ input[type=text].active {
   margin-bottom: 10px;
   cursor: pointer;
 }
-.buttonDisabled {
+.submitDisabled {
   background-color: lightgray;
   color: #fff;
   float: right;
