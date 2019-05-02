@@ -71,6 +71,7 @@ def fit_default(request):
 
 		cmpObjByAll = FitDefault.objects.filter(filters)
 		print("--- database query finish in [ %s ] seconds ---" % (time.time() - start_time))
+		print("--- get objects [ %s ] rows ---" % len(cmpObjByAll))
 
 		# === for tag Default ===
 		companyInfo = formatedFitDefaultList(cmpObjByAll)
