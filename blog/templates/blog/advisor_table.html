@@ -847,10 +847,11 @@ function printAll(rows, n) {
                     <tr>
                     {% for col in colnames %}
                         <th>{{ col }}
-                          <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},'tableId01')">
-                          {{ col }} <arrow class=""></arrow>
-                          <div style="color: red;">{{forloop.counter}}</div>
-                          </div>
+                            <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},'tableId01')">
+                              {{ col }} <arrow class=""></arrow>
+                              <div style="color: red; position: absolute;">{{forloop.counter}}</div>
+                            </div>
+                            <button onclick="" class="dropbtn"><droparrow></droparrow></button>
                         </th>
                     {% endfor %}
                     </tr>
