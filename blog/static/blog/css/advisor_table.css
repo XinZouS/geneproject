@@ -245,11 +245,12 @@ ul li {
 
 thead tr th:first-child {
     width: 40px;
+    padding-right: 30px;
 }
 thead tr th:first-child div {
-    padding: 14px 0px 0px 20px; /*t,r,b,l*/
-    width: 40px;
-    border: none;
+  padding: 14px 0px 0px 20px; /*t,r,b,l*/
+  width: 65px;
+  border-left: 1px solid #aabbdd;
 }
 tbody {
   height: 92vh;
@@ -269,7 +270,7 @@ th {
   height: 1px;
   width: 80px;
   line-height: 0;
-  padding: 0px 56px 0px 10px; /*t,r30,b,l30*/
+  padding: 0px 53px 0px 10px; /*t,r30,b,l30*/
   color: transparent; /*transparent;*/
   border: none;
   white-space: nowrap; /*nowarp*/
@@ -320,7 +321,7 @@ arrow {
   position: absolute;
   float: right;
   margin-top: -19px;
-  margin-left: 34px;
+  margin-left: 31px;
   padding: 8px 6px 1px 6px; /*t,r,b,l*/
   border: none;
   cursor: pointer;
