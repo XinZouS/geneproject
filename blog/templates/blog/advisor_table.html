@@ -404,6 +404,13 @@ document.addEventListener("click", function (e) {
     if (e.target.parentNode.id != "autocompleteMenuDiv" && e.target.id != "btnI") {
         okButtonTapped(); // close list and rm text in textField;
     }
+    // close all list of the dropdown cols
+    let targetClass = e.target.classList[0];
+    let parentClass = e.target.parentNode.classList[0];
+    const dropdownClassSet = new Set(["dropbtn","dropdownContainer","dropdownLabel","dropdownRows"]);
+    if (!dropdownClassSet.has(targetClass) && !dropdownClassSet.has(parentClass)) {
+      closeDropdownLists();
+    }
 });
 
 function didSelectSearchListItem(searchTypeEnum, targetDiv) {
@@ -822,6 +829,53 @@ function printAll(rows, n) {
   console.log(rlt);
 }
 
+function showDropdownList(evt, n, tableId) {
+  n -= 1; // the tr starts from 1, yet array need to start from 0, so n--;
+  let btn = evt.currentTarget;
+
+  let listContainer = document.createElement("ul");
+  listContainer.setAttribute("id", tableId + n);
+  listContainer.setAttribute("class", "dropdownContainer");
+  btn.parentNode.appendChild(listContainer);
+
+  // the scroll container for search result list
+  for (let i = 0; i < 6; i++) {
+    let rowId = "rowId" + i;
+
+    let row = document.createElement("li");
+    row.setAttribute("class", "dropdownRows");
+    listContainer.appendChild(row);
+
+    let box = document.createElement("input");
+    box.setAttribute("type", "checkbox");
+    box.setAttribute("id", rowId);
+    row.appendChild(box);
+
+    let label = document.createElement("label");
+    label.innerHTML = n+","+i+": li name hrer, fjlda fld fjas ffdssf jlk jl l ljjljl; j jljlj ytutuy lkjljl dsfds!";
+    label.setAttribute("for", rowId);
+    label.setAttribute("class", "dropdownLabel");
+    label.addEventListener('click', function(event) {
+      toggleDropdownRowSelect(n, name, event);
+    });
+    row.appendChild(label);
+
+  }
+
+}
+
+function toggleDropdownRowSelect(col, name, event) {
+  let label = event.currentTarget;
+  label.parentNode.classList.toggle("dropdownSelected");
+}
+
+function closeDropdownLists() {
+  let lists = document.getElementsByClassName("dropdownContainer");
+  for (let i = 0; i < lists.length; i++) {
+    lists[i].parentNode.removeChild(lists[i]);
+  }
+}
+
 </script>
 
     </navleft>
@@ -844,19 +898,19 @@ function printAll(rows, n) {
         <div id="tabId01" class="tabcontent" style="display:block;">
             <table id="tableId01" class="sortable">
                 <thead>
-                    <tr>
-                    {% for col in colnames %}
-                        <th>{{ col }}
-                            <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},'tableId01')">
-                              {{ col }} <arrow class=""></arrow>
-                              <div style="display: none; color: red; position: absolute;">{{forloop.counter}}</div>
-                            </div>
-                            {% if forloop.counter > 1 %}
-                              <button onclick="showDropdownList(event,{{forloop.counter}})" class="dropbtn"><droparrow></droparrow></button>
-                            {% endif %}
-                        </th>
-                    {% endfor %}
-                    </tr>
+                  <tr>
+                  {% for col in colnames %}
+                    <th>{{ col }}
+                      <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},'tableId01')">
+                        {{ col }} <arrow class=""></arrow>
+                        <div style="display: none; color: red; position: absolute;">{{forloop.counter}}</div>
+                      </div>
+                      {% if forloop.counter > 1 %}
+                        <button onclick="showDropdownList(event,{{forloop.counter}},'tableId01')" class="dropbtn"><droparrow></droparrow></button>
+                      {% endif %}
+                    </th>
+                  {% endfor %}
+                  </tr>
                 </thead>
                 <tbody style="">
                     {% for row in companys %}

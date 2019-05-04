@@ -178,7 +178,7 @@ ul li {
   position: relative;
   padding: 6px 20px 6px 10px; /* t, r, b, l */
   list-style-type: circle;
-  font-size: 16px;
+  font-size: 14px;
   transition: 0.2s;
 }
 
@@ -278,9 +278,7 @@ th {
 }
 /* Sortable tables */
 div.sorted { background-color: lightgray; }
-
 .ascending, .descending {}
-
 th div.thdiv:hover { background-color: #ddf; }
 th div.thdiv {
   position: absolute;
@@ -312,7 +310,7 @@ arrow {
   transform: rotate(180deg);
   -webkit-transform: rotate(180deg);
 }
-
+/* cols drop-down list */
 .dropbtn:hover, .dropbtn:focus {background-color:deepskyblue;}
 .dropbtn {
   background-color: #2980B9;
@@ -335,28 +333,27 @@ droparrow {
   border-bottom:5px solid transparent;
   border-left:  5px solid transparent;
 }
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-.dropdown-content {
-  display: none;
+.dropdownContainer {
   position: absolute;
   background-color: #f1f1f1;
-  min-width: 160px;
+  min-width: 100px;
   overflow: auto;
-  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  font-weight: normal;
+  box-shadow: 0px 8px 16px 3px rgba(0,0,0,0.2);
   z-index: 1;
 }
-.dropdown-content a {
+/*.dropdownRows:hover {background-color:#ddd;}*/
+.dropdownRows {
   color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
+  padding: 6px 10px;
 }
-.dropdown a:hover {background-color: #ddd;}
-.show {display: block;}
-
+.dropdownLabel {
+  width: 96%;
+  height: 100%;
+  padding-left: 6px;
+}
+.dropdownSelected {background-color: #cdf;}
+.dropdownSelected:nth-child(odd) {background:#cdf;}
 
 td.strings { text-align: left; }
 td.numerical { text-align: right; }
