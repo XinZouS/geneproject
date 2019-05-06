@@ -177,7 +177,7 @@ ul li:hover           { background: #ddf; }
 ul li {
   position: relative;
   padding: 6px 20px 6px 10px; /* t, r, b, l */
-  list-style-type: circle;
+  list-style-type: none;
   font-size: 14px;
   transition: 0.2s;
 }
