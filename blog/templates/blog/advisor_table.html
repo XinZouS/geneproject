@@ -922,11 +922,11 @@ function applyColFilters(tableId) {
       namesOfCol.forEach(name => names.add(name));
     }
     for (let row of rows) {
-      let isSelected = "";
+      let isSelected = ""; // default empty val to show the row
       for (const col of cols) {
         const colName = row.getElementsByTagName("td")[parseInt(col)].innerHTML;
         if (!names.has(colName)) {
-          isSelected = "none";
+          isSelected = "none"; // hide the row
           break;
         }
       }
@@ -935,11 +935,15 @@ function applyColFilters(tableId) {
   }
 }
 
-function addColFilter(rowNode, col, tableId) {
+function toggleColFilter(isSelected, rowNode, col, tableId) {
   let checkedColNumRowNames = getCheckedColNumRowNamesBy(tableId);
   const rowName = rowNode.getElementsByTagName("label")[0].innerHTML;
   if (checkedColNumRowNames[col]) {
-    checkedColNumRowNames[col].add(rowName);
+    if (isSelected) {
+      checkedColNumRowNames[col].add(rowName);
+    } else {
+      checkedColNumRowNames[col].delete(rowName);
+    }
   } else {
     let nameSet = new Set();
     nameSet.add(rowName);
@@ -947,17 +951,13 @@ function addColFilter(rowNode, col, tableId) {
   }
 }
 
-function removeColFilter(rowNode, col, tableId) {
-  //
-}
-
 function toggleDropdownRowSelect(isSelected, col, rowId, rowNode, tableId) {
   if (isSelected) {
     rowNode.classList.add("dropdownSelected");
-    addColFilter(rowNode, col, tableId);
   } else {
     rowNode.className = "dropdownRows";
   }
+  toggleColFilter(isSelected, rowNode, col, tableId);
   applyColFilters(tableId);
 }
 
