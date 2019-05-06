@@ -843,7 +843,6 @@ function toggleDropdownList(evt, n, tableId) {
     if (btn) { btn.blur(); } // force to lose focus
     return;
   }
-  n -= 1; // the tr starts from 1, yet array need to start from 0, so n--;
   let table = document.getElementById(tableId).getElementsByTagName("tbody");
   if (table && table.length > 0) {
     table = table[0];
@@ -852,7 +851,7 @@ function toggleDropdownList(evt, n, tableId) {
   let names = new Set();
   for (let i = 0; i < rows.length; i++) {
     let row = rows[i].getElementsByTagName("td");
-    names.add(row[n].innerHTML);
+    names.add(row[n - 1].innerHTML);
   }
   let btn = evt.currentTarget;
 
@@ -874,7 +873,7 @@ function toggleDropdownList(evt, n, tableId) {
     box.setAttribute("type", "checkbox");
     box.setAttribute("id", rowId);
     box.addEventListener('change', function() {
-      toggleDropdownRowSelect(this.checked, n, rowId, row, tableId);
+      toggleDropdownRowSelect(this.checked, n - 1, rowId, row, tableId);
     });
     row.appendChild(box);
 
@@ -884,7 +883,6 @@ function toggleDropdownList(evt, n, tableId) {
     label.setAttribute("class", "dropdownLabel");
     row.appendChild(label);
   }
-
 }
 
 function getCheckedColNumRowNamesBy(tableId) {
@@ -907,11 +905,14 @@ function getCheckedColNumRowNamesBy(tableId) {
 function applyColFilters(tableId) {
   const checkedColNumRowNames = getCheckedColNumRowNamesBy(tableId);
   let table = document.getElementById(tableId).getElementsByTagName("tbody");
+  if (table && table.length > 0) {
+    table = table[0];
+  }
   let rows = table.getElementsByTagName("tr");
 
   if (checkedColNumRowNames.length == 0) {
-    for (let row in rows) {
-      row.style.display = "block"; // showing full table
+    for (let i = 0; i < rows.length; i++) {
+      rows[i].style.display = "block"; // showing full table
     }
   } else {
     const cols = Object.keys(checkedColNumRowNames);
@@ -920,10 +921,10 @@ function applyColFilters(tableId) {
     for (const namesOfCol of nameArrs) {
       namesOfCol.forEach(name => names.add(name));
     }
-    for (let row in rows) {
-      let isSelected = "block";
-      for (const col in cols) {
-        const colName = row.getElementsByTagName("td")[col].innerHTML;
+    for (let row of rows) {
+      let isSelected = "";
+      for (const col of cols) {
+        const colName = row.getElementsByTagName("td")[parseInt(col)].innerHTML;
         if (!names.has(colName)) {
           isSelected = "none";
           break;
@@ -936,9 +937,18 @@ function applyColFilters(tableId) {
 
 function addColFilter(rowNode, col, tableId) {
   let checkedColNumRowNames = getCheckedColNumRowNamesBy(tableId);
+  const rowName = rowNode.getElementsByTagName("label")[0].innerHTML;
   if (checkedColNumRowNames[col]) {
-    checkedColNumRowNames[col].push()
+    checkedColNumRowNames[col].add(rowName);
+  } else {
+    let nameSet = new Set();
+    nameSet.add(rowName);
+    checkedColNumRowNames[col] = nameSet;
   }
+}
+
+function removeColFilter(rowNode, col, tableId) {
+  //
 }
 
 function toggleDropdownRowSelect(isSelected, col, rowId, rowNode, tableId) {
