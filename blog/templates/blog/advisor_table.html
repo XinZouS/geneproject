@@ -138,9 +138,9 @@ setupselectedMgrNames();
 
 /* for the col filter in each tab of table */
 var TableIdEnum = Object.freeze({"DefaultFit":"DefaultFit", "SubAdvisory":"SubAdvisory", "Performance":"Performance"});
-var checkedColNumRowNamesDefaultFit = {}; // { 6: Set["name01","name02"], }
-var checkedColNumRowNamesSubAdvisory = {};
-var checkedColNumRowNamesPerformance = {};
+var checkedColNumRowNamesDefaultFit = new Map(); // { 6: Set["name01","name02"], }
+var checkedColNumRowNamesSubAdvisory = new Map();
+var checkedColNumRowNamesPerformance = new Map();
 
 function showFullAdvisorList() {
     constructSearchList(allAdvs, SearchTypeEnum.Advisor);
@@ -883,7 +883,6 @@ function toggleDropdownList(evt, n, tableId) {
     row.appendChild(label);
 
     const checkedNames = checkedColNumRowNames[col];
-    console.log(checkedNames);
     if (checkedNames && checkedNames.has(names[i])) {
       row.classList.add("dropdownSelected");
       box.checked = true;
@@ -952,9 +951,10 @@ function toggleColFilter(isSelected, rowNode, col, tableId) {
       checkedColNumRowNames[col].add(rowName);
     } else { // delete the checked item from dictionary
       checkedColNumRowNames[col].delete(rowName);
-      if (checkedColNumRowNames[col].length == 0) {
-        checkedColNumRowNames.delete(col);
+      if (checkedColNumRowNames[col].size == 0) {
+        delete checkedColNumRowNames[col]; // delete for the Map
       }
+      console.log(checkedColNumRowNames);
     }
   } else {
     let nameSet = new Set();
@@ -971,6 +971,17 @@ function toggleDropdownRowSelect(isSelected, col, rowId, rowNode, tableId) {
   }
   toggleColFilter(isSelected, rowNode, col, tableId);
   applyColFilters(tableId);
+
+  const filters = getCheckedColNumRowNamesBy(tableId);
+  let btns = rowNode.parentNode.parentNode.getElementsByTagName("button");
+  if (btns && btns.length > 0) {
+    let btn = btns[0];
+    if (filters[col] && filters[col].size > 0) {
+      btn.classList.replace("dropbtnNoFilter", "dropbtnHasFilter");
+    } else {
+      btn.classList.replace("dropbtnHasFilter", "dropbtnNoFilter");
+    }
+  }
 }
 
 function closeDropdownLists() {
@@ -1010,7 +1021,7 @@ function closeDropdownLists() {
                         <div style="display: none; color: red; position: absolute;">{{forloop.counter}}</div>
                       </div>
                       {% if forloop.counter > 1 %}
-                        <button onclick="toggleDropdownList(event,{{forloop.counter}},TableIdEnum.DefaultFit)" class="dropbtn"><droparrow></droparrow></button>
+                        <button onclick="toggleDropdownList(event,{{forloop.counter}},TableIdEnum.DefaultFit)" class="dropbtn dropbtnNoFilter"><droparrow></droparrow></button>
                       {% endif %}
                     </th>
                   {% endfor %}
