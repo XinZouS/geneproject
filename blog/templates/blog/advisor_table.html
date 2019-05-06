@@ -829,7 +829,14 @@ function printAll(rows, n) {
   console.log(rlt);
 }
 
-function showDropdownList(evt, n, tableId) {
+function toggleDropdownList(evt, n, tableId) {
+  let openedList = document.getElementsByClassName("dropdownContainer");
+  if (openedList.length > 0) {
+    closeDropdownLists();
+    let btn = document.querySelector(":focus");
+    if (btn) { btn.blur(); } // force to lose focus
+    return;
+  }
   n -= 1; // the tr starts from 1, yet array need to start from 0, so n--;
   let btn = evt.currentTarget;
 
@@ -849,24 +856,27 @@ function showDropdownList(evt, n, tableId) {
     let box = document.createElement("input");
     box.setAttribute("type", "checkbox");
     box.setAttribute("id", rowId);
+    box.addEventListener('change', function() {
+      toggleDropdownRowSelect(this.checked, n, rowId, row);
+    });
     row.appendChild(box);
 
     let label = document.createElement("label");
-    label.innerHTML = n+","+i+": li name hrer, fjlda fld fjas ffdssf jlk jl l ljjljl; j jljlj ytutuy lkjljl dsfds!";
+    label.innerHTML = n+","+i+": li name hrer, ytutuy lkjljl dsfds!";
     label.setAttribute("for", rowId);
     label.setAttribute("class", "dropdownLabel");
-    label.addEventListener('click', function(event) {
-      toggleDropdownRowSelect(n, name, event);
-    });
     row.appendChild(label);
 
   }
 
 }
 
-function toggleDropdownRowSelect(col, name, event) {
-  let label = event.currentTarget;
-  label.parentNode.classList.toggle("dropdownSelected");
+function toggleDropdownRowSelect(isSelected, col, rowId, rowNode) {
+  if (isSelected) {
+    rowNode.classList.add("dropdownSelected");
+  } else {
+    rowNode.className = "dropdownRows";
+  }
 }
 
 function closeDropdownLists() {
@@ -906,7 +916,7 @@ function closeDropdownLists() {
                         <div style="display: none; color: red; position: absolute;">{{forloop.counter}}</div>
                       </div>
                       {% if forloop.counter > 1 %}
-                        <button onclick="showDropdownList(event,{{forloop.counter}},'tableId01')" class="dropbtn"><droparrow></droparrow></button>
+                        <button onclick="toggleDropdownList(event,{{forloop.counter}},'tableId01')" class="dropbtn"><droparrow></droparrow></button>
                       {% endif %}
                     </th>
                   {% endfor %}
