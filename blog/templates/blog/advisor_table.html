@@ -848,22 +848,24 @@ function toggleDropdownList(evt, n, tableId) {
     table = table[0];
   }
   let rows = table.getElementsByTagName("tr");
+  const col = n - 1;
   let names = new Set();
   for (let i = 0; i < rows.length; i++) {
     let row = rows[i].getElementsByTagName("td");
-    names.add(row[n - 1].innerHTML);
+    names.add(row[col].innerHTML);
   }
   let btn = evt.currentTarget;
 
   let listContainer = document.createElement("ul");
-  listContainer.setAttribute("id", tableId + n);
+  listContainer.setAttribute("id", tableId + col);
   listContainer.setAttribute("class", "dropdownContainer");
   btn.parentNode.appendChild(listContainer);
 
   // the scroll container for search result list
+  const checkedColNumRowNames = getCheckedColNumRowNamesBy(tableId);
   names = Array.from(names);
   for (let i = 0; i < names.length; i++) {
-    let rowId = "rowId" + i;
+    const rowId = "rowId" + i;
 
     let row = document.createElement("li");
     row.setAttribute("class", "dropdownRows");
@@ -872,9 +874,6 @@ function toggleDropdownList(evt, n, tableId) {
     let box = document.createElement("input");
     box.setAttribute("type", "checkbox");
     box.setAttribute("id", rowId);
-    box.addEventListener('change', function() {
-      toggleDropdownRowSelect(this.checked, n - 1, rowId, row, tableId);
-    });
     row.appendChild(box);
 
     let label = document.createElement("label");
@@ -882,6 +881,16 @@ function toggleDropdownList(evt, n, tableId) {
     label.setAttribute("for", rowId);
     label.setAttribute("class", "dropdownLabel");
     row.appendChild(label);
+
+    const checkedNames = checkedColNumRowNames[col];
+    console.log(checkedNames);
+    if (checkedNames && checkedNames.has(names[i])) {
+      row.classList.add("dropdownSelected");
+      box.checked = true;
+    }
+    box.addEventListener('change', function() {
+      toggleDropdownRowSelect(this.checked, col, rowId, row, tableId);
+    });
   }
 }
 
@@ -941,8 +950,11 @@ function toggleColFilter(isSelected, rowNode, col, tableId) {
   if (checkedColNumRowNames[col]) {
     if (isSelected) {
       checkedColNumRowNames[col].add(rowName);
-    } else {
+    } else { // delete the checked item from dictionary
       checkedColNumRowNames[col].delete(rowName);
+      if (checkedColNumRowNames[col].length == 0) {
+        checkedColNumRowNames.delete(col);
+      }
     }
   } else {
     let nameSet = new Set();
