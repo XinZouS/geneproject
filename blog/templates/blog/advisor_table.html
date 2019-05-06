@@ -136,6 +136,12 @@ setupselectedMSCatNames();
 setupselectedMSSubAdvNames();
 setupselectedMgrNames();
 
+/* for the col filter in each tab of table */
+var TableIdEnum = Object.freeze({"DefaultFit":"DefaultFit", "SubAdvisory":"SubAdvisory", "Performance":"Performance"});
+var checkedColNumRowNamesDefaultFit = {}; // { 6: Set["name01","name02"], }
+var checkedColNumRowNamesSubAdvisory = {};
+var checkedColNumRowNamesPerformance = {};
+
 function showFullAdvisorList() {
     constructSearchList(allAdvs, SearchTypeEnum.Advisor);
 }
@@ -838,6 +844,16 @@ function toggleDropdownList(evt, n, tableId) {
     return;
   }
   n -= 1; // the tr starts from 1, yet array need to start from 0, so n--;
+  let table = document.getElementById(tableId).getElementsByTagName("tbody");
+  if (table && table.length > 0) {
+    table = table[0];
+  }
+  let rows = table.getElementsByTagName("tr");
+  let names = new Set();
+  for (let i = 0; i < rows.length; i++) {
+    let row = rows[i].getElementsByTagName("td");
+    names.add(row[n].innerHTML);
+  }
   let btn = evt.currentTarget;
 
   let listContainer = document.createElement("ul");
@@ -846,7 +862,8 @@ function toggleDropdownList(evt, n, tableId) {
   btn.parentNode.appendChild(listContainer);
 
   // the scroll container for search result list
-  for (let i = 0; i < 6; i++) {
+  names = Array.from(names);
+  for (let i = 0; i < names.length; i++) {
     let rowId = "rowId" + i;
 
     let row = document.createElement("li");
@@ -857,26 +874,81 @@ function toggleDropdownList(evt, n, tableId) {
     box.setAttribute("type", "checkbox");
     box.setAttribute("id", rowId);
     box.addEventListener('change', function() {
-      toggleDropdownRowSelect(this.checked, n, rowId, row);
+      toggleDropdownRowSelect(this.checked, n, rowId, row, tableId);
     });
     row.appendChild(box);
 
     let label = document.createElement("label");
-    label.innerHTML = n+","+i+": li name hrer, ytutuy lkjljl dsfds!";
+    label.innerHTML = names[i];
     label.setAttribute("for", rowId);
     label.setAttribute("class", "dropdownLabel");
     row.appendChild(label);
-
   }
 
 }
 
-function toggleDropdownRowSelect(isSelected, col, rowId, rowNode) {
+function getCheckedColNumRowNamesBy(tableId) {
+  switch (tableId) {
+    case TableIdEnum.DefaultFit:
+      return checkedColNumRowNamesDefaultFit;
+
+    case TableIdEnum.SubAdvisory:
+      return checkedColNumRowNamesSubAdvisory;
+
+    case TableIdEnum.Performance:
+      return checkedColNumRowNamesPerformance;
+
+    default:
+      console.log("--- [ERROR] wrong tableId: " + tableId);
+      return;
+    }
+}
+
+function applyColFilters(tableId) {
+  const checkedColNumRowNames = getCheckedColNumRowNamesBy(tableId);
+  let table = document.getElementById(tableId).getElementsByTagName("tbody");
+  let rows = table.getElementsByTagName("tr");
+
+  if (checkedColNumRowNames.length == 0) {
+    for (let row in rows) {
+      row.style.display = "block"; // showing full table
+    }
+  } else {
+    const cols = Object.keys(checkedColNumRowNames);
+    let names = new Set();
+    const nameArrs = Object.values(checkedColNumRowNames);
+    for (const namesOfCol of nameArrs) {
+      namesOfCol.forEach(name => names.add(name));
+    }
+    for (let row in rows) {
+      let isSelected = "block";
+      for (const col in cols) {
+        const colName = row.getElementsByTagName("td")[col].innerHTML;
+        if (!names.has(colName)) {
+          isSelected = "none";
+          break;
+        }
+      }
+      row.style.display = isSelected;
+    }
+  }
+}
+
+function addColFilter(rowNode, col, tableId) {
+  let checkedColNumRowNames = getCheckedColNumRowNamesBy(tableId);
+  if (checkedColNumRowNames[col]) {
+    checkedColNumRowNames[col].push()
+  }
+}
+
+function toggleDropdownRowSelect(isSelected, col, rowId, rowNode, tableId) {
   if (isSelected) {
     rowNode.classList.add("dropdownSelected");
+    addColFilter(rowNode, col, tableId);
   } else {
     rowNode.className = "dropdownRows";
   }
+  applyColFilters(tableId);
 }
 
 function closeDropdownLists() {
@@ -906,17 +978,17 @@ function closeDropdownLists() {
     <div class="tablecontainer">
 
         <div id="tabId01" class="tabcontent" style="display:block;">
-            <table id="tableId01" class="sortable">
+            <table id="DefaultFit" class="sortable">
                 <thead>
                   <tr>
                   {% for col in colnames %}
                     <th>{{ col }}
-                      <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},'tableId01')">
+                      <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},TableIdEnum.DefaultFit)">
                         {{ col }} <arrow class=""></arrow>
                         <div style="display: none; color: red; position: absolute;">{{forloop.counter}}</div>
                       </div>
                       {% if forloop.counter > 1 %}
-                        <button onclick="toggleDropdownList(event,{{forloop.counter}},'tableId01')" class="dropbtn"><droparrow></droparrow></button>
+                        <button onclick="toggleDropdownList(event,{{forloop.counter}},TableIdEnum.DefaultFit)" class="dropbtn"><droparrow></droparrow></button>
                       {% endif %}
                     </th>
                   {% endfor %}
