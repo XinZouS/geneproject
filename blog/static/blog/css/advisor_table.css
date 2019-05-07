@@ -273,14 +273,8 @@ tbody {
 }
 tbody tr td:first-child {
     width: 20px;
-    padding-left: 10px;
+    padding-left: 5px;
     text-align: center;
-}
-td, th {
-  border: 1px solid #aabbdd;
-  text-align: left;
-  height: 20px;
-  padding: 6px 10px; /*tb,rl*/
 }
 .performance-float {
   width: 100px;
@@ -378,21 +372,48 @@ droparrow {
 .dropdownSelected {background-color: #cdf;}
 .dropdownSelected:nth-child(odd) {background:#cdf;}
 
-td.strings { text-align: left; }
-td.numerical { text-align: right; }
+td {
+  max-height: 46px;
+  border: 1px solid #aabbdd;
+}
+td div {
+  max-height: 40px;
+  text-align: left;
+  padding: 5px 10px; /*tb,rl*/
+  float: right;
+}
+td div.oversize {
+  overflow: hidden;
+  overflow-y: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+td div.oversize:hover {
+  height: auto;
+  max-height: 90px;
+  overflow: show;
+  overflow-y: scroll;
+  text-overflow: normal;
+  display: block;
+  background-color: white;
+}
+td div.strings { text-align: left; }
+td div.numerical { text-align: right; }
 
-td.width_xs { width: 60px; }
-td.width_s { width: 110px; }
-td.width_m { width: 150px; }
-td.width_l { width: 200px; }
-td.width_xl { width: 300px; }
+td div.width_xs { width: 60px; }
+td div.width_s { width: 110px; }
+td div.width_m { width: 150px; }
+td div.width_l { width: 200px; }
+td div.width_xl { width: 300px; }
 
-td.green  { background-color: #afffbb; }
-td.green:hover  { background-color: #aff0cc; }
-td.white  { background-color: #fff; }
-td.white:hover  { background-color: #eef; }
-td.yellow { background-color: #fffd8e; }
-td.yellow:hover { background-color: #fffdce; }
-td.red    { background-color: #fa8877; }
-td.red:hover    { background-color: #ffaaaa; }
+td div.green  { background-color: #afffbb; }
+td div.green:hover  { background-color: #aff0cc; }
+td div.white  { background-color: #fff; }
+td div.white:hover  { background-color: #eef; }
+td div.yellow { background-color: #fffd8e; }
+td div.yellow:hover { background-color: #fffdce; }
+td div.red    { background-color: #fa8877; }
+td div.red:hover    { background-color: #ffaaaa; }
 

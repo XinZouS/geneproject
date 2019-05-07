@@ -954,7 +954,6 @@ function toggleColFilter(isSelected, rowNode, col, tableId) {
       if (checkedColNumRowNames[col].size == 0) {
         delete checkedColNumRowNames[col]; // delete for the Map
       }
-      console.log(checkedColNumRowNames);
     }
   } else {
     let nameSet = new Set();
@@ -1018,7 +1017,7 @@ function closeDropdownLists() {
           <th>{{ col }}
             <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},TableIdEnum.DefaultFit)">
               {{ col }} <arrow class=""></arrow>
-              <div style="display: none; color: red; position: absolute;">{{forloop.counter}}</div>
+              <div style="display: inline-block; color: red; position: absolute;">{{forloop.counter}}</div>
             </div>
             {% if forloop.counter > 1 %}
               <button onclick="toggleDropdownList(event,{{forloop.counter}},TableIdEnum.DefaultFit)" class="dropbtn dropbtnNoFilter"><droparrow></droparrow></button>
@@ -1033,39 +1032,39 @@ function closeDropdownLists() {
           <td>{{ forloop.counter }}</td>
           {% for c in row %}
             {% if forloop.counter == 1 %}
-              <td class="width_xl">{{ c | default_if_none:"n/a" }}</td>
+              <td><div class="width_xl">{{ c | default_if_none:"n/a" }}</div></td>
             {% elif forloop.counter == 2 %}
-              <td class="width_xl">{{ c | default_if_none:"n/a" }}</td>
+              <td><div class="width_xl">{{ c | default_if_none:"n/a" }}</div></td>
             {% elif forloop.counter == 3 %}
-              <td class="width_xs">{{ c | default_if_none:"n/a" }}</td>
+              <td><div class="width_xs">{{ c | default_if_none:"n/a" }}</div></td>
             {% elif forloop.counter >= 4 and forloop.counter <= 6 %}
-              <td class="width_xs">{{ c | default_if_none:"n/a" }}</td>
+              <td><div class="width_xs">{{ c | default_if_none:"n/a" }}</div></td>
             {% elif forloop.counter == 8 or forloop.counter == 9 %}
-              <td class="width_m">{{ c | default_if_none:"n/a" }}</td>
+              <td><div class="width_m">{{ c | default_if_none:"n/a" }}</div></td>
             {% elif forloop.counter == 10 or forloop.counter == 11 %}
-              <td class="width_xl">{{ c | default_if_none:"n/a" }}</td>
+              <td><div class="width_xl">{{ c | default_if_none:"n/a" }}</div></td>
             {% elif forloop.counter >= 12 and forloop.counter <= 15 %}
-              <td class="numerical">{{ c | default_if_none:"n/a" }}</td>
+              <td><div class="numerical">{{ c | default_if_none:"n/a" }}</div></td>
             {% elif forloop.counter >= 16 and forloop.counter <= 17 %}
-              <td class="width_xl strings">{{ c | default_if_none:"n/a" }}</td>
+              <td><div class="width_xl strings oversize">{{ c | default_if_none:"n/a" }}</div></td>
             {% elif forloop.counter >= 18 and forloop.counter <= 19 %}
-              <td class="numerical">{{ c | default_if_none:"n/a" }}</td>
+              <td><div class="numerical">{{ c | default_if_none:"n/a" }}</div></td>
             {% elif forloop.counter >= 20 and forloop.counter <= 35 %}
-              <td class="performance-float numerical
+              <td><div class="performance-float numerical
                   {% if c.1 == 1 %} green
                   {% elif c.1 == 2 %} white
                   {% elif c.1 == 3 %} yellow
                   {% elif c.1 == 4 %} red
                   {% endif %}
-                  ">{{ c.0 | default_if_none:"n/a" }}</td>
+                  ">{{ c.0 | default_if_none:"n/a" }}</div></td>
             {% elif forloop.counter >= 36 and forloop.counter <= 54 %}
-              <td class="width_s numerical">{{ c | default_if_none:"n/a" }}</td>
+              <td><div class="width_s numerical">{{ c | default_if_none:"n/a" }}</div></td>
             {% elif forloop.counter == 55 %}
-              <td class="width_xl">{{ c | default_if_none:"n/a" }}</td>
+              <td><div class="width_xl oversize">{{ c | default_if_none:"n/a" }}</div></td>
             {% elif forloop.counter == 58 %}
-              <td class="width_xl">{{ c | default_if_none:"n/a" }}</td>
+              <td><div class="width_xl">{{ c | default_if_none:"n/a" }}</div></td>
             {% else %}
-              <td class="width">{{ c | default_if_none:"n/a" }}</td>
+              <td><div class="width">{{ c | default_if_none:"n/a" }}</div></td>
             {% endif %}
           {% endfor %}
         </tr>
@@ -1096,7 +1095,7 @@ function closeDropdownLists() {
         <tr>
           <td>{{ forloop.counter }}</td>
           {% for item in row %}
-            <td>{{ item | default_if_none:"n/a" }}</td>
+            <td><div>{{ item | default_if_none:"n/a" }}</div></td>
           {% endfor %}
         </tr>
         {% endfor %}
