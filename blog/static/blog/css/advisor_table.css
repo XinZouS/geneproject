@@ -379,8 +379,8 @@ td {
 td div {
   max-height: 40px;
   text-align: left;
+  float: left;
   padding: 5px 10px; /*tb,rl*/
-  float: right;
 }
 td div.oversize {
   overflow: hidden;
@@ -399,8 +399,10 @@ td div.oversize:hover {
   display: block;
   background-color: white;
 }
-td div.strings { text-align: left; }
-td div.numerical { text-align: right; }
+td div.numerical { 
+  text-align: right;
+  float: right;
+}
 
 td div.width_xs { width: 60px; }
 td div.width_s { width: 110px; }
