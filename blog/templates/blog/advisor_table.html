@@ -1075,42 +1075,48 @@ function closeDropdownLists() {
         </div>
 
         <div id="tabId02" class="tabcontent">
-            <table id="tableId02" class="sortable">
-                <thead>
-                    <tr>
-                      {% for col in subAdvCols %}
-                        <th>{{ col }}
-                          <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},'tableId02')">
-                          {{ col }} <arrow class=""></arrow>
-                          <div style="color: orange;">{{forloop.counter}}</div>
-                          </div>
-                        </th>
-                      {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in subAdvs %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        {% for item in row %}
-                            <td>{{ item | default_if_none:"n/a" }}</td>
-                        {% endfor %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>        
+          <table id="SubAdvisory" class="sortable">
+            <thead>
+              <tr>
+                {% for col in subAdvCols %}
+                  <th>{{ col }}
+                    <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},TableIdEnum.SubAdvisory)">
+                    {{ col }} <arrow class=""></arrow>
+                    <div style="display: none; color: orange;">{{forloop.counter}}</div>
+                    </div>
+                    {% if forloop.counter > 1 %}
+                      <button onclick="toggleDropdownList(event,{{forloop.counter}},TableIdEnum.SubAdvisory)" class="dropbtn dropbtnNoFilter"><droparrow></droparrow></button>
+                    {% endif %}
+                  </th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in subAdvs %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                {% for item in row %}
+                  <td>{{ item | default_if_none:"n/a" }}</td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>        
         </div>
 
         <div id="tabId03" class="tabcontent">
-            <table id="tableId03" class="sortable">
+            <table id="Performance" class="sortable">
               <thead>
                 <tr>
                 {% for col in sharesAndFundsColnames %}
                   <th>{{ col }}
-                    <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},'tableId03')">
+                    <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},TableIdEnum.Performance)">
                     {{ col }} <arrow class=""></arrow>
-                    <div style="color: skyblue;">{{forloop.counter}}</div>
+                    <div style="display: none; color: skyblue;">{{forloop.counter}}</div>
                     </div>
+                    {% if forloop.counter > 1 %}
+                      <button onclick="toggleDropdownList(event,{{forloop.counter}},TableIdEnum.Performance)" class="dropbtn dropbtnNoFilter"><droparrow></droparrow></button>
+                    {% endif %}
                   </th>
                 {% endfor %}
                 </tr>

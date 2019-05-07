@@ -337,7 +337,7 @@ droparrow {
 .dropdownContainer {
   position: absolute;
   background-color: #f1f1f1;
-  min-width: 160px;
+  min-width: 116px;
   overflow: visible;
   font-weight: normal;
   box-shadow: 0px 8px 16px 3px rgba(0,0,0,0.2);
