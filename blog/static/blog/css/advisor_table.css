@@ -11,6 +11,13 @@ navleft {
   padding: 0px 30px 30px 30px; /* t, r, b, l */
 }
 
+div.scrollable {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 6px;
+  overflow: auto;
+}
 .tab {
   width: 900px;
   overflow: hidden;
@@ -37,9 +44,11 @@ navleft {
   font-weight: bold;
 }
 
-table {
-  margin:0 auto;
-  float:left;
+/* Clear floats after the columns */
+section:after {
+  content: "";
+  display: table;
+  clear: both;
 }
 .tablecontainer {
   width: 8600px;
@@ -243,6 +252,13 @@ ul li {
   color: white;
 }
 
+table {
+  width: 100%;
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  margin:0 auto;
+  float:left;
+}
 thead tr th:first-child {
     width: 40px;
     padding-right: 30px;
@@ -261,6 +277,9 @@ tbody tr td:first-child {
     text-align: center;
 }
 td, th {
+  border: 1px solid #aabbdd;
+  text-align: left;
+  height: 20px;
   padding: 6px 10px; /*tb,rl*/
 }
 .performance-float {
@@ -276,6 +295,9 @@ th {
   white-space: nowrap; /*nowarp*/
   word-wrap: normal;
 }
+tr:hover {background-color: #eef;}
+tr {background-color: #f6f6f6;}
+
 /* Sortable tables */
 div.sorted { background-color: lightgray; }
 .ascending, .descending {}
@@ -370,7 +392,7 @@ td.green:hover  { background-color: #aff0cc; }
 td.white  { background-color: #fff; }
 td.white:hover  { background-color: #eef; }
 td.yellow { background-color: #fffd8e; }
-td.yellow:hover { background-color: #fffdd0; }
+td.yellow:hover { background-color: #fffdee; }
 td.red    { background-color: #fa8877; }
 td.red:hover    { background-color: #ffaaaa; }
 
