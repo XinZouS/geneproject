@@ -1074,14 +1074,14 @@ function closeDropdownLists() {
   </div>
 
   <div id="tabId02" class="tabcontent">
-    <table id="SubAdvisory" class="sortable">
+    <table id="SubAdvisory" class="sortable" style="width: 1500px;">
       <thead>
         <tr>
           {% for col in subAdvCols %}
             <th>{{ col }}
               <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},TableIdEnum.SubAdvisory)">
               {{ col }} <arrow class=""></arrow>
-              <div style="display: none; color: orange;">{{forloop.counter}}</div>
+              <div style="display: inline-block; position: absolute; color: orange;">{{forloop.counter}}</div>
               </div>
               {% if forloop.counter > 1 %}
                 <button onclick="toggleDropdownList(event,{{forloop.counter}},TableIdEnum.SubAdvisory)" class="dropbtn dropbtnNoFilter"><droparrow></droparrow></button>
@@ -1095,7 +1095,13 @@ function closeDropdownLists() {
         <tr>
           <td>{{ forloop.counter }}</td>
           {% for item in row %}
-            <td><div>{{ item | default_if_none:"n/a" }}</div></td>
+            {% if forloop.counter == 1 %}
+              <td><div style="width:115px;">{{ item | default_if_none:"n/a" }}</div></td>
+            {% elif forloop.counter >= 2 and forloop.counter <= 5 %}
+              <td><div style="width:230px;">{{ item | default_if_none:"n/a" }}</div></td>
+            {% else %}
+              <td><div>{{ item | default_if_none:"n/a" }}</div></td>
+            {% endif %}
           {% endfor %}
         </tr>
         {% endfor %}
