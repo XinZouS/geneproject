@@ -24,6 +24,7 @@
         <div style="width: 100%;">
             <form method="POST" autocomplete="off" action="">
                 {% csrf_token %}
+                <input type="hidden" id="openedTabInput" name="openedTabInput" value="tabBtnId01">
                 <div style="padding-top: -30px;">
                   <button type="button" class="btn clearAllButton" id="clearAllButton" onclick="clearAllButtonTapped()">Clear All</button>
                   <input type="submit" class="submitButton" id="submitButton1" onclick="submitButtonTapped(); this.form.submit(); this.disabled=true;">
@@ -103,6 +104,172 @@
             Total results: {{ companys|length }}
         </h6>
 
+    </navleft>
+
+
+<div class="tab">
+  <button class="tablinks" onclick="openTab('tabId01')" id="tabId01Btn">Default</button>
+  <button class="tablinks" onclick="openTab('tabId02')" id="tabId02Btn">Sub-Advisory</button>
+  <button class="tablinks" onclick="openTab('tabId03')" id="tabId03Btn">Performance</button>
+  <button class="tablinks" onclick="openTab('tabId04')" id="tabId04Btn">Tab04</button>
+  <button class="tablinks" onclick="openTab('tabId05')" id="tabId05Btn">Tab05</button>
+</div>
+
+<div class="tablecontainer">
+
+  <div id="tabId01" class="tabcontent" style="display:block;">
+    <table id="DefaultFit" class="sortable">
+      <thead>
+        <tr>
+        {% for col in colnames %}
+          <th>{{ col }}
+            <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},TableIdEnum.DefaultFit)">
+              {{ col }} <arrow class=""></arrow>
+              <div style="display: inline-block; color: red; position: absolute;">{{forloop.counter}}</div>
+            </div>
+            {% if forloop.counter > 1 %}
+              <button onclick="toggleDropdownList(event,{{forloop.counter}},TableIdEnum.DefaultFit)" class="dropbtn dropbtnNoFilter"><droparrow></droparrow></button>
+            {% endif %}
+          </th>
+        {% endfor %}
+        </tr>
+      </thead>
+      <tbody style="">
+        {% for row in companys %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          {% for c in row %}
+            {% if forloop.counter == 1 %}
+              <td><div class="width_xl">{{ c | default_if_none:"n/a" }}</div></td>
+            {% elif forloop.counter == 2 %}
+              <td><div class="width_xl">{{ c | default_if_none:"n/a" }}</div></td>
+            {% elif forloop.counter == 3 %}
+              <td><div class="width_xs">{{ c | default_if_none:"n/a" }}</div></td>
+            {% elif forloop.counter >= 4 and forloop.counter <= 6 %}
+              <td><div class="width_xs">{{ c | default_if_none:"n/a" }}</div></td>
+            {% elif forloop.counter == 8 or forloop.counter == 9 %}
+              <td><div class="width_m">{{ c | default_if_none:"n/a" }}</div></td>
+            {% elif forloop.counter == 10 or forloop.counter == 11 %}
+              <td><div class="width_xl">{{ c | default_if_none:"n/a" }}</div></td>
+            {% elif forloop.counter >= 12 and forloop.counter <= 15 %}
+              <td><div class="numerical">{{ c | default_if_none:"n/a" }}</div></td>
+            {% elif forloop.counter >= 16 and forloop.counter <= 17 %}
+              <td><div class="width_xl strings oversize">{{ c | default_if_none:"n/a" }}</div></td>
+            {% elif forloop.counter >= 18 and forloop.counter <= 19 %}
+              <td><div class="numerical">{{ c | default_if_none:"n/a" }}</div></td>
+            {% elif forloop.counter >= 20 and forloop.counter <= 35 %}
+              <td><div class="performance-float numerical
+                  {% if c.1 == 1 %} green
+                  {% elif c.1 == 2 %} white
+                  {% elif c.1 == 3 %} yellow
+                  {% elif c.1 == 4 %} red
+                  {% endif %}
+                  ">{{ c.0 | default_if_none:"n/a" }}</div></td>
+            {% elif forloop.counter >= 36 and forloop.counter <= 54 %}
+              <td><div class="width_s numerical">{{ c | default_if_none:"n/a" }}</div></td>
+            {% elif forloop.counter == 55 %}
+              <td><div class="width_xl oversize">{{ c | default_if_none:"n/a" }}</div></td>
+            {% elif forloop.counter == 58 %}
+              <td><div class="width_xl">{{ c | default_if_none:"n/a" }}</div></td>
+            {% else %}
+              <td><div class="width">{{ c | default_if_none:"n/a" }}</div></td>
+            {% endif %}
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>        
+  </div>
+
+  <div id="tabId02" class="tabcontent">
+    <table id="SubAdvisory" class="sortable" style="width: 1500px;">
+      <thead>
+        <tr>
+          {% for col in subAdvCols %}
+            <th>{{ col }}
+              <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},TableIdEnum.SubAdvisory)">
+              {{ col }} <arrow class=""></arrow>
+              <div style="display: inline-block; position: absolute; color: orange;">{{forloop.counter}}</div>
+              </div>
+              {% if forloop.counter > 1 %}
+                <button onclick="toggleDropdownList(event,{{forloop.counter}},TableIdEnum.SubAdvisory)" class="dropbtn dropbtnNoFilter"><droparrow></droparrow></button>
+              {% endif %}
+            </th>
+          {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in subAdvs %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          {% for item in row %}
+            {% if forloop.counter == 1 %}
+              <td><div style="width:115px;">{{ item | default_if_none:"n/a" }}</div></td>
+            {% elif forloop.counter >= 2 and forloop.counter <= 5 %}
+              <td><div style="width:230px;">{{ item | default_if_none:"n/a" }}</div></td>
+            {% else %}
+              <td><div>{{ item | default_if_none:"n/a" }}</div></td>
+            {% endif %}
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>        
+  </div>
+
+  <div id="tabId03" class="tabcontent">
+    <table id="Performance" class="sortable">
+      <thead>
+        <tr>
+        {% for col in sharesAndFundsColnames %}
+          <th>{{ col }}
+            <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},TableIdEnum.Performance)">
+            {{ col }} <arrow class=""></arrow>
+            <div style="display: none; color: skyblue;">{{forloop.counter}}</div>
+            </div>
+            {% if forloop.counter > 1 %}
+              <button onclick="toggleDropdownList(event,{{forloop.counter}},TableIdEnum.Performance)" class="dropbtn dropbtnNoFilter"><droparrow></droparrow></button>
+            {% endif %}
+          </th>
+        {% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for row in sharesAndFunds %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          {% for item in row %}
+            {% if forloop.counter == 1 %}
+              <td class="performance-float" style="width:260px; text-align:left;">{{ item }}</td>
+            {% elif forloop.counter == 2 %}
+              <td class="performance-float" style="width:120px; text-align:left;">{{ item }}</td>
+            {% elif forloop.counter == 3 %}
+              <td class="performance-float" style="width:200px">{{ item }}</td>
+            {% else %}
+              {% if forloop.counter > 3 and forloop.counter < 29 %}
+                <td class="performance-float 
+                    {% if item.1 == 1 %} green
+                    {% elif item.1 == 2 %} white
+                    {% elif item.1 == 3 %} yellow
+                    {% elif item.1 == 4 %} red
+                    {% endif %}
+                    ">{{ item.0 | default_if_none:"n/a" }}</td>
+              {% else %}
+                <td class="performance-float">{{ item | default_if_none:"n/a" }}</td>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+</section>
+
+
 
 <script>
 
@@ -135,6 +302,9 @@ setupselectedAdvisorNames();
 setupselectedMSCatNames();
 setupselectedMSSubAdvNames();
 setupselectedMgrNames();
+
+var openedTabId = {{ openedTabId|safe }};
+openTab(openedTabId[0]);
 
 /* for the col filter in each tab of table */
 var TableIdEnum = Object.freeze({"DefaultFit":"DefaultFit", "SubAdvisory":"SubAdvisory", "Performance":"Performance"});
@@ -669,7 +839,7 @@ function clearSelectedMgrList() {
 }
 
 
-function openTab(evt, tabId) {
+function openTab(tabId) {
   var i, tabcontent, tablinks;
   // close all tab
   tabcontent = document.getElementsByClassName("tabcontent");
@@ -685,7 +855,8 @@ function openTab(evt, tabId) {
   if (showDiv) {
     showDiv.style.display = "block";
   }
-  evt.currentTarget.className += " active";
+  document.getElementById(tabId + "Btn").className += " active";
+  document.getElementById("openedTabInput").value = tabId;
 }
 
 
@@ -990,176 +1161,7 @@ function closeDropdownLists() {
   }
 }
 
-  </script>
-
-</navleft>
-
-
-<div class="tab">
-  <button class="tablinks" onclick="openTab(event, 'tabId01')" id="defaultOpenBtn">Default</button>
-  <button class="tablinks" onclick="openTab(event, 'tabId02')">Sub-Advisory</button>
-  <button class="tablinks" onclick="openTab(event, 'tabId03')">Performance</button>
-  <button class="tablinks" onclick="openTab(event, 'tabId04')">Tab04</button>
-  <button class="tablinks" onclick="openTab(event, 'tabId05')">Tab05</button>
-</div>
-
-<script type="text/javascript">
-  document.getElementById("defaultOpenBtn").click();  // default selected tab
 </script>
-
-<div class="tablecontainer">
-
-  <div id="tabId01" class="tabcontent" style="display:block;">
-    <table id="DefaultFit" class="sortable">
-      <thead>
-        <tr>
-        {% for col in colnames %}
-          <th>{{ col }}
-            <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},TableIdEnum.DefaultFit)">
-              {{ col }} <arrow class=""></arrow>
-              <div style="display: inline-block; color: red; position: absolute;">{{forloop.counter}}</div>
-            </div>
-            {% if forloop.counter > 1 %}
-              <button onclick="toggleDropdownList(event,{{forloop.counter}},TableIdEnum.DefaultFit)" class="dropbtn dropbtnNoFilter"><droparrow></droparrow></button>
-            {% endif %}
-          </th>
-        {% endfor %}
-        </tr>
-      </thead>
-      <tbody style="">
-        {% for row in companys %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          {% for c in row %}
-            {% if forloop.counter == 1 %}
-              <td><div class="width_xl">{{ c | default_if_none:"n/a" }}</div></td>
-            {% elif forloop.counter == 2 %}
-              <td><div class="width_xl">{{ c | default_if_none:"n/a" }}</div></td>
-            {% elif forloop.counter == 3 %}
-              <td><div class="width_xs">{{ c | default_if_none:"n/a" }}</div></td>
-            {% elif forloop.counter >= 4 and forloop.counter <= 6 %}
-              <td><div class="width_xs">{{ c | default_if_none:"n/a" }}</div></td>
-            {% elif forloop.counter == 8 or forloop.counter == 9 %}
-              <td><div class="width_m">{{ c | default_if_none:"n/a" }}</div></td>
-            {% elif forloop.counter == 10 or forloop.counter == 11 %}
-              <td><div class="width_xl">{{ c | default_if_none:"n/a" }}</div></td>
-            {% elif forloop.counter >= 12 and forloop.counter <= 15 %}
-              <td><div class="numerical">{{ c | default_if_none:"n/a" }}</div></td>
-            {% elif forloop.counter >= 16 and forloop.counter <= 17 %}
-              <td><div class="width_xl strings oversize">{{ c | default_if_none:"n/a" }}</div></td>
-            {% elif forloop.counter >= 18 and forloop.counter <= 19 %}
-              <td><div class="numerical">{{ c | default_if_none:"n/a" }}</div></td>
-            {% elif forloop.counter >= 20 and forloop.counter <= 35 %}
-              <td><div class="performance-float numerical
-                  {% if c.1 == 1 %} green
-                  {% elif c.1 == 2 %} white
-                  {% elif c.1 == 3 %} yellow
-                  {% elif c.1 == 4 %} red
-                  {% endif %}
-                  ">{{ c.0 | default_if_none:"n/a" }}</div></td>
-            {% elif forloop.counter >= 36 and forloop.counter <= 54 %}
-              <td><div class="width_s numerical">{{ c | default_if_none:"n/a" }}</div></td>
-            {% elif forloop.counter == 55 %}
-              <td><div class="width_xl oversize">{{ c | default_if_none:"n/a" }}</div></td>
-            {% elif forloop.counter == 58 %}
-              <td><div class="width_xl">{{ c | default_if_none:"n/a" }}</div></td>
-            {% else %}
-              <td><div class="width">{{ c | default_if_none:"n/a" }}</div></td>
-            {% endif %}
-          {% endfor %}
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>        
-  </div>
-
-  <div id="tabId02" class="tabcontent">
-    <table id="SubAdvisory" class="sortable" style="width: 1500px;">
-      <thead>
-        <tr>
-          {% for col in subAdvCols %}
-            <th>{{ col }}
-              <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},TableIdEnum.SubAdvisory)">
-              {{ col }} <arrow class=""></arrow>
-              <div style="display: inline-block; position: absolute; color: orange;">{{forloop.counter}}</div>
-              </div>
-              {% if forloop.counter > 1 %}
-                <button onclick="toggleDropdownList(event,{{forloop.counter}},TableIdEnum.SubAdvisory)" class="dropbtn dropbtnNoFilter"><droparrow></droparrow></button>
-              {% endif %}
-            </th>
-          {% endfor %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in subAdvs %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          {% for item in row %}
-            {% if forloop.counter == 1 %}
-              <td><div style="width:115px;">{{ item | default_if_none:"n/a" }}</div></td>
-            {% elif forloop.counter >= 2 and forloop.counter <= 5 %}
-              <td><div style="width:230px;">{{ item | default_if_none:"n/a" }}</div></td>
-            {% else %}
-              <td><div>{{ item | default_if_none:"n/a" }}</div></td>
-            {% endif %}
-          {% endfor %}
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>        
-  </div>
-
-  <div id="tabId03" class="tabcontent">
-    <table id="Performance" class="sortable">
-      <thead>
-        <tr>
-        {% for col in sharesAndFundsColnames %}
-          <th>{{ col }}
-            <div class="thdiv" onclick="sortTable(event,{{forloop.counter}},TableIdEnum.Performance)">
-            {{ col }} <arrow class=""></arrow>
-            <div style="display: none; color: skyblue;">{{forloop.counter}}</div>
-            </div>
-            {% if forloop.counter > 1 %}
-              <button onclick="toggleDropdownList(event,{{forloop.counter}},TableIdEnum.Performance)" class="dropbtn dropbtnNoFilter"><droparrow></droparrow></button>
-            {% endif %}
-          </th>
-        {% endfor %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for row in sharesAndFunds %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          {% for item in row %}
-            {% if forloop.counter == 1 %}
-              <td class="performance-float" style="width:260px; text-align:left;">{{ item }}</td>
-            {% elif forloop.counter == 2 %}
-              <td class="performance-float" style="width:120px; text-align:left;">{{ item }}</td>
-            {% elif forloop.counter == 3 %}
-              <td class="performance-float" style="width:200px">{{ item }}</td>
-            {% else %}
-              {% if forloop.counter > 3 and forloop.counter < 29 %}
-                <td class="performance-float 
-                    {% if item.1 == 1 %} green
-                    {% elif item.1 == 2 %} white
-                    {% elif item.1 == 3 %} yellow
-                    {% elif item.1 == 4 %} red
-                    {% endif %}
-                    ">{{ item.0 | default_if_none:"n/a" }}</td>
-              {% else %}
-                <td class="performance-float">{{ item | default_if_none:"n/a" }}</td>
-              {% endif %}
-            {% endif %}
-          {% endfor %}
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-</div>
-
-</section>
 
 </body>
 

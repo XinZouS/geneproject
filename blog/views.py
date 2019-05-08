@@ -26,6 +26,8 @@ def home(request):
 
 @login_required
 def fit_default(request):
+	openedTabId = "tabId01".encode("utf-8")
+
 	defaultCols = ["No.","Name","Category","MF/VA","SubAdvised","Index Fund","Watch List","VIT","Fund of Funds","Inception Date","Advisor","Subadvisor","AUM","NFYTD","NF2017","NF2016","SubStart","SubSched","SubAdvEffRate","Sub_Rate($)","TR_YTD","TR_1Y","TR_2Y","TR_3Y","TR_5Y","TR_10Y","Alpha","ExcessRet","Sharpe","InfoRat","Beta","Stdev","R2","UpsideCap","DownsideCap","TrackingErr","QRK_YTD","QRK_1Y","QRK_2Y","QRK_3Y","QRK_5Y","QRK_10Y","QRK_15Y","QRK_Alpha","QRK_ExcessRet","QRK_Sharpe","QRK_InfoRat","QRK_Beta","QRK_Stdev","QRK_R2","QRK_UpsideCap","QRK_DownsideCap","QRK_TrackingErr","Team Managed","Prospectus Net Expense Ratio","Manager Name","Manager Tenure (Longest)","Manager Tenure (Average)","Benchmark"]
 	companyInfo = []
 	subAdvCols = ["No.", "FundId", "Fund", "SubAdvisor", "SubAdvisorParent", "AdvisorParent", "SubAdvised", "AgrmStart", "AgrmEnd", "SubStart", "SubEnd", "SubAlloc", "SubAUM", "FundAUM", "EffSub", "SubSched3"]
@@ -95,6 +97,10 @@ def fit_default(request):
 		selectedMSCatNames 		= list(map(lambda x: x.encode("utf-8"), selectedMSCatNameSet))
 		selectedMgrNames 		= list(map(lambda x: x.encode("utf-8"), selectedMgrNameSet))
 
+		lastTabId = request.POST.getlist('openedTabInput')
+		if lastTabId and len(lastTabId) > 0:
+			openedTabId = lastTabId[0].encode("utf-8")
+
 	else:
 		print "--- [GET] request is GET, init page....,"
 
@@ -141,6 +147,8 @@ def fit_default(request):
 		'idOfMgrNameDict' : idOfMgrNameDict,
 		'selectedMgrIds':   selectedMgrIds,
 		'selectedMgrNames': selectedMgrNames,
+
+		'openedTabId': [openedTabId],
 
 		'colnames': defaultCols,
 		'companys': companyInfo,
