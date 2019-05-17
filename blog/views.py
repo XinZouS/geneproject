@@ -97,6 +97,7 @@ def fit_default(request):
 		selectedMSCatNames 		= list(map(lambda x: x.encode("utf-8"), selectedMSCatNameSet))
 		selectedMgrNames 		= list(map(lambda x: x.encode("utf-8"), selectedMgrNameSet))
 
+		# TODO: try get 'opendTabInput' without getlist:
 		lastTabId = request.POST.getlist('openedTabInput')
 		if lastTabId and len(lastTabId) > 0:
 			openedTabId = lastTabId[0].encode("utf-8")
