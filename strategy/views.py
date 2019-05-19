@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.http import Http404
+from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib import messages
 from django.shortcuts import render
@@ -51,7 +52,7 @@ class StrategyListByUser(LoginRequiredMixin, generic.ListView):
 
 
 class StrategyDelete(LoginRequiredMixin, SelectRelatedMixin, generic.DeleteView):
-	model = models.Strategy
+	model = Strategy
 	select_related = ('user')
 	success_url = reverse_lazy('strategy:all')
 
