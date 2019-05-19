@@ -19,10 +19,14 @@ from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.conf import settings
 from users import views as user_views
+from . import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('blog.urls')),
+    url(r'^$', views.HomePage.as_view(),name='home'),
+    url(r'^welcome/$',views.WelcomeLogin.as_view(),name='welcome'),
+    url(r'^seeyou/$',views.WelgoLogout.as_view(),name='welgo'),
+    url(r'^info/', include('blog.urls')),
     url(r'^register/', user_views.register, name='register'),
     url(r'^login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     url(r'^logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
