@@ -42,7 +42,7 @@ class StrategyList(SelectRelatedMixin, generic.ListView):
 # the strategy of current user in a list
 class StrategyListByUser(LoginRequiredMixin, generic.ListView):
 	model = Strategy
-	template_name = 'strategy/list_by_user.html'
+	template_name = 'strategy/strategy_list_by_user.html'
 
 	def get_queryset(self):
 		try:
