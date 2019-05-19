@@ -24,8 +24,8 @@ from . import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.HomePage.as_view(),name='home'),
-    url(r'^welcome/$',views.WelcomeLogin.as_view(),name='welcome'),
-    url(r'^seeyou/$',views.WelgoLogout.as_view(),name='welgo'),
+    url(r'^welcome/$',views.WelcomeLogin.as_view(),name='login'),
+    url(r'^logout/$',views.WelgoLogout.as_view(),name='logout'),
     url(r'^info/', include('blog.urls')),
     url(r'^register/', user_views.register, name='register'),
     url(r'^login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
