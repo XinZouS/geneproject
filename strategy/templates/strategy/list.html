@@ -1,0 +1,44 @@
+{% extends 'strategy/base.html' %}
+
+{% block strategypre %}
+<div class="col-md-4">
+	<div class="content">
+		<h2>Strategies</h2>
+		<p>Select a strategy to view</p>
+	</div>
+</div>
+{% endblock %}
+
+
+{% block strategy_content %}
+<div class="col-md-8">
+	<div class="list-group">
+		{% for strategy in object_list %}
+		<a href="{% url 'strategy:detail' slug=strategy.slug %}" class="list-group-item">
+			<h3 class="title list-group-item-heading">{{strategy.name}}</h3>
+			<div class="list-group-item-text container-fluid">
+				{{strategy.description_html|safe}}
+				<div class="row">
+					<div class="col-md-2">
+						<span class="badge">{{strategy.advisors.count}}</span>
+						Advisors {{strategy.advisors.count|pluralize}}
+					</div>
+					<div class="col-md-2">
+						<span class="badge">{{strategy.mscats.count}}</span>
+						Advisors {{strategy.mscats.count|pluralize}}
+					</div>
+					<div class="col-md-2">
+						<span class="badge">{{strategy.mssubadvs.count}}</span>
+						Advisors {{strategy.mssubadvs.count|pluralize}}
+					</div>
+					<div class="col-md-2">
+						<span class="badge">{{strategy.mgrnames.count}}</span>
+						Advisors {{strategy.mgrnames.count|pluralize}}
+					</div>
+				</div>
+			</div>
+		</a>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}

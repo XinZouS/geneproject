@@ -1,0 +1,36 @@
+{% extends 'strategy/base.html' %}
+
+{% block strategypre %}
+<h1>{{strategy.name}}</h1>
+<h4>{{strategy.description}}</h4>
+{% endblock %}
+
+
+{% block strategy_content %}
+<div class="col-md-8">
+	<h3>Advisors</h3>
+	<div class="col-md-4">
+		{% for item in strategy.advisors %}
+			<p>{{item.Name|safe}}</p>
+		{% endfor %}
+	</div>
+	<h3>MSCats</h3>
+	<div class="col-md-4">
+		{% for item in strategy.mscats %}
+			<p>{{item.Name|safe}}</p>
+		{% endfor %}
+	</div>
+	<h3>MSSubAdvs</h3>
+	<div class="col-md-4">
+		{% for item in strategy.mssubadvs %}
+			<p>{{item.Name|safe}}</p>
+		{% endfor %}
+	</div>
+	<h3>MgrNames</h3>
+	<div class="col-md-4">
+		{% for item in strategy.mgrnames %}
+			<p>{{item.Name|safe}}</p>
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}

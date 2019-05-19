@@ -1,0 +1,12 @@
+{% extends 'base_with_container.html' %}
+{% block containercontent %}
+
+<div class="container">
+	<div class="row">
+		{% block strategypre %}{% endblock %}
+		{% block strategy_content %}{% endblock %}
+		{% block strategypost %}{% endblock %}
+	</div>
+</div>
+
+{% endblock %}

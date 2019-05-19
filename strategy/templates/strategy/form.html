@@ -1,0 +1,12 @@
+{% extends 'strategy/base.html' %}
+{% load bootstrap3 %}
+
+{% block strategy_content %}
+<h4>New Strategy</h4>
+
+<form action="{% url 'strategy:create' %}" method="POST" id="strategyForm">
+	{% csrf_token %}
+	{% bootstrap_form form %}
+	<input type="submit" class="btn btn-primary btn-large" value="Create Strategy">
+</form>
+{% endblock %}
