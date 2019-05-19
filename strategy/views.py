@@ -32,7 +32,7 @@ class StrategyList(SelectRelatedMixin, generic.ListView):
 
 
 # the strategy of current user in a list
-class StrategyListByUser(generic.ListView):
+class StrategyListByUser(LoginRequiredMixin, generic.ListView):
 	model = Strategy
 	template_name = 'strategy/list_by_user.html'
 
