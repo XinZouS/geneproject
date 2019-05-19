@@ -1,0 +1,16 @@
+{% extneds 'strategy/base.html' %}
+
+{% block strategypre %}
+<div class="col-md-4">
+	<h1>@{{strategy_user.username}}</h1>
+</div>
+{% endblock %}
+
+
+{% block strategy_content %}
+<div class="col-md-8">
+	{% for strategy in strategy_list %}
+		{% include 'strategy/_strategy.html' %}
+	{% endfor %}
+</div>
+{% endblock %}

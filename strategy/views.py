@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.http import Http404
 from django.views import generic
 from django.contrib import messages
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from strategy.models import Strategy
-
 # pip install django-braces
 from braces.views import SelectRelatedMixin
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
+from strategy.models import Strategy
 
 
 class StrategyCreate(LoginRequiredMixin, SelectRelatedMixin, generic.CreateView):
@@ -21,8 +25,29 @@ class StrategyDetail(SelectRelatedMixin, generic.DetailView):
 	model = Strategy
 
 
+# All strategy in a list
 class StrategyList(SelectRelatedMixin, generic.ListView):
 	model = Strategy
+	select_related = ('user','strategy')
+
+
+# the strategy of current user in a list
+class StrategyListByUser(generic.ListView):
+	model = Strategy
+	template_name = 'strategy/list_by_user.html'
+
+	def get_queryset(self):
+		try:
+			self.strategy_user = User.objects.prefetch_related('strategies').get(username__iexact=self.kwargs.get('username'))
+		except User.DoesNotExist:
+			raise Http404
+		else:
+			return self.strategy_user.strategies.all()
+
+	def get_context_data(self,**kwargs):
+		context = super().get_context_data(**kwargs)
+		context['strategy_user'] = self.strategy_user
+		return context
 
 
 class StrategyDelete(LoginRequiredMixin, SelectRelatedMixin, generic.DeleteView):
