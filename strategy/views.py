@@ -18,12 +18,19 @@ from strategy.models import Strategy
 
 
 class StrategyCreate(LoginRequiredMixin, SelectRelatedMixin, generic.CreateView):
-	fields = ('name','description')
 	model = Strategy
+	fields = ('name','description')
+
+	def form_valid(self,form):
+		self.object = form.save(commit=False)
+		self.object.user = self.request.user
+		self.object.save()
+		return super(StrategyCreate,self).form_valid(form)
 
 
 class StrategyDetail(SelectRelatedMixin, generic.DetailView):
 	model = Strategy
+	select_related = ('user',)
 
 
 # All strategy in a list
@@ -63,3 +70,9 @@ class StrategyDelete(LoginRequiredMixin, SelectRelatedMixin, generic.DeleteView)
 	def delete(self,*args,**kwargs):
 		messages.success(self.request,'Strategy Delete Success')
 		return super().delete(*args,**kwargs)
+
+
+
+
+
+

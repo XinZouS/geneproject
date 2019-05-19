@@ -31,11 +31,11 @@ class Strategy(models.Model):
 	def save(self,*args,**kwargs):
 		self.slug = slugify(self.name)
 		self.description_html = misaka.html(self.description)
-		super().save(*args,**kwargs)
+		super(Strategy,self).save(*args,**kwargs)
 
 	def get_absolute_url(self):
 		argsdict = {'slug':self.slug, 'pk':self.pk}
-		return reverse('strategy:details',kwargs=argsdict)
+		return reverse('strategy:detail',kwargs=argsdict)
 
 	class Meta:
 		ordering = ['name']
