@@ -36,7 +36,7 @@ class StrategyDetail(SelectRelatedMixin, generic.DetailView):
 # All strategy in a list
 class StrategyList(SelectRelatedMixin, generic.ListView):
 	model = Strategy
-	select_related = ('user','strategy')
+	select_related = ('user',)
 
 
 # the strategy of current user in a list
@@ -53,24 +53,26 @@ class StrategyListByUser(LoginRequiredMixin, generic.ListView):
 			return self.strategy_user.strategies.all()
 
 	def get_context_data(self,**kwargs):
-		context = super().get_context_data(**kwargs)
+		context = super(StrategyListByUser, self).get_context_data(**kwargs)
 		context['strategy_user'] = self.strategy_user
 		return context
 
 
 class StrategyDelete(LoginRequiredMixin, SelectRelatedMixin, generic.DeleteView):
 	model = Strategy
-	select_related = ('user')
-	success_url = reverse_lazy('strategy:all')
+	select_related = ('user',)
+	# success_url = reverse_lazy('strategy:by_user', kwargs={'username': self.object.username})
 
 	def get_queryset(self):
-		queryset = super().get_queryset()
+		queryset = super(StrategyDelete, self).get_queryset()
 		return queryset.filter(user_id=self.request.user.id)
 
 	def delete(self,*args,**kwargs):
 		messages.success(self.request,'Strategy Delete Success')
-		return super().delete(*args,**kwargs)
+		return super(StrategyDelete, self).delete(*args,**kwargs)
 
+	def get_success_url(self):
+		return reverse_lazy('strategy:by_user', kwargs={'username': self.request.user.username})
 
 
 

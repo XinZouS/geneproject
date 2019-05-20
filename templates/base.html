@@ -94,7 +94,9 @@
 	        <div class="navbar-nav mr-auto">
 	          <a class="nav-item nav-link" href="{% url 'blog-home' %}">Home</a>
 	          <a class="nav-item nav-link" href="{% url 'fitdefault' %}">Fit Default</a>
-	          <a class="nav-item nav-link" href="{% url 'strategy:all' %}">Strategy</a>
+	          {% if user.is_authenticated %}
+		          <a class="nav-item nav-link" href="{% url 'strategy:by_user' username=user.username %}">Strategy</a>
+	          {% endif %}
 	          <a class="nav-item nav-link" href="{% url 'blog-about' %}">About</a>
 	        </div>
 
