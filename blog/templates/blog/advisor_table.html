@@ -26,21 +26,21 @@
                 {% csrf_token %}
                 <input type="hidden" id="openedTabInput" name="openedTabInput" value="tabBtnId01">
                 <div style="padding-top: -30px;">
-                  <button type="button" class="btn clearAllButton" id="clearAllButton" onclick="clearAllButtonTapped()">Clear All</button>
-    <a href="{% url 'strategy:create' %}" class="btn btn-md btn-fill btn-warning">
-      <span class="glyphicon glyphicon-plus-sign">Create</span>
-    </a>
-                  <input type="submit" class="submitButton" id="submitButton1" onclick="submitButtonTapped(); this.form.submit(); this.disabled=true;">
+                  <button type="button" class="mainBtn clearAllButton" id="clearAllButton" onclick="clearAllButtonTapped()">Clear All</button>
+                  <a href="{% url 'strategy:create' %}" class="btn btn-md btn-info" style="height:36px; margin-left:8px; margin-top:10px;">
+                    <span class="glyphicon glyphicon-plus-sign">Save</span>
+                  </a>
+                  <input type="submit" class="mainBtn submitButton" id="submitButton1" onclick="submitButtonTapped(); this.form.submit(); this.disabled=true;">
                 </div>
 
                 <h6 class="searchTitle">Advisor:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input type="text" name="myAdvisor" id="searchAdvisorInput" placeholder="Advisor Name">
-                    <button type="button" class="btn showUl" id="lstAdvisors" onclick="showFullAdvisorList()">
+                    <button type="button" class="mainBtn showUl" id="lstAdvisors" onclick="showFullAdvisorList()">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
-                    <button type="button" class="btn okBtn" id="okAdvisors" onclick="okButtonTapped()">OK</button>
-                    <button type="button" class="btn allBtn" id="allAdvisors" onclick="addAllButtonTapped()">Add All</button>
-                    <button type="button" class="btn clearUlButton" id="clearAdvisors" onclick="clearSelectedAdvisorList()">Clear</button>
+                    <button type="button" class="mainBtn okBtn" id="okAdvisors" onclick="okButtonTapped()">OK</button>
+                    <button type="button" class="mainBtn allBtn" id="allAdvisors" onclick="addAllButtonTapped()">Add All</button>
+                    <button type="button" class="mainBtn clearUlButton" id="clearAdvisors" onclick="clearSelectedAdvisorList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
             
@@ -52,11 +52,11 @@
                 <h6 class="searchTitle">Category:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input type="text" name="myMSCat" id="searchMSCatInput" placeholder="MSCat Name">
-                    <button type="button" class="btn showUl" id="lstMSCats" onclick="showFullMSCatList()">
+                    <button type="button" class="mainBtn showUl" id="lstMSCats" onclick="showFullMSCatList()">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
-                    <button type="button" class="btn okBtn" id="okMSCats" onclick="okButtonTapped()">OK</button>
-                    <button type="button" class="btn allBtn" id="allMSCats" onclick="addAllButtonTapped()">Add All</button>
-                    <button type="button" class="btn clearUlButton" id="clearMSCats" onclick="clearSelectedMSCatList()">Clear</button>
+                    <button type="button" class="mainBtn okBtn" id="okMSCats" onclick="okButtonTapped()">OK</button>
+                    <button type="button" class="mainBtn allBtn" id="allMSCats" onclick="addAllButtonTapped()">Add All</button>
+                    <button type="button" class="mainBtn clearUlButton" id="clearMSCats" onclick="clearSelectedMSCatList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
@@ -68,11 +68,11 @@
                 <h6 class="searchTitle">SubAdvisors:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input type="text" name="myMSSubAdv" id="searchMSSubAdvInput" placeholder="MSSubAdv Name">
-                    <button type="button" class="btn showUl" id="lstMSSubAdvs" onclick="showFullMSSubAdvList()">
+                    <button type="button" class="mainBtn showUl" id="lstMSSubAdvs" onclick="showFullMSSubAdvList()">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
-                    <button type="button" class="btn okBtn" id="okMSSubAdvs" onclick="okButtonTapped()">OK</button>
-                    <button type="button" class="btn allBtn" id="allMSSubAdvs" onclick="addAllButtonTapped()">Add All</button>
-                    <button type="button" class="btn clearUlButton" id="clearMSSubAdvs" onclick="clearSelectedMSSubAdvList()">Clear</button>
+                    <button type="button" class="mainBtn okBtn" id="okMSSubAdvs" onclick="okButtonTapped()">OK</button>
+                    <button type="button" class="mainBtn allBtn" id="allMSSubAdvs" onclick="addAllButtonTapped()">Add All</button>
+                    <button type="button" class="mainBtn clearUlButton" id="clearMSSubAdvs" onclick="clearSelectedMSSubAdvList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
@@ -84,11 +84,11 @@
                 <h6 class="searchTitle">Manager Names:</h6>
                 <div class="autocomplete" style="width:100%;">
                     <input type="text" name="myMgr" id="searchMgrInput" placeholder="Manager Name">
-                    <button type="button" class="btn showUl" id="lstMgrName" onclick="showFullMgrList()">
+                    <button type="button" class="mainBtn showUl" id="lstMgrName" onclick="showFullMgrList()">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
-                    <button type="button" class="btn okBtn" id="okMgrName" onclick="okButtonTapped()">OK</button>
-                    <button type="button" class="btn allBtn" id="allMgrName" onclick="addAllButtonTapped()">Add All</button>
-                    <button type="button" class="btn clearUlButton" id="clearMgrName" onclick="clearSelectedMgrList()">Clear</button>
+                    <button type="button" class="mainBtn okBtn" id="okMgrName" onclick="okButtonTapped()">OK</button>
+                    <button type="button" class="mainBtn allBtn" id="allMgrName" onclick="addAllButtonTapped()">Add All</button>
+                    <button type="button" class="mainBtn clearUlButton" id="clearMgrName" onclick="clearSelectedMgrList()">Clear</button>
                 </div>
                 <div class="blankMarginDiv"></div>
 
@@ -97,15 +97,15 @@
                 </div>
 
                 <div>
-                  <button type="button" class="btn clearAllButton" id="clearAllButton" onclick="clearAllButtonTapped()">Clear All</button>
-                  <input type="submit" class="submitButton" id="submitButton2" onclick="submitButtonTapped(); this.form.submit(); this.disabled=true;">
+                  <button type="button" class="mainBtn clearAllButton" id="clearAllButton" onclick="clearAllButtonTapped()">Clear All</button>
+                  <a href="{% url 'strategy:create' %}" class="btn btn-md btn-info" style="height:36px; margin-left:8px; margin-top:10px;">
+                    <span class="glyphicon glyphicon-plus-sign">Save</span>
+                  </a>
+                  <input type="submit" class="mainBtn submitButton" id="submitButton2" onclick="submitButtonTapped(); this.form.submit(); this.disabled=true;">
                 </div>
 
             </form>
         </div>
-        <h6 style="height:20px; margin-top:10px; color:#008800">
-            Total results: {{ companys|length }}
-        </h6>
 
     </navleft>
 
@@ -863,8 +863,8 @@ function openTab(tabId) {
 
 function submitButtonTapped() {
     animateActivityIndicator();
-    document.getElementById("submitButton1").className = "submitDisabled";
-    document.getElementById("submitButton2").className = "submitDisabled";
+    document.getElementById("submitButton1").className = "mainBtn submitDisabled";
+    document.getElementById("submitButton2").className = "mainBtn submitDisabled";
 }
 
 function clearAllButtonTapped() {
