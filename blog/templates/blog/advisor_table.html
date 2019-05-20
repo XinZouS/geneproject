@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block base_navbar_content %}
+{% block content %}
 
 {% load static %}
 
@@ -51,7 +51,7 @@
 
                 <h6 class="searchTitle">Category:</h6>
                 <div class="autocomplete" style="width:100%;">
-                    <input type="text" name="myMSCat" id="searchMSCatInput" placeholder="MSCat Name">
+                    <input type="text" name="myMSCat" id="searchMSCatInput" placeholder="Category Name">
                     <button type="button" class="mainBtn showUl" id="lstMSCats" onclick="showFullMSCatList()">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" class="mainBtn okBtn" id="okMSCats" onclick="okButtonTapped()">OK</button>
@@ -67,7 +67,7 @@
 
                 <h6 class="searchTitle">SubAdvisors:</h6>
                 <div class="autocomplete" style="width:100%;">
-                    <input type="text" name="myMSSubAdv" id="searchMSSubAdvInput" placeholder="MSSubAdv Name">
+                    <input type="text" name="myMSSubAdv" id="searchMSSubAdvInput" placeholder="SubAdvisors Name">
                     <button type="button" class="mainBtn showUl" id="lstMSSubAdvs" onclick="showFullMSSubAdvList()">
                         <i class="fa fa-list-ul" id="btnI"></i></button>
                     <button type="button" class="mainBtn okBtn" id="okMSSubAdvs" onclick="okButtonTapped()">OK</button>
@@ -1166,7 +1166,7 @@ function closeDropdownLists() {
 
 </body>
 
-{% endblock base_navbar_content %}
+{% endblock %}
 
 
 
