@@ -14,10 +14,10 @@ import misaka
 
 
 class Strategy(models.Model):
-	name = models.CharField(max_length=255)
+	name = models.CharField(max_length=128)
 	slug = models.SlugField(allow_unicode=True)
 	user = models.ForeignKey(User,related_name='strategies',on_delete=models.CASCADE)
-	description = models.TextField(max_length=255,blank=True,default='')
+	description = models.TextField(max_length=256,blank=True,default='')
 	description_html = models.TextField(editable=False,default='',blank=True)
 
 	advisors = models.ManyToManyField(Advisors,through='StrategyAdvisor')
@@ -38,6 +38,7 @@ class Strategy(models.Model):
 		return reverse('strategy:detail',kwargs=argsdict)
 
 	class Meta:
+		unique_together = ['user','name']
 		ordering = ['name']
 
 
@@ -48,12 +49,14 @@ class StrategyAdvisor(models.Model):
 	def __str__(self):
 		return Advisor.Name
 
+
 class StrategyMSCat(models.Model):
 	strategy = models.ForeignKey(Strategy,related_name='mscats_strategy',on_delete=models.CASCADE)
 	MSCat = models.ForeignKey(MSCats,related_name='strategyMSCat',on_delete=models.CASCADE)
 
 	def __str__(self):
 		return MSCat.Name
+
 
 class StrategyMSSubAdv(models.Model):
 	strategy = models.ForeignKey(Strategy,related_name='mssubadvs_strategy',on_delete=models.CASCADE)
@@ -62,12 +65,14 @@ class StrategyMSSubAdv(models.Model):
 	def __str__(self):
 		return MSSubAdv.Name
 
+
 class StrategyMgrName(models.Model):
 	strategy = models.ForeignKey(Strategy,related_name='mgrnames_strategy',on_delete=models.CASCADE)
 	MgrName = models.ForeignKey(MgrNames,related_name='strategyMgrName',on_delete=models.CASCADE)
 
 	def __str__(self):
 		return MgrName.Name
+
 
 
 

@@ -22,15 +22,17 @@
 
     <navleft>
         <div style="width: 100%;">
-            <form method="POST" autocomplete="off" action="">
+            <form method="POST" name="sectionform" id="sectionform" autocomplete="off" action="" onsubmit="doSubmit();">
                 {% csrf_token %}
                 <input type="hidden" id="openedTabInput" name="openedTabInput" value="tabBtnId01">
                 <div style="padding-top: -30px;">
                   <button type="button" class="mainBtn clearAllButton" id="clearAllButton" onclick="clearAllButtonTapped()">Clear All</button>
-                  <a href="{% url 'strategy:create' %}" class="btn btn-md btn-info" style="height:36px; margin-left:8px; margin-top:10px;">
+                  <!-- <a href="{% url 'strategy:create' %}" class="btn btn-md btn-info" style="height:36px; margin-left:8px; margin-top:10px;">
                     <span class="glyphicon glyphicon-plus-sign">Save</span>
-                  </a>
-                  <input type="submit" class="mainBtn submitButton" id="submitButton1" onclick="submitButtonTapped(); this.form.submit(); this.disabled=true;">
+                  </a> -->
+                  <input type="checkbox" id="isSaveCheckbox" name="isSaveCheckbox" style="display:none;">
+                  <input type="submit" class="btn btn-md btn-info" value="Save" style="height:36px; margin-left:8px; margin-top:10px;" onclick="saveButtonTapped(); this.disabled=true;">
+                  <input type="submit" class="mainBtn submitButton" id="submitButton1" onclick="submitButtonTapped(); this.disabled=true;">
                 </div>
 
                 <h6 class="searchTitle">Advisor:</h6>
@@ -861,10 +863,22 @@ function openTab(tabId) {
 }
 
 
+function doSubmit() {
+  document.getElementById("sectionform").submit();
+  // return true;
+}
+
+function saveButtonTapped() {
+  // document.getElementById("isSaveCheckbox").checked = true;
+  document.sectionform.isSaveCheckbox.checked = true;
+  doSubmit();
+}
+
 function submitButtonTapped() {
     animateActivityIndicator();
     document.getElementById("submitButton1").className = "mainBtn submitDisabled";
     document.getElementById("submitButton2").className = "mainBtn submitDisabled";
+    doSubmit();
 }
 
 function clearAllButtonTapped() {

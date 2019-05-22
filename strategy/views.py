@@ -15,11 +15,15 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 from strategy.models import Strategy
+from strategy.forms import StrategyForm
 
 
 class StrategyCreate(LoginRequiredMixin, SelectRelatedMixin, generic.CreateView):
 	model = Strategy
-	fields = ('name','description')
+	form_class = StrategyForm
+
+	login_url = '/login/'
+	redirect_field_name = 'blog/advisor_table.html'
 
 	def form_valid(self,form):
 		self.object = form.save(commit=False)

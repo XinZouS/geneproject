@@ -9,14 +9,30 @@ from django.contrib.auth.models import User
 class Advisors(models.Model):  # model name must NOT the same as column name!
 	Name = models.CharField(max_length=400,null=False)
 
+	def __str__(self):
+		return self.Name
+
+
 class MSCats(models.Model):  # model name must NOT the same as column name!
 	Name = models.CharField(max_length=50,null=False)
+
+	def __str__(self):
+		return self.Name
+
 
 class MSSubAdvs(models.Model):  # model name must NOT the same as column name!
 	Name = models.CharField(max_length=730,null=False)
 
+	def __str__(self):
+		return self.Name
+
+
 class MgrNames(models.Model):  # model name must NOT the same as column name!
 	Name = models.CharField(max_length=1000,null=False)
+
+	def __str__(self):
+		return self.Name
+
 
 class Company(models.Model):
 	Name	= models.CharField(max_length=40)

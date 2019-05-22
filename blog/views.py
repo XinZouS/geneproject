@@ -102,6 +102,11 @@ def fit_default(request):
 		if lastTabId and len(lastTabId) > 0:
 			openedTabId = lastTabId[0].encode("utf-8")
 
+		isSave = request.POST.get('isSaveCheckbox')
+		if isSave:
+			print("save!!!!!!!")
+		else:
+			print("noooooo")
 	else:
 		print "--- [GET] request is GET, init page....,"
 
