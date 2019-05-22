@@ -25,11 +25,20 @@ class StrategyCreate(LoginRequiredMixin, SelectRelatedMixin, generic.CreateView)
 	login_url = '/login/'
 	redirect_field_name = 'blog/advisor_table.html'
 
+	def get_initial(self):
+		initial = super(StrategyCreate,self).get_initial()
+		return initial
+		
 	def form_valid(self,form):
 		self.object = form.save(commit=False)
 		self.object.user = self.request.user
 		self.object.save()
 		return super(StrategyCreate,self).form_valid(form)
+
+
+class StrategyVerify(LoginRequiredMixin, SelectRelatedMixin, generic.DetailView):
+	model = Strategy
+	select_related = ('user',)
 
 
 class StrategyDetail(SelectRelatedMixin, generic.DetailView):

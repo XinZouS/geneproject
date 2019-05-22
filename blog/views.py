@@ -5,11 +5,13 @@ from django.http import HttpResponse
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.urls import reverse
 from .models import Funds, Shares, SubAdv
 # --- use Static table ---
 # from .models import Company, Advisors, MSCats, MSSubAdvs, MgrNames
 # --- use FitDefault table ---
 from .models import FitDefault, FitAdvisors, FitCategorys, FitSubAdvisors, FitManagerNames
+from strategy.forms import StrategyForm
 
 import time
 
@@ -102,11 +104,19 @@ def fit_default(request):
 		if lastTabId and len(lastTabId) > 0:
 			openedTabId = lastTabId[0].encode("utf-8")
 
-		isSave = request.POST.get('isSaveCheckbox')
+		isSave = request.POST.get('isSaveCheckbox', False)
 		if isSave:
-			print("save!!!!!!!")
-		else:
-			print("noooooo")
+			print('---------------------')
+			form = StrategyForm()
+			print(form)
+			print('---------------------')
+			print(request.POST['advId'])
+			content = {
+				"advId": selectedAdvisorIds,
+				'catId': selectedMSCatIds,
+			}
+			return render(request, 'strategy/strategy_verify.html', content)
+
 	else:
 		print "--- [GET] request is GET, init page....,"
 

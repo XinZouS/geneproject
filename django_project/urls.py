@@ -30,7 +30,7 @@ urlpatterns = [
     # url(r'^welcome/$',views.WelcomeLogin.as_view(),name='login'),
     # url(r'^logout/$',views.WelgoLogout.as_view(),name='logout'),
     url(r'^profile/', user_views.profile, name='profile'),
-    url(r'^info/', include('blog.urls')),
+    url(r'^info/', include('blog.urls',namespace='blog')),
     url(r'^strategy/',include('strategy.urls',namespace='strategy')),
 ]
 
