@@ -8,7 +8,7 @@ from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from blog.models import Advisors,MSCats,MSSubAdvs,MgrNames
+from blog.models import FitDefault,FitAdvisors,FitCategorys,FitSubAdvisors,FitManagerNames
 
 import misaka
 
@@ -20,10 +20,10 @@ class Strategy(models.Model):
 	description = models.TextField(max_length=256,blank=True,default='')
 	description_html = models.TextField(editable=False,default='',blank=True)
 
-	advisors = models.ManyToManyField(Advisors,through='StrategyAdvisor')
-	mscats = models.ManyToManyField(MSCats,through='StrategyMSCat')
-	mssubadvs = models.ManyToManyField(MSSubAdvs,through='StrategyMSSubAdv')
-	mgrnames = models.ManyToManyField(MgrNames,through='StrategyMgrName')
+	advisors = models.ManyToManyField(FitAdvisors,through='StrategyAdvisor')
+	mscats = models.ManyToManyField(FitCategorys,through='StrategyMSCat')
+	mssubadvs = models.ManyToManyField(FitSubAdvisors,through='StrategyMSSubAdv')
+	mgrnames = models.ManyToManyField(FitManagerNames,through='StrategyMgrName')
 
 	def __str__(self):
 		return self.name
@@ -44,7 +44,7 @@ class Strategy(models.Model):
 
 class StrategyAdvisor(models.Model):
 	strategy = models.ForeignKey(Strategy,related_name='advisors_strategy',on_delete=models.CASCADE)
-	Advisor = models.ForeignKey(Advisors,related_name='strategyAdvisorID',on_delete=models.CASCADE)
+	Advisor = models.ForeignKey(FitAdvisors,related_name='strategyAdvisorID',on_delete=models.CASCADE)
 
 	def __str__(self):
 		return Advisor.Name
@@ -52,7 +52,7 @@ class StrategyAdvisor(models.Model):
 
 class StrategyMSCat(models.Model):
 	strategy = models.ForeignKey(Strategy,related_name='mscats_strategy',on_delete=models.CASCADE)
-	MSCat = models.ForeignKey(MSCats,related_name='strategyMSCat',on_delete=models.CASCADE)
+	MSCat = models.ForeignKey(FitCategorys,related_name='strategyMSCat',on_delete=models.CASCADE)
 
 	def __str__(self):
 		return MSCat.Name
@@ -60,7 +60,7 @@ class StrategyMSCat(models.Model):
 
 class StrategyMSSubAdv(models.Model):
 	strategy = models.ForeignKey(Strategy,related_name='mssubadvs_strategy',on_delete=models.CASCADE)
-	MSSubAdv = models.ForeignKey(MSSubAdvs,related_name='strategyMSSubAdv',on_delete=models.CASCADE)
+	MSSubAdv = models.ForeignKey(FitSubAdvisors,related_name='strategyMSSubAdv',on_delete=models.CASCADE)
 
 	def __str__(self):
 		return MSSubAdv.Name
@@ -68,7 +68,7 @@ class StrategyMSSubAdv(models.Model):
 
 class StrategyMgrName(models.Model):
 	strategy = models.ForeignKey(Strategy,related_name='mgrnames_strategy',on_delete=models.CASCADE)
-	MgrName = models.ForeignKey(MgrNames,related_name='strategyMgrName',on_delete=models.CASCADE)
+	MgrName = models.ForeignKey(FitManagerNames,related_name='strategyMgrName',on_delete=models.CASCADE)
 
 	def __str__(self):
 		return MgrName.Name

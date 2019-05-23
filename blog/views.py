@@ -11,7 +11,6 @@ from .models import Funds, Shares, SubAdv
 # from .models import Company, Advisors, MSCats, MSSubAdvs, MgrNames
 # --- use FitDefault table ---
 from .models import FitDefault, FitAdvisors, FitCategorys, FitSubAdvisors, FitManagerNames
-from strategy.forms import StrategyForm
 
 import time
 

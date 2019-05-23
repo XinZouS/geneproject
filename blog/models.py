@@ -476,14 +476,30 @@ class Funds(models.Model):
 class FitCategorys(models.Model):
 	Name = models.CharField(max_length=50,null=False)
 
+	def __str__(self):
+		return self.Name
+
+
 class FitAdvisors(models.Model):
 	Name = models.CharField(max_length=200,null=False)
+
+	def __str__(self):
+		return self.Name
+
 
 class FitSubAdvisors(models.Model):
 	Name = models.CharField(max_length=200,null=False)
 
+	def __str__(self):
+		return self.Name
+
+
 class FitManagerNames(models.Model):
 	Name = models.CharField(max_length=1500,null=False)
+
+	def __str__(self):
+		return self.Name
+
 
 class FitDefault(models.Model):
 	Name	= models.CharField(max_length=40)

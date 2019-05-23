@@ -47,18 +47,14 @@ def strategy_verify(request):
 		postForm.save()
 
 	else:
-		print("--- verify.GET.content: --------------------")
+		print("--- verify.GET.setup form initial: --------------------")
 		content = request.session['content']
-		print(content)
-
 		form = StrategyForm(initial={
 			'advId': content.get('advId', []),
 			'catId': content.get('catId', []),
 			'subId': content.get('subId', []),
 			'mgrId': content.get('mgrId', []),
 		})
-		print("--- verify.form: --------------------")
-		print(form)
 
 		return render(request, 'strategy/strategy_verify.html', {'form':form})
 
