@@ -44,6 +44,7 @@ def strategy_verify(request):
 		postForm = StrategyForm(request.POST or None)
 		print('--- the postForm: -------------')
 		print(postForm)
+		postForm.save()
 
 	else:
 		print("--- verify.GET.content: --------------------")

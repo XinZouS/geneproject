@@ -1,15 +1,69 @@
 {% extends 'strategy/base.html' %}
 
+{% load widget_tweaks %}
+
 {% block strategypre %}
-<div class="container">
+<!-- <div class="container">
 	<h2>Strategy Name: {{form.name}}</h2>
 	<h5>Description: {{form.description}}</h5>
 </div>
-
+ -->
 <form class="post-form" method="POST">
 	{% csrf_token %}
-	{{ form.as_p }}
-	<button type="submit" class="save btn btn-default">Save</button>
+	
+	{% for hidden in form.hidden_fields %}
+	  {{ hidden }}
+	{% endfor %}
+
+<!-- https://simpleisbetterthancomplex.com/2015/12/04/package-of-the-week-django-widget-tweaks.html -->
+	<div class="form-group">
+		<label for="{{ field.name.id_for_label }}">{{ form.name.label }}</label>
+		{% render_field form.name class="form-control" placeholder='Strategy Name' %}
+	    {% for error in form.name.errors %}
+	    	<span class="help-block">{{ error }}</span>
+	    {% endfor %}
+	</div>
+	<div class="form-group">
+		<label for="{{ field.description.id_for_label }}">{{ form.description.label }}</label>
+		{% render_field form.description class="form-control" placeholder='(Optional) Add description' %}
+	    {% for error in form.description.errors %}
+	    	<span class="help-block">{{ error }}</span>
+	    {% endfor %}
+	</div>
+
+	<div class="form-group">
+		<label for="{{ field.advisors.id_for_label }}">{{ form.advisors.label }}</label>
+		{% render_field form.advisors class="form-control" %}
+	    {% for error in form.advisors.errors %}
+	    	<span class="help-block">{{ error }}</span>
+	    {% endfor %}
+	</div>
+	<div class="form-group">
+		<label for="{{ field.mscats.id_for_label }}">{{ form.mscats.label }}</label>
+		{% render_field form.mscats class="form-control" %}
+	    {% for error in form.mscats.errors %}
+	    	<span class="help-block">{{ error }}</span>
+	    {% endfor %}
+	</div>
+	<div class="form-group">
+		<label for="{{ field.mssubadvs.id_for_label }}">{{ form.mssubadvs.label }}</label>
+		{% render_field form.mssubadvs class="form-control" %}
+	    {% for error in form.mssubadvs.errors %}
+	    	<span class="help-block">{{ error }}</span>
+	    {% endfor %}
+	</div>
+	<div class="form-group">
+		<label for="{{ field.mgrnames.id_for_label }}">{{ form.mgrnames.label }}</label>
+		{% render_field form.mgrnames class="form-control" %}
+	    {% for error in form.mgrnames.errors %}
+	    	<span class="help-block">{{ error }}</span>
+	    {% endfor %}
+	</div>
+
+	<button type="submit" class="save btn btn-primary">
+		<span class="glyphicon glyphicon-ok"></span>
+		Save
+	</button>
 </form>
 
 {% endblock %}

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',
     'users.apps.UsersConfig',
+    'widget_tweaks',
     'crispy_forms',
     'bootstrap4',
     'strategy',
