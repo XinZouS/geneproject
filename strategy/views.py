@@ -41,21 +41,25 @@ class StrategyCreate(LoginRequiredMixin, SelectRelatedMixin, generic.CreateView)
 def strategy_verify(request):
 	if request.method == 'POST':
 		print('--- verify:POST -------')
+		postForm = StrategyForm(request.POST or None)
+		print('--- the postForm: -------------')
+		print(postForm)
+
 	else:
-		print('--- verify:GET --------')
-		print("--- verify.content: --------------------")
+		print("--- verify.GET.content: --------------------")
 		content = request.session['content']
 		print(content)
 
 		form = StrategyForm(initial={
-			'name': 'my strategy_verify new form name',
-			'description': 'ljlljjljlkjljlj kljlkjkljlk jlkj ljjlkkljl',
-			'advId': content['advId'],
+			'advId': content.get('advId', []),
+			'catId': content.get('catId', []),
+			'subId': content.get('subId', []),
+			'mgrId': content.get('mgrId', []),
 		})
 		print("--- verify.form: --------------------")
 		print(form)
 
-	return render(request, 'strategy/strategy_verify.html')
+		return render(request, 'strategy/strategy_verify.html', {'form':form})
 
 
 class StrategyDetail(SelectRelatedMixin, generic.DetailView):

@@ -35,17 +35,17 @@ class StrategyForm(forms.ModelForm):
 
 		super(StrategyForm, self).__init__(*args,**kwargs)
 		if kwargs.get('initial'):
-			print('------ get "initial" -------')
-			self.fields['name'].initial = kwargs['initial']['name']
+			initDict = kwargs['initial']
+			# self.fields['name'].initial = initDict['name']
 			self.fields["advisors"].initial = (
-				Advisors.objects.filter(pk__in=[1,2,3])
+				Advisors.objects.filter(pk__in=initDict['advId'])
 			)
-			print(self.fields)
+			print('---- advisors: ', self.fields['advisors'])
 
-		# self.fields['advisors'].queryset = qsAdvisors
 
-	def get_initial(self):
-		print("--- StrategyForm.get_initial() --------------------------")
-		print(self.initial.copy())
-		return self.initial.copy()
+
+
+
+
+
 
