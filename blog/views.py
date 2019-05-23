@@ -50,11 +50,11 @@ def fit_default(request):
 		selectedAdvisorIds = intListFrom(request.POST.getlist('advId'))
 		selectedAdvisorNames = request.POST.getlist('advName', '')
 
-		selectedMSSubAdvIds = intListFrom(request.POST.getlist('subId'))
-		selectedMSSubAdvNames = request.POST.getlist('subName', '')
-
 		selectedMSCatIds = intListFrom(request.POST.getlist('catId'))
 		selectedMSCatNames = request.POST.getlist('catName', '')
+
+		selectedMSSubAdvIds = intListFrom(request.POST.getlist('subId'))
+		selectedMSSubAdvNames = request.POST.getlist('subName', '')
 
 		selectedMgrIds = intListFrom(request.POST.getlist('mgrId'))
 		selectedMgrNames = request.POST.getlist('mgrName', '')
@@ -106,16 +106,14 @@ def fit_default(request):
 
 		isSave = request.POST.get('isSaveCheckbox', False)
 		if isSave:
-			print('---------------------')
-			form = StrategyForm()
-			print(form)
-			print('---------------------')
-			print(request.POST['advId'])
 			content = {
 				"advId": selectedAdvisorIds,
 				'catId': selectedMSCatIds,
+				'subId': selectedMSSubAdvIds,
+				'mgrId': selectedMgrIds,
 			}
-			return render(request, 'strategy/strategy_verify.html', content)
+			request.session['content'] = content
+			return redirect('strategy:verify')
 
 	else:
 		print "--- [GET] request is GET, init page....,"

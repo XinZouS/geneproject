@@ -7,6 +7,7 @@ from django.views import generic
 from django.contrib import messages
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 # pip install django-braces
 from braces.views import SelectRelatedMixin
@@ -36,9 +37,25 @@ class StrategyCreate(LoginRequiredMixin, SelectRelatedMixin, generic.CreateView)
 		return super(StrategyCreate,self).form_valid(form)
 
 
-class StrategyVerify(LoginRequiredMixin, SelectRelatedMixin, generic.DetailView):
-	model = Strategy
-	select_related = ('user',)
+@login_required
+def strategy_verify(request):
+	if request.method == 'POST':
+		print('--- verify:POST -------')
+	else:
+		print('--- verify:GET --------')
+		print("--- verify.content: --------------------")
+		content = request.session['content']
+		print(content)
+
+		form = StrategyForm(initial={
+			'name': 'my strategy_verify new form name',
+			'description': 'ljlljjljlkjljlj kljlkjkljlk jlkj ljjlkkljl',
+			'advId': content['advId'],
+		})
+		print("--- verify.form: --------------------")
+		print(form)
+
+	return render(request, 'strategy/strategy_verify.html')
 
 
 class StrategyDetail(SelectRelatedMixin, generic.DetailView):

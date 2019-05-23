@@ -2,9 +2,16 @@
 
 {% block strategypre %}
 <div class="container">
-	<h2>Strategy Name: {{strategy.name}}</h2>
-	<h5>Description: {{strategy.description}}</h5>
+	<h2>Strategy Name: {{form.name}}</h2>
+	<h5>Description: {{form.description}}</h5>
 </div>
+
+<form class="post-form" method="POST">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<button type="submit" class="save btn btn-default">Save</button>
+</form>
+
 {% endblock %}
 
 

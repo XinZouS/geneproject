@@ -20,20 +20,6 @@ class StrategyForm(forms.ModelForm):
 		widget = forms.CheckboxSelectMultiple(attrs={'checked':''})
 		)
 
-	def __init__(self, *args, **kwargs):
-		# print("-----------------------------")
-		# print(args)
-		# print("-----------------------------")
-		# print(kwargs)
-		# qsAdvisors = kwargs.pop('advId')
-		super(StrategyForm, self).__init__(*args,**kwargs)
-		# self.fields['advisors'].queryset = qsAdvisors
-
-	def get_initial(self):
-		print("-----------------------------")
-		print(self.initial.copy())
-		return self.initial.copy()
-
 	class Meta():
 		model = Strategy
 		fields = ('name','description','advisors','mscats','mssubadvs','mgrnames')
@@ -42,3 +28,24 @@ class StrategyForm(forms.ModelForm):
 			'name':forms.TextInput(attrs={'class':'textinputclass'}), # for CSS:
 			'description':forms.Textarea(attrs={'class':'editable medium-editor-textarea postcontent'}),
 		}
+
+	def __init__(self, *args, **kwargs):
+		print("---- init form kwargs ------------------------")
+		print(kwargs)
+
+		super(StrategyForm, self).__init__(*args,**kwargs)
+		if kwargs.get('initial'):
+			print('------ get "initial" -------')
+			self.fields['name'].initial = kwargs['initial']['name']
+			self.fields["advisors"].initial = (
+				Advisors.objects.filter(pk__in=[1,2,3])
+			)
+			print(self.fields)
+
+		# self.fields['advisors'].queryset = qsAdvisors
+
+	def get_initial(self):
+		print("--- StrategyForm.get_initial() --------------------------")
+		print(self.initial.copy())
+		return self.initial.copy()
+
